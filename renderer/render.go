@@ -28,7 +28,7 @@ func FetchTemplate(template string) string {
 	p := provider.NewProviderFromPath(template)
 	fmt.Println(prefix, "Detected", green.Sprint(p.Name()), "template provider")
 	s.Suffix = fmt.Sprintf(" %s…", strings.Title(p.Action()))
-	s.Color("green")
+	s.Color("green") // nolint: errcheck
 	s.Start()
 
 	// Actually fetch and fail fast if an error occurs
@@ -52,7 +52,7 @@ func Render(template, output string) {
 		prompt := &survey.Confirm{
 			Message: "The output destination already exists. Continue ?",
 		}
-		survey.AskOne(prompt, &confirmed, nil)
+		survey.AskOne(prompt, &confirmed, nil) // nolint: errcheck
 		if !confirmed {
 			fmt.Println("Canceled operation")
 			os.Exit(0)
