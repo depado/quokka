@@ -1,13 +1,28 @@
 package provider
 
-type http struct {
+type httpp struct {
+	URL string
 }
 
 // NewHTTPProvider will return a new HTTP provider
 func NewHTTPProvider(in string) Provider {
-	return http{}
+	return httpp{
+		URL: in,
+	}
 }
 
-func (http) Fetch(string) error {
+func (httpp) Fetch() (string, error) {
 	panic("not implemented")
+}
+
+func (httpp) Name() string {
+	return "http"
+}
+
+func (httpp) Action() string {
+	return "downloading"
+}
+
+func (httpp) TemplatePath() string {
+	return ""
 }

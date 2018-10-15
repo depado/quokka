@@ -7,6 +7,16 @@ import (
 	"github.com/spf13/viper"
 )
 
+// AddRendererFlags adds a set of flags to make the use of the program more
+// flexible
+func AddRendererFlags(c *cobra.Command) {
+	c.PersistentFlags().StringP("output", "o", "output", "output directory of rendered template")
+	c.PersistentFlags().Int("git.depth", 1, "depth of git clone in case of git provider")
+	if err := viper.BindPFlags(c.PersistentFlags()); err != nil {
+		logrus.WithError(err).WithField("step", "AddLoggerFlags").Fatal("Couldn't bind flags")
+	}
+}
+
 // AddLoggerFlags adds support to configure the level of the logger
 func AddLoggerFlags(c *cobra.Command) {
 	c.PersistentFlags().String("log.level", "info", "one of debug, info, warn, error or fatal")
@@ -17,31 +27,10 @@ func AddLoggerFlags(c *cobra.Command) {
 	}
 }
 
-// AddConfigurationFlag adds support to provide a configuration file on the
-// command line
-func AddConfigurationFlag(c *cobra.Command) {
-	c.PersistentFlags().String("conf", "", "configuration file to use")
-	if err := viper.BindPFlags(c.PersistentFlags()); err != nil {
-		logrus.WithError(err).Fatal("Couldn't bind flags")
-	}
-}
-
 // Initialize will be run when cobra finishes its initialization
 func Initialize() {
 	// Environment variables
 	viper.AutomaticEnv()
-
-	// Configuration file
-	if viper.GetString("conf") != "" {
-		viper.SetConfigFile(viper.GetString("conf"))
-	} else {
-		viper.SetConfigName("conf")
-		viper.AddConfigPath(".")
-		viper.AddConfigPath("/config/")
-	}
-	if err := viper.ReadInConfig(); err != nil {
-		logrus.Debug("No configuration file found")
-	}
 
 	lvl := viper.GetString("log.level")
 	l, err := logrus.ParseLevel(lvl)

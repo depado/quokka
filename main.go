@@ -4,8 +4,10 @@ import (
 	"fmt"
 
 	"github.com/Depado/projectmpl/cmd"
+	"github.com/Depado/projectmpl/renderer"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // Build number and versions injected at compile time, set yours
@@ -21,7 +23,7 @@ var rootCmd = &cobra.Command{
 	Short: "projectmpl [renderer] <options>",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-
+		renderer.Render(args[0], viper.GetString("output"))
 	},
 }
 
@@ -36,7 +38,7 @@ func main() {
 	// Initialize Cobra and Viper
 	cobra.OnInitialize(cmd.Initialize)
 	cmd.AddLoggerFlags(rootCmd)
-	cmd.AddConfigurationFlag(rootCmd)
+	cmd.AddRendererFlags(rootCmd)
 	rootCmd.AddCommand(versionCmd)
 
 	// Run the command
