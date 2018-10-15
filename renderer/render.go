@@ -15,6 +15,7 @@ import (
 // Color stuff
 var green = color.New(color.FgGreen)
 var prefix = green.Sprint("»")
+var errprefix = color.New(color.FgRed).Sprint("»")
 
 // FetchTemplate will determine which provider needs to be used to fetch the
 // template and display user-friendly information about what's going on under
@@ -32,8 +33,10 @@ func FetchTemplate(template string) string {
 	s.Start()
 
 	// Actually fetch and fail fast if an error occurs
-	if path, err = p.Fetch(); err != nil {
-		color.Red("Couldn't complete operation:", err)
+	path, err = p.Fetch()
+	if err != nil {
+		s.FinalMSG = fmt.Sprintln(errprefix, "Couldn't complete operation:", err)
+		s.Stop()
 		os.Exit(1)
 	}
 	s.FinalMSG = fmt.Sprintln(prefix, "Done", p.Action(), "in", green.Sprint(path))
