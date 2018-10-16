@@ -1,14 +1,10 @@
 package provider
 
 import (
-	"fmt"
-	"io/ioutil"
-	"time"
-
-	"github.com/Depado/projectmpl/colors"
-	"github.com/briandowns/spinner"
 	"github.com/spf13/viper"
 	git "gopkg.in/src-d/go-git.v4"
+
+	"github.com/Depado/projectmpl/utils"
 )
 
 type gitp struct {
@@ -29,31 +25,19 @@ func (g gitp) Fetch() (string, error) {
 	var err error
 	var outdir string
 
-	// Setup colors and spinner
-	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-	s.Suffix = " Cloning…"
-	s.Color("green") // nolint: errcheck
-	s.Start()
-
-	if viper.GetString("template.path") != "" {
-		outdir = viper.GetString("template.path")
-	} else {
-		// Create the temporary directory where we'll clone the repo
-		if outdir, err = ioutil.TempDir("", "projectmpl"); err != nil {
-			s.FinalMSG = fmt.Sprintln(colors.ErrPrefix, "Couldn't create tmp dir:", err)
-			s.Stop()
-			return "", err
-		}
-	}
-
-	// Clone the given repository
-	if _, err = git.PlainClone(outdir, false, &git.CloneOptions{Depth: viper.GetInt("git.depth"), URL: g.Repo}); err != nil {
-		s.FinalMSG = fmt.Sprintln(colors.ErrPrefix, "Couldn't clone repo:", err)
-		s.Stop()
+	// Setup spinner
+	s := utils.NewSpinner("Cloning template")
+	// Create template directory if needed
+	if outdir, err = utils.GetTemplateDir(); err != nil {
+		s.ErrStop("Couldn't create template directory:", err)
 		return "", err
 	}
-	s.FinalMSG = fmt.Sprintln(colors.OkPrefix, "Done cloning in", colors.Green.Sprint(outdir))
-	s.Stop()
+	// Clone the given repository
+	if _, err = git.PlainClone(outdir, false, &git.CloneOptions{Depth: viper.GetInt("git.depth"), URL: g.Repo}); err != nil {
+		s.ErrStop("Couldn't clone repo:", err)
+		return "", err
+	}
+	s.DoneStop("Done cloning in", utils.Green.Sprint(outdir))
 	return outdir, nil
 }
 

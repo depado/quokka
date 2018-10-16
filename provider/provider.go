@@ -1,6 +1,8 @@
 package provider
 
-import "strings"
+import (
+	"strings"
+)
 
 // Provider is the main interface. A provider defines a way to retrieve a
 // template and the way said provider should behave once fetched

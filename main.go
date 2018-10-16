@@ -3,11 +3,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/Depado/projectmpl/cmd"
-	"github.com/Depado/projectmpl/renderer"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/Depado/projectmpl/cmd"
+	"github.com/Depado/projectmpl/renderer"
 )
 
 // Build number and versions injected at compile time, set yours
