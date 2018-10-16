@@ -1,0 +1,8 @@
+delimiters: ["[[", "]]"]
+name: "Example Projectmpl"
+version: "0.1.0"
+variables:
+  name:
+    type: string
+    default: rendered
+

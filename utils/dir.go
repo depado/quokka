@@ -9,7 +9,7 @@ import (
 // GetTemplateDir creates the necessary directory or uses the one provided in
 // the configuration on the command line
 func GetTemplateDir() (string, error) {
-	tmplpath := viper.GetString("template.path")
+	tmplpath := viper.GetString("template.output")
 	if tmplpath != "" {
 		return tmplpath, nil
 	}

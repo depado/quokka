@@ -1,6 +1,8 @@
 package provider
 
 import (
+	"path/filepath"
+
 	"github.com/spf13/viper"
 	git "gopkg.in/src-d/go-git.v4"
 
@@ -38,7 +40,8 @@ func (g gitp) Fetch() (string, error) {
 		return "", err
 	}
 	s.DoneStop("Done cloning in", utils.Green.Sprint(outdir))
-	return outdir, nil
+
+	return filepath.Join(outdir, viper.GetString("template.path")), nil
 }
 
 func (gitp) UsesTmp() bool {

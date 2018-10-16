@@ -1,5 +1,11 @@
 package provider
 
+import (
+	"path/filepath"
+
+	"github.com/spf13/viper"
+)
+
 type local struct {
 	Path string
 }
@@ -12,7 +18,7 @@ func NewLocalProvider(in string) Provider {
 }
 
 func (l local) Fetch() (string, error) {
-	return l.Path, nil
+	return filepath.Join(l.Path, viper.GetString("template.path")), nil
 }
 
 func (local) UsesTmp() bool {

@@ -41,4 +41,5 @@ func Render(template, output string) {
 			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
 		}(path)
 	}
+	Analyze(path)
 }

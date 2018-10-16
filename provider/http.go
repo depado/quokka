@@ -5,8 +5,10 @@ import (
 	"io"
 	"net/http"
 	"path"
+	"path/filepath"
 
 	"github.com/mholt/archiver"
+	"github.com/spf13/viper"
 
 	"github.com/Depado/projectmpl/utils"
 )
@@ -56,7 +58,7 @@ func (h httpp) Fetch() (string, error) {
 	}
 	s.DoneStop("Donwloaded and extracted template in", utils.Green.Sprint(outdir))
 
-	return outdir, nil
+	return filepath.Join(outdir, viper.GetString("template.path")), nil
 }
 
 func (httpp) Name() string {
