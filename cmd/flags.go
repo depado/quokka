@@ -12,6 +12,8 @@ import (
 func AddRendererFlags(c *cobra.Command) {
 	c.PersistentFlags().StringP("output", "o", "output", "output directory of rendered template")
 	c.PersistentFlags().Int("git.depth", 1, "depth of git clone in case of git provider")
+	c.PersistentFlags().Bool("template.keep", false, "do not delete the template when operation is complete")
+	c.PersistentFlags().String("template.path", "", "specify output directory for the template")
 	if err := viper.BindPFlags(c.PersistentFlags()); err != nil {
 		logrus.WithError(err).WithField("step", "AddLoggerFlags").Fatal("Couldn't bind flags")
 	}

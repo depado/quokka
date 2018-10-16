@@ -11,14 +11,14 @@ func NewLocalProvider(in string) Provider {
 	}
 }
 
-func (local) Fetch() (string, error) {
-	panic("not implemented")
+func (l local) Fetch() (string, error) {
+	return l.Path, nil
+}
+
+func (local) UsesTmp() bool {
+	return false
 }
 
 func (local) Name() string {
 	return "local"
-}
-
-func (local) Action() string {
-	return "copying"
 }

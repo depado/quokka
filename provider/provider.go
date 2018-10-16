@@ -7,7 +7,7 @@ import "strings"
 type Provider interface {
 	Fetch() (string, error) // Fetch the template and return the path where it's stored on the local filesystem
 	Name() string           // For example, git provider should return "git provider detected"
-	Action() string         // For example, git should return "cloning"
+	UsesTmp() bool          // Defines if the provider uses a temporary file/directory that can be safely deleted at the end
 }
 
 // NewProviderFromPath will return a new Provider according to the given string
@@ -16,7 +16,8 @@ type Provider interface {
 func NewProviderFromPath(in string) Provider {
 	if strings.HasSuffix(in, ".git") {
 		return NewGitProvider(in)
-	} else if strings.HasPrefix(in, "http://") || strings.HasSuffix(in, "http://") {
+	}
+	if strings.HasPrefix(in, "http://") || strings.HasPrefix(in, "https://") {
 		return NewHTTPProvider(in)
 	}
 	return NewLocalProvider(in)
