@@ -13,10 +13,15 @@ import (
 // which templates they should apply. TODO: Think about how to create a config
 // hierarchy
 func Analyze(dir string) {
+	var err error
 	var rootcfg string
 	m := make(map[string]string)
+	if err = os.Chdir(dir); err != nil {
+		utils.ErrPrintln("Couldn't change directory:", err)
+		os.Exit(1)
+	}
 
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
 		// Ignore directories for the first pass
 		if info.IsDir() {
 			return nil
@@ -33,8 +38,8 @@ func Analyze(dir string) {
 		}
 		return nil
 	})
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if info.IsDir() {
+	filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() || info.Name() == ".git" {
 			return nil
 		}
 		if info.Name() != ".projectmpl.yml" {
