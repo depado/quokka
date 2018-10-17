@@ -11,11 +11,11 @@ import (
 )
 
 // Render is the main render function
-func Render(template, output string) {
+func Render(template string) {
 	var err error
 	var path string
 
-	if _, err = os.Stat(output); !os.IsNotExist(err) {
+	if _, err = os.Stat(viper.GetString("output")); !os.IsNotExist(err) {
 		var confirmed bool
 		prompt := &survey.Confirm{
 			Message: "The output destination already exists. Continue ?",

@@ -3,6 +3,9 @@ name: "Example Projectmpl"
 version: "0.1.0"
 variables:
   name:
-    type: string
     default: rendered
+    help: "Simple string"
+  choice:
+    values: ["Hello", "World"]
+    help: "Used for some things"
 

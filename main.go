@@ -5,7 +5,6 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
 	"github.com/Depado/projectmpl/cmd"
 	"github.com/Depado/projectmpl/renderer"
@@ -24,7 +23,7 @@ var rootCmd = &cobra.Command{
 	Short: "projectmpl [renderer] <options>",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		renderer.Render(args[0], viper.GetString("output"))
+		renderer.Render(args[0])
 	},
 }
 

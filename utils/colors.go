@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fatih/color"
 )
@@ -23,4 +24,10 @@ func OkPrintln(opts ...interface{}) {
 // ErrPrintln prints with a red prefix
 func ErrPrintln(opts ...interface{}) {
 	fmt.Println(append([]interface{}{ErrPrefix}, opts...)...)
+}
+
+// FatalPrintln prints out information with a red prefix and exits the program
+func FatalPrintln(opts ...interface{}) {
+	fmt.Println(append([]interface{}{ErrPrefix}, opts...)...)
+	os.Exit(1)
 }
