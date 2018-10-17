@@ -6,8 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/davecgh/go-spew/spew"
-
 	"github.com/AlecAivazis/survey"
 	"github.com/Depado/projectmpl/utils"
 	"github.com/fatih/color"
@@ -95,10 +93,17 @@ func (r *Root) ParseVars() {
 			}
 			utils.OkPrintln("Chose:", color.BlueString(variable.Result), "for", color.YellowString(name), "variable")
 		} else {
-			// TODO: Do simple input
+			prompt := &survey.Input{
+				Message: fmt.Sprintf("Value for a %s:", name),
+				Default: variable.Default,
+				Help:    variable.Help,
+			}
+			if err := survey.AskOne(prompt, &variable.Result, nil); err != nil {
+				utils.FatalPrintln("Couldn't get an answer:", err)
+			}
+			utils.OkPrintln("Chose:", color.BlueString(variable.Result), "for", color.YellowString(name), "variable")
 		}
 	}
-	spew.Dump(r.Variables)
 }
 
 // NewRootConfig will return the root configuration
