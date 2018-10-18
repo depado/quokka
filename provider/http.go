@@ -7,10 +7,9 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/Depado/projectmpl/utils"
 	"github.com/mholt/archiver"
 	"github.com/spf13/viper"
-
-	"github.com/Depado/projectmpl/utils"
 )
 
 type httpp struct {

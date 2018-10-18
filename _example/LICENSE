@@ -1,2 +1,3 @@
-{{ if eq license MIT }}
+{{ if eq .license "MIT" }}
+POUET
 {{ end }}

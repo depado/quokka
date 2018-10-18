@@ -1,15 +1,13 @@
 package renderer
 
 import (
-	"bufio"
-	"fmt"
 	"os"
 	"path/filepath"
 
+	"github.com/Depado/projectmpl/conf"
 	"github.com/Depado/projectmpl/utils"
 	"github.com/fatih/color"
-
-	"github.com/Depado/projectmpl/conf"
+	"github.com/spf13/viper"
 )
 
 // ConfigName is the generic name of the file that acts at the configuration
@@ -26,10 +24,9 @@ func GetRootConfig(dir string) *conf.Root {
 	return conf.NewRootConfig(exp, info)
 }
 
-// Analyze is a work in progress function to analyze the template directory
-// and gather information about where the configuration files are stored and to
-// which templates they should apply.
-func Analyze(dir string) {
+// HandleRootConfig will find and parse the root configuration. It will then ask
+// the user for the variables in the root configuration
+func HandleRootConfig(dir string) *conf.Root {
 	var err error
 	var root *conf.Root
 
@@ -38,10 +35,20 @@ func Analyze(dir string) {
 	}
 	utils.OkPrintln("Root configuration found")
 	if err = root.Parse(); err != nil {
-		utils.ErrPrintln("Couldn't parse root configuration:", err)
+		utils.FatalPrintln("Couldn't parse root configuration:", err)
 	}
 	utils.OkPrintln("Preparing", color.GreenString(root.Name), "-", color.YellowString(root.Version))
 	root.PromptVariables()
+	return root
+}
+
+// Analyze is a work in progress function to analyze the template directory
+// and gather information about where the configuration files are stored and to
+// which templates they should apply.
+func Analyze(dir string) {
+	var err error
+	output := viper.GetString("output")
+	root := HandleRootConfig(dir)
 
 	m := make(map[string]*conf.ConfigFile)
 	m[root.File.Dir] = &root.ConfigFile
@@ -75,37 +82,22 @@ func Analyze(dir string) {
 				}
 				c = filepath.Dir(c)
 			}
+			root.NewPath(f, output)
 			conf.AllCandidates = append(conf.AllCandidates, f)
 		}
 		return nil
 	})
 
 	for _, f := range conf.AllCandidates {
-		ParseCandidate(f)
-	}
-}
-
-// ParseCandidate will parse the file and detect front-matter if any
-func ParseCandidate(f *conf.File) {
-	var err error
-	var fd *os.File
-
-	if fd, err = os.Open(f.Path); err != nil {
-		utils.FatalPrintln("Couldn't open candidate:", err)
-	}
-	defer fd.Close()
-
-	scanner := bufio.NewScanner(fd)
-	if !scanner.Scan() {
-		return
-	}
-	// Detected from matter
-	if scanner.Text() == "---" {
-		var line string
-		for scanner.Scan() && scanner.Text() != "---" {
-			line = scanner.Text()
-			fmt.Println(line)
+		if err = f.ParseFrontMatter(); err != nil {
+			utils.FatalPrintln("Couldn't parse front matter for file", color.YellowString(f.Path), ":", err)
 		}
+		if err = os.MkdirAll(filepath.Dir(f.NewPath), os.ModePerm); err != nil {
+			utils.FatalPrintln("Couldn't create directory:", err)
+		}
+		if err = f.Render(); err != nil {
+			utils.FatalPrintln("Couldn't render template:", err)
+		}
+		utils.OkPrintln("Rendered", color.GreenString(f.NewPath))
 	}
-	return
 }

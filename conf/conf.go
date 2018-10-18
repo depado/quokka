@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -85,6 +86,11 @@ func (r *Root) Parse() error {
 	}
 
 	return yaml.Unmarshal(out, r)
+}
+
+// NewPath adds the path where the file should be rendered according to the root
+func (r Root) NewPath(f *File, new string) {
+	f.NewPath = strings.Replace(f.Path, r.File.Dir, new, 1)
 }
 
 // NewRootConfig will return the root configuration
