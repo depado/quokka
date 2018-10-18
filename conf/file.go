@@ -125,6 +125,8 @@ func (f *File) WriteIgnore() error {
 	return nil
 }
 
+// WriteRender will first render the file as if ignored, but will parse it and
+// render it as soon as it has been copied
 func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 	var err error
 	var fd *os.File

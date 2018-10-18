@@ -6,8 +6,11 @@ variables:
     default: rendered
     prompt: "What's the name of your project?"
     help: "The name of your project"
+  description:
+    prompt: "Describe your project:"
+    help: "This will be written in the README.md file"
   organization:
-    help: "Organization or username (used to render the package name)"
+    help: "Organization or username"
     prompt: "What is your username or organization's name?"
     required: true
   gitserver:
@@ -18,9 +21,4 @@ variables:
     default: "MIT"
     help: "License to be applied to the project"
     prompt: "Which license do you want to apply to this project?"
-  hi:
-  stuff:
-    confirm: false
-  hello:
-    confirm: true
 
