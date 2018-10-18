@@ -1,0 +1,2 @@
+{{ if eq license MIT }}
+{{ end }}

@@ -1,6 +1,8 @@
 package renderer
 
 import (
+	"bufio"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -39,8 +41,7 @@ func Analyze(dir string) {
 		utils.ErrPrintln("Couldn't parse root configuration:", err)
 	}
 	utils.OkPrintln("Preparing", color.GreenString(root.Name), "-", color.YellowString(root.Version))
-
-	root.ParseVars()
+	root.PromptVariables()
 
 	m := make(map[string]*conf.ConfigFile)
 	m[root.File.Dir] = &root.ConfigFile
@@ -51,6 +52,10 @@ func Analyze(dir string) {
 			cf := conf.NewConfigFile(path, info)
 			m[cf.File.Dir] = cf
 			utils.OkPrintln("Override Configuration:", color.YellowString(path))
+			if err := cf.Parse(); err != nil {
+				utils.FatalPrintln("Couldn't parse configuration:", err)
+			}
+			cf.PromptVariables()
 		}
 		return nil
 	})
@@ -63,7 +68,7 @@ func Analyze(dir string) {
 			for {
 				if v, ok := m[c]; ok {
 					v.AddCandidate(f)
-					f.Renderers = append(f.Renderers, v)
+					f.AddRenderer(v)
 				}
 				if c == root.File.Dir {
 					break
@@ -74,4 +79,33 @@ func Analyze(dir string) {
 		}
 		return nil
 	})
+
+	for _, f := range conf.AllCandidates {
+		ParseCandidate(f)
+	}
+}
+
+// ParseCandidate will parse the file and detect front-matter if any
+func ParseCandidate(f *conf.File) {
+	var err error
+	var fd *os.File
+
+	if fd, err = os.Open(f.Path); err != nil {
+		utils.FatalPrintln("Couldn't open candidate:", err)
+	}
+	defer fd.Close()
+
+	scanner := bufio.NewScanner(fd)
+	if !scanner.Scan() {
+		return
+	}
+	// Detected from matter
+	if scanner.Text() == "---" {
+		var line string
+		for scanner.Scan() && scanner.Text() != "---" {
+			line = scanner.Text()
+			fmt.Println(line)
+		}
+	}
+	return
 }

@@ -1,11 +1,25 @@
-delimiters: ["[[", "]]"]
+delimiters: ["{{", "}}"]
 name: "Example Projectmpl"
 version: "0.1.0"
 variables:
   name:
     default: rendered
-    help: "Simple string"
-  choice:
-    values: ["Hello", "World"]
-    help: "Used for some things"
+    help: "The name of your project"
+  organization:
+    help: "Organization or username (used to render the package name)"
+    prompt: "What is your username or organization's name?"
+    required: true
+  gitserver:
+    default: "github.com"
+    help: "Git server"
+  license:
+    values: ["MIT", "Apache License 2.0", "BSD 3", "FreeBSD", "GPL", "LGPL", "WTFPL", "None"]
+    default: "MIT"
+    help: "License to be applied to the project"
+    prompt: "Which license do you want to apply to this project?"
+  hi:
+  stuff:
+    confirm: false
+  hello:
+    confirm: true
 
