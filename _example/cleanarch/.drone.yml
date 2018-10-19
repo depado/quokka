@@ -1,3 +1,7 @@
+---
+render_if: drone
+---
+
 workspace:
   base: /go
   path: src/{{ .gitserver }}/{{ .organization }}/{{ .name }}
