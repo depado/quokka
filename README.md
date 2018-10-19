@@ -21,6 +21,7 @@ projectmpl
 - [Usage](#usage)
     - [Commands](#commands)
     - [Keeping the template](#keeping-the-template)
+    - [Examples](#examples)
 - [Template Creation](#template-creation)
     - [The root `.projectmpl.yml` file](#the-root-projectmplyml-file)
     - [Variable declaration](#variable-declaration)
@@ -81,6 +82,17 @@ directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
 the `--template.keep` option. This option pairs well with `--template.output`
 which defines where the template should be downloaded/cloned.
+
+## Examples
+
+```sh
+$ # Clone the repository and execute the template that is located in _example/license
+$ projectmpl git@github.com:Depado/projectmpl.git --template.path _example/license
+$ # Clone the template and render it in a specific directory
+$ projectmpl git@github.com:Depado/projectmpl.git --template.path _example/cleanarch --template.keep --template.output "template" -o myamazingproject
+$ # Reuse the downloaded template and allow final commands
+$ projectmpl template/ -c -o myotherproject
+```
 
 # Template Creation
 
