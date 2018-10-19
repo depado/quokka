@@ -2,12 +2,12 @@
 
 
 [[projects]]
-  digest = "1:5627be48bc0061b4ed6a158e593112cd3eb6322da6ec91f73b5c70a7c9cfb01a"
+  digest = "1:2fd83c8c2b1ff53fd7c4376a63c3a2f31e002e9296df9d7f150b07da524de88d"
   name = "github.com/briandowns/spinner"
   packages = ["."]
   pruneopts = "UT"
-  revision = "bbeb66ec3653684a0afb3031087f790a5b7d7bdf"
-  version = "1.3"
+  revision = "dd69c579ff204842e8962816987f838e2c2c18d8"
+  version = "1.4"
 
 [[projects]]
   branch = "master"
@@ -358,14 +358,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:f5aa274a0377f85735edc7fedfb0811d3cbc20af91633797cb359e29c3272271"
+  digest = "1:bececf436a23bf63181438c4ef4f7f47816b87ff879083d83ca1321f9001a354"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "fa43e7bc11baaae89f3f902b2b4d832b68234844"
+  revision = "8f1d3d21f81be6e86ebcd6febee89c89bc50719f"
 
 [[projects]]
   digest = "1:8029e9743749d4be5bc9f7d42ea1659471767860f0cdc34d37c3111bd308a295"
