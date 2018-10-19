@@ -1,5 +1,6 @@
 ---
 ignore: true
+render_if: sub2
 ---
 package sub2
 

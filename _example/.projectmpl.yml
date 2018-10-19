@@ -22,3 +22,5 @@ variables:
     default: "MIT"
     help: "License to be applied to the project"
     prompt: "Which license do you want to apply to this project?"
+  sub2:
+    confirm: false

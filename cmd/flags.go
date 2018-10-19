@@ -12,6 +12,9 @@ import (
 func AddRendererFlags(c *cobra.Command) {
 	c.PersistentFlags().StringP("output", "o", "output", "output directory of rendered template")
 	c.PersistentFlags().Int("git.depth", 1, "depth of git clone in case of git provider")
+	c.PersistentFlags().String("git.key", "", "private key to use to clone the template if needed")
+	c.PersistentFlags().String("user", "", "user for auth if needed")
+	c.PersistentFlags().String("password", "", "password for auth if needed")
 	c.PersistentFlags().Bool("template.keep", false, "do not delete the template when operation is complete")
 	c.PersistentFlags().String("template.output", "", "specify output directory for the template")
 	c.PersistentFlags().String("template.path", "", "specify if the template is actually stored in a sub-directory of the downloaded file")

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"text/template"
 
 	"github.com/Depado/projectmpl/utils"
@@ -97,6 +98,11 @@ func (f *File) WriteIgnore() error {
 	var ofd *os.File // Output
 	var sfd *os.File // Source
 
+	// Create the directory
+	if err = os.MkdirAll(filepath.Dir(f.NewPath), os.ModePerm); err != nil {
+		return err
+	}
+
 	if sfd, err = os.Open(f.Path); err != nil {
 		return err
 	}
@@ -166,19 +172,17 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 
 // Render will actually render the file
 func (f *File) Render() error {
+	var err error
+	var condition string
+	var ignore bool
+
 	delims := []string{"{{", "}}"}
 	ctx := make(map[string]interface{})
-
-	if f.Metadata != nil {
-		if f.Metadata.Ignore {
-			return f.WriteIgnore()
-		}
-	}
 
 	for i := len(f.Renderers) - 1; i >= 0; i-- {
 		r := f.Renderers[i]
 		if r.Ignore {
-			return f.WriteIgnore()
+			ignore = true
 		}
 		for k, v := range r.Variables {
 			if v != nil {
@@ -196,9 +200,43 @@ func (f *File) Render() error {
 			delims = r.Delimiters
 		}
 	}
-	if f.Metadata != nil && f.Metadata.Delimiters != nil {
-		delims = f.Metadata.Delimiters
+	if f.Metadata != nil {
+		if f.Metadata.RenderIf != "" {
+			condition = f.Metadata.RenderIf
+		}
+		if f.Metadata.Ignore {
+			ignore = true
+		}
+		if f.Metadata.Delimiters != nil {
+			delims = f.Metadata.Delimiters
+		}
 	}
-
-	return f.WriteRender(ctx, delims)
+	if condition != "" {
+		if v, ok := ctx[condition]; ok {
+			switch o := v.(type) {
+			case bool:
+				if !o {
+					utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+					return nil
+				}
+			case string:
+				if o == "" {
+					utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+					return nil
+				}
+			}
+		}
+	}
+	if ignore {
+		if err = f.WriteIgnore(); err != nil {
+			return err
+		}
+		utils.OkPrintln("Copied  ", color.GreenString(f.NewPath))
+	} else {
+		if err = f.WriteRender(ctx, delims); err != nil {
+			return err
+		}
+		utils.OkPrintln("Rendered", color.GreenString(f.NewPath))
+	}
+	return nil
 }

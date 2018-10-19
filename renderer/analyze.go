@@ -100,12 +100,8 @@ func Analyze(dir string) {
 		if err = f.ParseFrontMatter(); err != nil {
 			utils.FatalPrintln("Couldn't parse front matter for file", color.YellowString(f.Path), ":", err)
 		}
-		if err = os.MkdirAll(filepath.Dir(f.NewPath), os.ModePerm); err != nil {
-			utils.FatalPrintln("Couldn't create directory:", err)
-		}
 		if err = f.Render(); err != nil {
 			utils.FatalPrintln("Couldn't render template:", err)
 		}
-		utils.OkPrintln("Rendered", color.GreenString(f.NewPath))
 	}
 }

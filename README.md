@@ -30,6 +30,7 @@ projectmpl
         - [Validation](#validation)
     - [Standard `.projectmpl.yml` files](#standard-projectmplyml-files)
     - [Per-file configuration](#per-file-configuration)
+    - [Conditional Rendering/Copy](#conditional-renderingcopy)
 
 <!-- /TOC -->
 
@@ -175,3 +176,32 @@ ignore: true
 
 You can even add per-file variables, or modify the delimiters. In fact, it's
 like an inline `.projectmpl.yml` that applies to a single file.
+
+## Conditional Rendering/Copy
+
+You may want some files to not be copied or rendered according to what the user
+answers to your prompt. You can use the `render_if` key (in a `.projectmpl.yml`
+or inline in a file), with the name of one of your variables. For example if
+you have a variable defined like this in your root config:
+
+```yaml
+variables:
+  drone:
+    prompt: "Do you want to add a Drone config file?"
+    confirm: true
+```
+
+You can then add this at the top of the file:
+
+```
+---
+render_if: drone
+---
+workspace:
+  base: /go
+...
+```
+
+This file will be rendered if, and only if, the user answered yes to that
+question. Note that `render_if` and `ignore` can work together if you just want
+to copy the file and not render it.

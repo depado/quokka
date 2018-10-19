@@ -16,6 +16,7 @@ type Config struct {
 	Delimiters []string             `yaml:"delimiters"`
 	Ignore     bool                 `yaml:"ignore"`
 	Variables  map[string]*Variable `yaml:"variables"`
+	RenderIf   string               `yaml:"render_if"`
 }
 
 // PromptVariables will prompt the user for the different variables in the file
