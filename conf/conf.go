@@ -21,7 +21,7 @@ type Config struct {
 // PromptVariables will prompt the user for the different variables in the file
 func (c *Config) PromptVariables() {
 	// Order the variables alphabetically to keep the same order
-	var ordered []*Variable
+	ordered := make([]*Variable, len(c.Variables))
 	for k, v := range c.Variables {
 		if v == nil { // Unconfigured values do have a key but no value
 			v = &Variable{Name: k}
@@ -41,9 +41,8 @@ func (c *Config) PromptVariables() {
 
 // ConfigFile is the combination of File and Config
 type ConfigFile struct {
-	Config     `yaml:",inline"`
-	Candidates []*File `yaml:"-"`
-	File       *File   `yaml:"-"`
+	Config `yaml:",inline"`
+	File   *File `yaml:"-"`
 }
 
 // Parse parses the configuration file
@@ -56,16 +55,6 @@ func (c *ConfigFile) Parse() error {
 	}
 
 	return yaml.Unmarshal(out, c)
-}
-
-// AddCandidate will add a candidate
-func (c *ConfigFile) AddCandidate(f *File) {
-	c.Candidates = append(c.Candidates, f)
-}
-
-// AddCandidateFromPath will add a candidate from path and file info
-func (c *ConfigFile) AddCandidateFromPath(path string, info os.FileInfo) {
-	c.Candidates = append(c.Candidates, NewFile(path, info))
 }
 
 // Root is a ConfigFile with extra information. It should be located at the root

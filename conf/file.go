@@ -12,6 +12,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+const frontMatterPrefix = "---"
+
 // AllCandidates is the full list of candidates
 var AllCandidates []*File
 
@@ -49,14 +51,14 @@ func (f *File) ParseFrontMatter() error {
 	}
 
 	// Detected from matter
-	if scanner.Text() != "---" {
+	if scanner.Text() != frontMatterPrefix {
 		return nil
 	}
 
 	// Detected from matter
 	var found bool
 	for scanner.Scan() {
-		if scanner.Text() == "---" {
+		if scanner.Text() == frontMatterPrefix {
 			found = true
 		}
 	}
@@ -64,12 +66,14 @@ func (f *File) ParseFrontMatter() error {
 		return nil
 	}
 
-	fd.Seek(0, 0)
+	if _, err = fd.Seek(0, 0); err != nil {
+		return err
+	}
 	scanner = bufio.NewScanner(fd)
 
 	var in string
 	scanner.Scan() // First line, we know it's front matter
-	for scanner.Scan() && scanner.Text() != "---" {
+	for scanner.Scan() && scanner.Text() != frontMatterPrefix {
 		in += scanner.Text() + "\n"
 	}
 
@@ -110,22 +114,28 @@ func (f *File) WriteIgnore() error {
 
 	// Detected from matter
 	var found bool
-	if scanner.Text() == "---" {
+	if scanner.Text() == frontMatterPrefix {
 		for scanner.Scan() {
-			if scanner.Text() == "---" {
+			if scanner.Text() == frontMatterPrefix {
 				found = true
 				break
 			}
 		}
 		if !found {
-			sfd.Seek(0, 0)
+			if _, err = sfd.Seek(0, 0); err != nil {
+				return err
+			}
 			scanner = bufio.NewScanner(sfd)
 		}
 	} else {
-		ofd.WriteString(scanner.Text() + "\n")
+		if _, err = ofd.WriteString(scanner.Text() + "\n"); err != nil {
+			return err
+		}
 	}
 	for scanner.Scan() {
-		ofd.WriteString(scanner.Text() + "\n")
+		if _, err = ofd.WriteString(scanner.Text() + "\n"); err != nil {
+			return err
+		}
 	}
 	return nil
 }

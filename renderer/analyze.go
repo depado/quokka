@@ -57,7 +57,7 @@ func Analyze(dir string) {
 	m[root.File.Dir] = &root.ConfigFile
 
 	// Cycle through to find override configuration files
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() && info.Name() == ConfigName && path != root.File.Path {
 			cf := conf.NewConfigFile(path, info)
 			m[cf.File.Dir] = cf
@@ -69,15 +69,17 @@ func Analyze(dir string) {
 		}
 		return nil
 	})
+	if err != nil {
+		utils.FatalPrintln("Couldn't read filesystem:", err)
+	}
 
 	// Cycle through the files
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() && info.Name() != ConfigName && info.Name() != ".git" {
 			f := conf.NewFile(path, info)
 			c := filepath.Dir(path)
 			for {
 				if v, ok := m[c]; ok {
-					v.AddCandidate(f)
 					f.AddRenderer(v)
 				}
 				if c == root.File.Dir {
@@ -90,6 +92,9 @@ func Analyze(dir string) {
 		}
 		return nil
 	})
+	if err != nil {
+		utils.FatalPrintln("Couldn't read filesystem:", err)
+	}
 
 	for _, f := range conf.AllCandidates {
 		if err = f.ParseFrontMatter(); err != nil {
