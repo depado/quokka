@@ -21,7 +21,8 @@ type Config struct {
 // PromptVariables will prompt the user for the different variables in the file
 func (c *Config) PromptVariables() {
 	// Order the variables alphabetically to keep the same order
-	ordered := make([]*Variable, len(c.Variables))
+	var ordered []*Variable
+	// ordered := make([]*Variable, len(c.Variables))
 	for k, v := range c.Variables {
 		if v == nil { // Unconfigured values do have a key but no value
 			v = &Variable{Name: k}
