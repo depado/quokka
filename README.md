@@ -1,5 +1,9 @@
-# projectmpl
+<h1 align=center>
+projectmpl
+<br>
+<img src="/assets/projectmpl.gif" height="360">
 Project boilerplate engine
+<br>
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
@@ -9,9 +13,11 @@ Project boilerplate engine
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/projectmpl/blob/master/LICENSE)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
 
+
+# Table of content
 <!-- TOC -->
 
-- [projectmpl](#projectmpl)
+- [Table of content](#table-of-content)
 - [Usage](#usage)
     - [Keeping the template](#keeping-the-template)
 - [Template Creation](#template-creation)
