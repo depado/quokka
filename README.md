@@ -19,6 +19,7 @@ projectmpl
 
 - [Table of content](#table-of-content)
 - [Usage](#usage)
+    - [Commands](#commands)
     - [Keeping the template](#keeping-the-template)
 - [Template Creation](#template-creation)
     - [The root `.projectmpl.yml` file](#the-root-projectmplyml-file)
@@ -40,6 +41,38 @@ projectmpl
 Projectmpl supports various provider to download the templates. It supports 
 `git`, downloading an archive (`.zip`/`.tar.gz`/`.tar.xz`/...) from internet,
 or using a local directory. 
+
+```
+Usage:
+  projectmpl [renderer] <options> [flags]
+  projectmpl [command]
+
+Available Commands:
+  help        Help about any command
+  version     Show build and version
+
+Flags:
+  -c, --commands                 execute the after commands (make sure you know what it does)
+      --git.depth int            depth of git clone in case of git provider (default 1)
+      --git.key string           private key to use to clone the template if needed
+  -h, --help                     help for projectmpl
+      --log.format string        one of text or json (default "text")
+      --log.level string         one of debug, info, warn, error or fatal (default "info")
+      --log.line                 enable filename and line in logs
+  -o, --output string            output directory of rendered template (default "output")
+      --password string          password for auth if needed
+      --template.keep            do not delete the template when operation is complete
+      --template.output string   specify output directory for the template
+      --template.path string     specify if the template is actually stored in a sub-directory of the downloaded file
+      --user string              user for auth if needed
+```
+
+## Commands
+
+Some templates may define additional commands that will run once the template
+has been rendered. If you wish to activate this behavior, you can pass the
+`-c` or `--commands` flag. These commands can be anything, and may harm your
+system so make sure you are ok with that. 
 
 ## Keeping the template
 

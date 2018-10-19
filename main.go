@@ -18,8 +18,8 @@ var (
 // Main command that will be run when no other command is provided on the
 // command-line
 var rootCmd = &cobra.Command{
-	Use:   "projectmpl",
-	Short: "projectmpl [renderer] <options>",
+	Use:   "projectmpl [renderer] <options>",
+	Short: "projectmpl is a boilerplate engine",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		renderer.Render(args[0])
