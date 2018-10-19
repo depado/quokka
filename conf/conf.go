@@ -71,9 +71,10 @@ func (c *ConfigFile) AddCandidateFromPath(path string, info os.FileInfo) {
 // Root is a ConfigFile with extra information. It should be located at the root
 // of the template
 type Root struct {
-	ConfigFile `yaml:",inline"`
-	Name       string `yaml:"name"`
-	Version    string `yaml:"version"`
+	ConfigFile  `yaml:",inline"`
+	Name        string `yaml:"name"`
+	Version     string `yaml:"version"`
+	Description string `yaml:"description"`
 }
 
 // Parse will parse the yaml file and store its result in the root config

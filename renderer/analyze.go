@@ -38,6 +38,9 @@ func HandleRootConfig(dir string) *conf.Root {
 		utils.FatalPrintln("Couldn't parse root configuration:", err)
 	}
 	utils.OkPrintln("Preparing", color.GreenString(root.Name), "-", color.YellowString(root.Version))
+	if root.Description != "" {
+		utils.OkPrintln(color.BlueString(root.Description))
+	}
 	root.PromptVariables()
 	return root
 }

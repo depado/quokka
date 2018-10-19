@@ -1,6 +1,7 @@
-delimiters: ["{{", "}}"]
 name: "Example Projectmpl"
 version: "0.1.0"
+description: "An example template to show how projectmpl works"
+delimiters: ["{{", "}}"]
 variables:
   name:
     default: rendered
@@ -21,4 +22,3 @@ variables:
     default: "MIT"
     help: "License to be applied to the project"
     prompt: "Which license do you want to apply to this project?"
-

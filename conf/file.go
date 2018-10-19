@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/Depado/projectmpl/utils"
+	"github.com/fatih/color"
 	"gopkg.in/yaml.v2"
 )
 
@@ -78,6 +79,10 @@ func (f *File) ParseFrontMatter() error {
 		return err
 	}
 	f.Metadata = &r
+	if f.Metadata.Variables != nil && len(f.Metadata.Variables) > 0 {
+		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
+		f.Metadata.PromptVariables()
+	}
 	return nil
 }
 
