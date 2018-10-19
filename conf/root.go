@@ -34,7 +34,7 @@ func (c Command) Run() {
 		main = parts[0]
 	} else if len(parts) > 1 {
 		main = parts[0]
-		args = parts[1:len(parts)]
+		args = parts[1:]
 	}
 
 	var ecmd *exec.Cmd
