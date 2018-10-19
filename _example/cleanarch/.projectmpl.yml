@@ -27,13 +27,16 @@ variables:
     default: "github.com"
     help: "Git server"
   license:
-    values: ["MIT", "Apache License 2.0", "BSD 3", "FreeBSD", "GPL", "LGPL", "WTFPL", "None"]
+    values: ["MIT", "Apache License 2.0", "GPL", "LGPL", "WTFPL", ""]
     default: "MIT"
-    help: "License to be applied to the project"
+    help: "License to be applied to the project. Select the last option if you don't want a license."
     prompt: "Which license do you want to apply to this project?"
   drone:
     confirm: true
-    prompt: "Add a Drone configuration ?"
+    prompt: "Add a Drone configuration?"
+  docker:
+    confirm: true
+    prompt: "Add a Dockerfile and dockerignore?"
   git:
     confirm: true
     prompt: "Initialize git repo and git hooks ?"

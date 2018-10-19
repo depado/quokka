@@ -14,3 +14,4 @@ vendor/
 projectmpl
 output/
 dist/
+.vscode/

@@ -1,3 +1,0 @@
-variables:
-  override:
-    required: true

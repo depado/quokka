@@ -1,3 +1,6 @@
+---
+if: docker
+---
 # Build Step
 FROM golang:latest AS builder
 

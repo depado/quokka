@@ -15,9 +15,6 @@ import (
 
 const frontMatterPrefix = "---"
 
-// AllCandidates is the full list of candidates
-var AllCandidates []*File
-
 // File represents a single file, combining both its path and its os.FileInfo
 type File struct {
 	Path      string
@@ -91,9 +88,9 @@ func (f *File) ParseFrontMatter() error {
 	return nil
 }
 
-// WriteIgnore will write the file to its intended path and not attempt to
+// WriteCopy will write the file to its intended path and not attempt to
 // render
-func (f *File) WriteIgnore() error {
+func (f *File) WriteCopy() error {
 	var err error
 	var ofd *os.File // Output
 	var sfd *os.File // Source
@@ -153,7 +150,7 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 	var fd *os.File
 	rdr := f.NewPath + ".rendered"
 
-	if err = f.WriteIgnore(); err != nil {
+	if err = f.WriteCopy(); err != nil {
 		return err
 	}
 
@@ -174,6 +171,7 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 func (f *File) Render() error {
 	var err error
 	var condition string
+	var copy bool
 	var ignore bool
 
 	delims := []string{"{{", "}}"}
@@ -181,8 +179,11 @@ func (f *File) Render() error {
 
 	for i := len(f.Renderers) - 1; i >= 0; i-- {
 		r := f.Renderers[i]
-		if r.Ignore {
-			ignore = true
+		if r.Copy != nil {
+			copy = *r.Copy
+		}
+		if r.Ignore != nil {
+			ignore = *r.Ignore
 		}
 		for k, v := range r.Variables {
 			if v != nil {
@@ -204,12 +205,19 @@ func (f *File) Render() error {
 		if f.Metadata.If != "" {
 			condition = f.Metadata.If
 		}
-		if f.Metadata.Ignore {
-			ignore = true
+		if f.Metadata.Copy != nil {
+			copy = *f.Metadata.Copy
+		}
+		if f.Metadata.Ignore != nil {
+			ignore = *f.Metadata.Ignore
 		}
 		if f.Metadata.Delimiters != nil {
 			delims = f.Metadata.Delimiters
 		}
+	}
+	if ignore {
+		utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+		return nil
 	}
 	if condition != "" {
 		if v, ok := ctx[condition]; ok {
@@ -227,8 +235,8 @@ func (f *File) Render() error {
 			}
 		}
 	}
-	if ignore {
-		if err = f.WriteIgnore(); err != nil {
+	if copy {
+		if err = f.WriteCopy(); err != nil {
 			return err
 		}
 		utils.OkPrintln("Copied  ", color.GreenString(f.NewPath))

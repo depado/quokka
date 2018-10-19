@@ -1,0 +1,9 @@
+name: "License Template"
+version: "0.1.0"
+description: "Add a LICENSE file to your project painlessly"
+variables:
+  license:
+    values: ["MIT", "Apache License 2.0", "GPL", "LGPL", "WTFPL"]
+    default: "MIT"
+    help: "License to be applied to the project."
+    prompt: "Which license do you want to apply to this project?"

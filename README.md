@@ -153,24 +153,30 @@ For example you can completely ignore a director:
 ```
 
 ```yaml
-ignore: true
+copy: true
 ```
 
 In this case, the file `override.go` won't be rendered (but will simply be 
 copied to the output directory). This would apply for every sub-directory, 
 except if a directory contains a `.projectmpl.yml` telling otherwise, or a
-file with an inline configuration. 
+file with an inline configuration. The `ignore` option can also be used to
+completely ignore a file or a directory. 
+
+```yaml
+ignore: true
+```
 
 ## Per-file configuration
 
 You can also configure individual files by adding a front matter at the top
 of the file (that will obviously be removed when rendered). 
 
-Let's say I have a file that I don't want to render:
+Let's say I have a file that I don't want to render but simply copy to the
+output directory:
 
 ```
 ---
-ignore: true
+copy: true
 ---
 # This shouldn't be rendered at all !
 ```
@@ -204,7 +210,7 @@ workspace:
 ```
 
 This file will be rendered if, and only if, the user answered yes to that
-question. Note that `if` and `ignore` can work together if you just want
+question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
 
 ## After render commands

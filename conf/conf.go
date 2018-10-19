@@ -13,7 +13,8 @@ import (
 // or to an entire directory
 type Config struct {
 	Delimiters []string             `yaml:"delimiters"`
-	Ignore     bool                 `yaml:"ignore"`
+	Copy       *bool                `yaml:"copy"`
+	Ignore     *bool                `yaml:"ignore"`
 	Variables  map[string]*Variable `yaml:"variables"`
 	If         string               `yaml:"if"`
 }

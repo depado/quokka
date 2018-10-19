@@ -52,6 +52,7 @@ func Analyze(dir string) {
 	var err error
 	output := viper.GetString("output")
 	root := HandleRootConfig(dir)
+	var candidates []*conf.File
 
 	m := make(map[string]*conf.ConfigFile)
 	m[root.File.Dir] = &root.ConfigFile
@@ -88,7 +89,7 @@ func Analyze(dir string) {
 				c = filepath.Dir(c)
 			}
 			root.NewPath(f, output)
-			conf.AllCandidates = append(conf.AllCandidates, f)
+			candidates = append(candidates, f)
 		}
 		return nil
 	})
@@ -96,7 +97,7 @@ func Analyze(dir string) {
 		utils.FatalPrintln("Couldn't read filesystem:", err)
 	}
 
-	for _, f := range conf.AllCandidates {
+	for _, f := range candidates {
 		if err = f.ParseFrontMatter(); err != nil {
 			utils.FatalPrintln("Couldn't parse front matter for file", color.YellowString(f.Path), ":", err)
 		}
