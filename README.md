@@ -31,6 +31,7 @@ projectmpl
     - [Standard `.projectmpl.yml` files](#standard-projectmplyml-files)
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
+    - [After render commands](#after-render-commands)
 
 <!-- /TOC -->
 
@@ -42,7 +43,7 @@ or using a local directory.
 
 ## Keeping the template
 
-When donwloading or cloning a template, `projectmpl` will create a temporary
+When downloading or cloning a template, `projectmpl` will create a temporary
 directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
 the `--template.keep` option. This option pairs well with `--template.output`
@@ -180,7 +181,7 @@ like an inline `.projectmpl.yml` that applies to a single file.
 ## Conditional Rendering/Copy
 
 You may want some files to not be copied or rendered according to what the user
-answers to your prompt. You can use the `render_if` key (in a `.projectmpl.yml`
+answers to your prompt. You can use the `if` key (in a `.projectmpl.yml`
 or inline in a file), with the name of one of your variables. For example if
 you have a variable defined like this in your root config:
 
@@ -195,7 +196,7 @@ You can then add this at the top of the file:
 
 ```
 ---
-render_if: drone
+if: drone
 ---
 workspace:
   base: /go
@@ -203,5 +204,36 @@ workspace:
 ```
 
 This file will be rendered if, and only if, the user answered yes to that
-question. Note that `render_if` and `ignore` can work together if you just want
+question. Note that `if` and `ignore` can work together if you just want
 to copy the file and not render it.
+
+## After render commands
+
+You can define some actions to be run once your template has been rendered.
+You can only define those in the root configuration (not in sub-directory
+configuration files). These actions can be configured to be run only when a
+variable has been entered, just like the conditional rendering. Here is an
+example of initializing the git repository when the template has been rendered:
+
+```yml
+after:
+  - cmd: "git init"
+    echo: "Intialized git repo"
+    if: git
+  - cmd: "git config core.hooksPath .githooks"
+    echo: "Configured git hooks"
+    if: git
+variables:
+  git:
+    confirm: true
+    prompt: "Initialize git repo and git hooks ?"
+```
+
+If the user answers yes to the question about git, then the repo will be 
+initialized. You can also specify that you want the output of the command to be
+displayed to the user using the `output: true`. `echo` is used to display a nice
+message (instead of the command output).
+
+**Note**: Due to the potential misbehavior of template creators, the user needs
+to pass the `-c` or `--commands` to execute those commands. Otherwise the 
+commands will be completely ignored.

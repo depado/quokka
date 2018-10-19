@@ -2,6 +2,15 @@ name: "Example Projectmpl"
 version: "0.1.0"
 description: "An example template to show how projectmpl works"
 delimiters: ["{{", "}}"]
+after:
+  - cmd: "git init"
+    failure: stop
+    echo: "Intialized git repo"
+    if: git
+  - cmd: "git config core.hooksPath .githooks"
+    failure: stop
+    echo: "Configured git hooks"
+    if: git
 variables:
   name:
     default: rendered
@@ -22,5 +31,9 @@ variables:
     default: "MIT"
     help: "License to be applied to the project"
     prompt: "Which license do you want to apply to this project?"
-  sub2:
-    confirm: false
+  drone:
+    confirm: true
+    prompt: "Add a Drone configuration ?"
+  git:
+    confirm: true
+    prompt: "Initialize git repo and git hooks ?"

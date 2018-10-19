@@ -104,4 +104,7 @@ func Analyze(dir string) {
 			utils.FatalPrintln("Couldn't render template:", err)
 		}
 	}
+	if viper.GetBool("commands") {
+		root.ExecuteCommands(output)
+	}
 }

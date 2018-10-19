@@ -201,8 +201,8 @@ func (f *File) Render() error {
 		}
 	}
 	if f.Metadata != nil {
-		if f.Metadata.RenderIf != "" {
-			condition = f.Metadata.RenderIf
+		if f.Metadata.If != "" {
+			condition = f.Metadata.If
 		}
 		if f.Metadata.Ignore {
 			ignore = true

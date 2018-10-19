@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -16,7 +15,7 @@ type Config struct {
 	Delimiters []string             `yaml:"delimiters"`
 	Ignore     bool                 `yaml:"ignore"`
 	Variables  map[string]*Variable `yaml:"variables"`
-	RenderIf   string               `yaml:"render_if"`
+	If         string               `yaml:"if"`
 }
 
 // PromptVariables will prompt the user for the different variables in the file
@@ -57,37 +56,6 @@ func (c *ConfigFile) Parse() error {
 	}
 
 	return yaml.Unmarshal(out, c)
-}
-
-// Root is a ConfigFile with extra information. It should be located at the root
-// of the template
-type Root struct {
-	ConfigFile  `yaml:",inline"`
-	Name        string `yaml:"name"`
-	Version     string `yaml:"version"`
-	Description string `yaml:"description"`
-}
-
-// Parse will parse the yaml file and store its result in the root config
-func (r *Root) Parse() error {
-	var err error
-	var out []byte
-
-	if out, err = ioutil.ReadFile(r.ConfigFile.File.Path); err != nil {
-		return err
-	}
-
-	return yaml.Unmarshal(out, r)
-}
-
-// NewPath adds the path where the file should be rendered according to the root
-func (r Root) NewPath(f *File, new string) {
-	f.NewPath = strings.Replace(f.Path, r.File.Dir, new, 1)
-}
-
-// NewRootConfig will return the root configuration
-func NewRootConfig(path string, file os.FileInfo) *Root {
-	return &Root{ConfigFile: ConfigFile{File: &File{Path: path, Info: file, Dir: filepath.Dir(path)}}}
 }
 
 // NewConfigFile returns a new configfile

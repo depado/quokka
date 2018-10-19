@@ -13,6 +13,13 @@ help:
 build: ## Build
 	go build -o $(BINARY) $(LDFLAGS)
 
+
+.PHONY: docker
+docker: ## Build the docker image
+	docker build -t $(BINARY):latest -t $(BINARY):$(VERSION) \
+		--build-arg build=$(BUILD) --build-arg version=$(VERSION) \
+		-f Dockerfile --no-cache .
+
 .PHONY: test
 test: ## Run the test suite
 	go test ./...
