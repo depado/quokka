@@ -7,12 +7,17 @@ after:
     failure: stop
     echo: "Intialized git repo"
     if: git
+  - cmd: "git add -A"
+    echo: "Added files"
+    failure: stop
+    if: git
+  - cmd: git commit -m "initial"
+    echo: "Created initial commit"
+    failure: stop
+    if: git
   - cmd: "git config core.hooksPath .githooks"
     failure: stop
     echo: "Configured git hooks"
-    if: git
-  - cmd: 'git commit -a -m "intial commit"'
-    echo: "Created initial commit"
     if: git
 variables:
   name:
