@@ -11,6 +11,9 @@ after:
     failure: stop
     echo: "Configured git hooks"
     if: git
+  - cmd: 'git commit -a -m "intial commit"'
+    echo: "Created initial commit"
+    if: git
 variables:
   name:
     default: rendered
