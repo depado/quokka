@@ -10,6 +10,14 @@
   version = "1.4"
 
 [[projects]]
+  digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  pruneopts = "UT"
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
+
+[[projects]]
   branch = "master"
   digest = "1:988cfde37f089c50ba1ac8a1032c3f81d2ac0359e1872093b946a30139665eb6"
   name = "github.com/dsnet/compress"
@@ -187,14 +195,6 @@
   revision = "e06696f847aeda6f39a8f0b7cdff193b7690aef6"
 
 [[projects]]
-  branch = "master"
-  digest = "1:7b00688590bccf501dc8b1f43f5948a80bc72494c501d9c995abb68be1e766f2"
-  name = "github.com/onrik/logrus"
-  packages = ["filename"]
-  pruneopts = "UT"
-  revision = "c9849815bc7c2abf20d58e4bc06c242198ebb741"
-
-[[projects]]
   digest = "1:b2ee62e09bec113cf086d2ce0769efcc7bf79481aba8373fd8f7884e94df3462"
   name = "github.com/pelletier/go-buffruneio"
   packages = ["."]
@@ -220,6 +220,14 @@
   pruneopts = "UT"
   revision = "635575b42742856941dbc767b44905bb9ba083f6"
   version = "v2.0.7"
+
+[[projects]]
+  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  pruneopts = "UT"
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
 
 [[projects]]
   digest = "1:d917313f309bda80d27274d53985bc65651f81a5b66b820749ac7f8ef061fd04"
@@ -302,6 +310,14 @@
   version = "v1.3.0"
 
 [[projects]]
+  digest = "1:18752d0b95816a1b777505a97f71c7467a8445b8ffb55631a7bf779f6ba4fa83"
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  pruneopts = "UT"
+  revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
+  version = "v1.2.2"
+
+[[projects]]
   digest = "1:4aeb3860275fa1fd60cccfb5a6ef85da438bf17402e1e84412ade4d4b55066a0"
   name = "github.com/ulikunitz/xz"
   packages = [
@@ -358,14 +374,14 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:bececf436a23bf63181438c4ef4f7f47816b87ff879083d83ca1321f9001a354"
+  digest = "1:56e0fb6e56fa651d9183abd2db5f29d05da203a7c50bf9b331259e5087aca683"
   name = "golang.org/x/sys"
   packages = [
     "unix",
     "windows",
   ]
   pruneopts = "UT"
-  revision = "8f1d3d21f81be6e86ebcd6febee89c89bc50719f"
+  revision = "8e24a49d80f82323e1c4db1b5da3e0f31171a151"
 
 [[projects]]
   digest = "1:8029e9743749d4be5bc9f7d42ea1659471767860f0cdc34d37c3111bd308a295"
@@ -480,10 +496,10 @@
     "github.com/briandowns/spinner",
     "github.com/fatih/color",
     "github.com/mholt/archiver",
-    "github.com/onrik/logrus/filename",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
+    "github.com/stretchr/testify/assert",
     "gopkg.in/AlecAivazis/survey.v1",
     "gopkg.in/AlecAivazis/survey.v1/core",
     "gopkg.in/src-d/go-git.v4",
