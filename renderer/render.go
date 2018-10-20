@@ -3,11 +3,10 @@ package renderer
 import (
 	"os"
 
-	"github.com/spf13/viper"
-	"gopkg.in/AlecAivazis/survey.v1"
-
 	"github.com/Depado/projectmpl/provider"
 	"github.com/Depado/projectmpl/utils"
+	"github.com/spf13/viper"
+	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 // Render is the main render function

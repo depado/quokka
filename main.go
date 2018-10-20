@@ -36,7 +36,6 @@ var versionCmd = &cobra.Command{
 func main() {
 	// Initialize Cobra and Viper
 	cobra.OnInitialize(cmd.Initialize)
-	cmd.AddLoggerFlags(rootCmd)
 	cmd.AddRendererFlags(rootCmd)
 	rootCmd.AddCommand(versionCmd)
 

@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/fatih/color"
@@ -18,16 +19,26 @@ var ErrPrefix = color.New(color.FgRed).Sprint("»")
 
 // OkPrintln prints with a green prefix
 func OkPrintln(opts ...interface{}) {
-	fmt.Println(append([]interface{}{OkPrefix}, opts...)...)
+	log.Println(append([]interface{}{OkPrefix}, opts...)...)
+}
+
+// OkSprintln will return the string with a green prefix
+func OkSprintln(opts ...interface{}) string {
+	return fmt.Sprintln(append([]interface{}{OkPrefix}, opts...)...)
 }
 
 // ErrPrintln prints with a red prefix
 func ErrPrintln(opts ...interface{}) {
-	fmt.Println(append([]interface{}{ErrPrefix}, opts...)...)
+	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
+}
+
+// ErrSprintln will return the string with a red prefix
+func ErrSprintln(opts ...interface{}) string {
+	return fmt.Sprintln(append([]interface{}{ErrPrefix}, opts...)...)
 }
 
 // FatalPrintln prints out information with a red prefix and exits the program
 func FatalPrintln(opts ...interface{}) {
-	fmt.Println(append([]interface{}{ErrPrefix}, opts...)...)
+	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
 	os.Exit(1)
 }

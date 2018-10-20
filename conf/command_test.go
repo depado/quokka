@@ -1,10 +1,25 @@
 package conf
 
 import (
+	"bytes"
+	"log"
+	"os"
 	"os/exec"
 	"reflect"
 	"testing"
+
+	"github.com/Depado/projectmpl/utils"
+	"github.com/stretchr/testify/assert"
 )
+
+func captureOutput(f func()) string {
+	var buf bytes.Buffer
+	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
+	log.SetOutput(&buf)
+	f()
+	log.SetOutput(os.Stderr)
+	return buf.String()
+}
 
 func TestCommand_Parse(t *testing.T) {
 	tests := []struct {
@@ -40,8 +55,12 @@ func TestCommand_Run(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields fields
+		output string
 	}{
-		{"shouldn't fail", fields{Cmd: ""}},
+		{"shouldn't fail", fields{Cmd: ""}, ""},
+		{"test echo", fields{Cmd: "echo", Echo: "Doing nothing"}, utils.OkSprintln("Doing nothing")},
+		{"test output", fields{Cmd: "echo test", Output: true}, utils.OkSprintln("test")},
+		{"test not found and no stop", fields{Cmd: "xxxxxxxx"}, utils.ErrSprintln(`Couldn't execute command, ignoring: exec: "xxxxxxxx": executable file not found in $PATH`)},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -52,7 +71,11 @@ func TestCommand_Run(t *testing.T) {
 				Echo:    tt.fields.Echo,
 				If:      tt.fields.If,
 			}
-			c.Run()
+			if tt.output != "" {
+				assert.Equal(t, tt.output, captureOutput(c.Run))
+			} else {
+				c.Run()
+			}
 		})
 	}
 }
