@@ -24,6 +24,10 @@ pipeline:
   test:
     image: "golang:latest"
     commands:
-      - go test -cover -failfast ./...
+      - go test -race -coverprofile=coverage.txt ./...
     environment:
       - GO111MODULE=off
+
+  codecov:
+    image: robertstettner/drone-codecov
+    secrets: [ codecov_token ]

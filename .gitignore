@@ -15,3 +15,4 @@ projectmpl
 output/
 dist/
 .vscode/
+coverage.txt

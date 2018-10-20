@@ -7,6 +7,7 @@ projectmpl
 ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/projectmpl)](https://goreportcard.com/report/github.com/Depado/projectmpl)
 [![Build Status](https://drone.depado.eu/api/badges/Depado/projectmpl/status.svg)](https://drone.depado.eu/Depado/projectmpl)
+[![codecov](https://codecov.io/gh/Depado/projectmpl/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/projectmpl)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/projectmpl/blob/master/LICENSE)
 [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
 </h1>
