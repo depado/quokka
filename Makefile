@@ -11,7 +11,7 @@ help:
 
 .PHONY: build
 build: ## Build
-	go build -o $(BINARY) $(LDFLAGS)
+	CGO_ENABLED=0 go build -o $(BINARY) $(LDFLAGS)
 
 .PHONY: test
 test: ## Run the test suite

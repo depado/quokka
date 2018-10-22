@@ -15,11 +15,15 @@ projectmpl
 
 <h2 align="center">Project boilerplate engine<h2>
 <img align="center" src="/assets/projectmpl.gif">
+</h1>
 
-# Table of content
 <!-- TOC -->
 
-- [Table of content](#table-of-content)
+- [Introduction](#introduction)
+    - [Features](#features)
+- [Installation](#installation)
+    - [Download](#download)
+    - [Build from source](#build-from-source)
 - [Usage](#usage)
     - [Commands](#commands)
     - [Keeping the template](#keeping-the-template)
@@ -38,6 +42,58 @@ projectmpl
     - [After render commands](#after-render-commands)
 
 <!-- /TOC -->
+
+# Introduction
+
+Projectmpl is a boilerplate engine. It allows you to quickly use boilerplate 
+templates and avoid copy-pasting chunks of code and snippets when you start a 
+new project.
+
+## Features
+
+- **No external dependencies**  
+  Projectmpl is written in Go and thus is compiled to a static binary. Download
+  or build it and you're good to go.
+- **Local or distant templates**  
+  Either your template is a git repository, an archive stored on a distant
+  server or a local directory, projectmpl knows how to handle these.
+- **Sweet output and prompts**  
+  Thanks to the wonderful [survey](https://github.com/AlecAivazis/survey) 
+  library, the prompts are unified, can display an help text and support
+  validation.
+- **Clean configuration files**  
+  Projectmpl uses YAML for its configuration file formats, making them clean
+  and easy to read.
+- **Powerful templating system**  
+  Projectmpl uses [Go's template system](https://golang.org/pkg/text/template/)
+  to render the boilerplate.
+- **Configuration override**  
+  Need a different behavior or additional variables in a specific directory? 
+  Just add another `.projectmpl.yml` file in there. You can even overwrite
+  variables. 
+- **Customizable templates**  
+  Projectmpl allows fine-grained control over what needs to be done when
+  rendering the template. Just copy the file, ignore it, add conditonals based
+  on what the user answered, change the template delimiters…
+- **After render commands**  
+  Projectmpl allows you to define commands to be run once the boilerplate has
+  been rendered. _For security reasons, an explicit flag must be provided by the
+  user for the commands to be executed_
+
+# Installation
+
+## Download
+
+You can grab the latest release from [the release page](https://github.com/Depado/projectmpl/releases).
+
+## Build from source
+
+```
+$ go get -u github.com/Depado/projectmpl
+$ cd $GOPATH/src/github.com/Depado/projectpml
+$ dep ensure
+$ make
+```
 
 # Usage
 
