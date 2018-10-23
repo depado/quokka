@@ -13,6 +13,10 @@ help:
 build: ## Build
 	CGO_ENABLED=0 go build -o $(BINARY) $(LDFLAGS)
 
+.PHONY: install
+install: ## Build and install
+	CGO_ENABLED=0 go install $(LDFLAGS)
+
 .PHONY: release
 release: ## Create a new release on Github
 	VERSION=$(VERSION) BUILD=$(BUILD) goreleaser

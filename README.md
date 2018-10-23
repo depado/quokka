@@ -99,6 +99,15 @@ $ dep ensure
 $ make
 ```
 
+Or directly install:
+
+```
+$ go get -u github.com/Depado/projectmpl
+$ cd $GOPATH/src/github.com/Depado/projectpml
+$ dep ensure
+$ make install
+```
+
 # Usage
 
 Projectmpl supports various provider to download the templates. It supports 

@@ -12,6 +12,27 @@ import (
 // Variables represents a map of variable
 type Variables map[string]*Variable
 
+// func (e *Variables) UnmarshalYAML(unmarshal func(interface{}) error) error {
+// 	n := yaml.MapSlice{}
+// 	err := unmarshal(&n)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	for _, v := range n {
+// 		var inv &Variable
+// 		fmt.Println("============")
+// 		fmt.Println(v.Key)
+// 		for _, vv := range v.Value.(yaml.MapSlice) {
+// 			switch vv.Key {
+// 			case "default":
+
+// 			}
+// 			fmt.Println("\t", vv.Key, vv.Value)
+// 		}
+// 	}
+// 	return nil
+// }
+
 // Prompt will prompt the variables
 func (vv Variables) Prompt() {
 	// Order the variables alphabetically to keep the same order
@@ -52,9 +73,13 @@ func (vv Variables) Ctx() map[string]interface{} {
 }
 
 // AddToCtx will add the variable results to a sub-key
-func (vv Variables) AddToCtx(key string, ctx map[string]interface{}) {
+func (vv Variables) AddToCtx(prefix string, ctx map[string]interface{}) {
 	for k, v := range vv.Ctx() {
-		ctx[key+"_"+k] = v
+		if prefix != "" {
+			ctx[prefix+"_"+k] = v
+		} else {
+			ctx[k] = v
+		}
 	}
 }
 

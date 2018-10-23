@@ -173,8 +173,8 @@ func (f *File) Render() error {
 	var condition string
 	var copy bool
 	var ignore bool
-	var ctx map[string]interface{}
 
+	ctx := make(map[string]interface{})
 	delims := []string{"{{", "}}"}
 	for i := len(f.Renderers) - 1; i >= 0; i-- {
 		r := f.Renderers[i]
@@ -184,13 +184,13 @@ func (f *File) Render() error {
 		if r.Ignore != nil {
 			ignore = *r.Ignore
 		}
-		ctx = r.Variables.Ctx()
 		if r.Delimiters != nil {
 			if len(r.Delimiters) != 2 {
 				return fmt.Errorf("Delimiters should be an array of two string")
 			}
 			delims = r.Delimiters
 		}
+		r.Variables.AddToCtx("", ctx)
 	}
 	if f.Metadata != nil {
 		if f.Metadata.If != "" {
