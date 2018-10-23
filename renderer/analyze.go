@@ -41,7 +41,7 @@ func HandleRootConfig(dir string) *conf.Root {
 	if root.Description != "" {
 		utils.OkPrintln(color.CyanString(root.Description))
 	}
-	root.PromptVariables()
+	root.Variables.Prompt()
 	return root
 }
 
@@ -66,7 +66,9 @@ func Analyze(dir string) {
 			if err := cf.Parse(); err != nil {
 				utils.FatalPrintln("Couldn't parse configuration:", err)
 			}
-			cf.PromptVariables()
+			if cf.Variables != nil {
+				cf.Variables.Prompt()
+			}
 		}
 		return nil
 	})

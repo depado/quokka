@@ -36,6 +36,7 @@ projectmpl
         - [Boolean/Confirmation](#booleanconfirmation)
         - [Other options and help](#other-options-and-help)
         - [Validation](#validation)
+        - [Sub Variables](#sub-variables)
     - [Standard `.projectmpl.yml` files](#standard-projectmplyml-files)
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
@@ -71,9 +72,12 @@ new project.
   Need a different behavior or additional variables in a specific directory? 
   Just add another `.projectmpl.yml` file in there. You can even overwrite
   variables. 
+- **Conditional prompts (sub-variables)**  
+  Each variable can have its own subset of variables which will only be
+  prompted to the user if the parent variable is filled or set to true.
 - **Customizable templates**  
   Projectmpl allows fine-grained control over what needs to be done when
-  rendering the template. Just copy the file, ignore it, add conditonals based
+  rendering the template. Just copy the file, ignore it, add conditionals based
   on what the user answered, change the template delimiters…
 - **After render commands**  
   Projectmpl allows you to define commands to be run once the boilerplate has
@@ -239,6 +243,34 @@ variables:
 This will prevent the user from rendering your template with missing variables.
 Note that if you specified a default value for an input, it becomes impossible
 to not fill in that value. So the validator becomes obsolete.
+
+### Sub Variables
+
+It's not uncommon to ask for additional information when the user answered yes
+or filled in a variable. Thus, each variable can have its own variables:
+
+```yaml
+variables:
+  slack:
+    confirm: true
+    prompt: "Add Slack integration?"
+    variables:
+      channel:
+        required: true
+        prompt: "In which Slack channel should the result be posted?"
+      webhook:
+        required: true
+        help: "See https://api.slack.com/incoming-webhooks for more information"
+        prompt: "Provide the Slack webhook URL:"
+```
+
+In the example above we ask the user if he wants a Slack integration. If he
+answers yes to that, then we'll ask him about the Slack channel and the webhook
+URL. Otherwise we won't bother him with these details since they won't be used
+in our template rendering.
+
+The sub variables can be accessed in your templates with the form `.parent_sub`.
+In this case, `.slack_channel` and `.slack_webhook`.
 
 ## Standard `.projectmpl.yml` files
 

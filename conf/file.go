@@ -83,7 +83,7 @@ func (f *File) ParseFrontMatter() error {
 	f.Metadata = &r
 	if f.Metadata.Variables != nil && len(f.Metadata.Variables) > 0 {
 		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
-		f.Metadata.PromptVariables()
+		f.Metadata.Variables.Prompt()
 	}
 	return nil
 }
@@ -173,10 +173,9 @@ func (f *File) Render() error {
 	var condition string
 	var copy bool
 	var ignore bool
+	var ctx map[string]interface{}
 
 	delims := []string{"{{", "}}"}
-	ctx := make(map[string]interface{})
-
 	for i := len(f.Renderers) - 1; i >= 0; i-- {
 		r := f.Renderers[i]
 		if r.Copy != nil {
@@ -185,15 +184,7 @@ func (f *File) Render() error {
 		if r.Ignore != nil {
 			ignore = *r.Ignore
 		}
-		for k, v := range r.Variables {
-			if v != nil {
-				if v.Confirm != nil {
-					ctx[k] = *v.Confirm
-				} else {
-					ctx[k] = v.Result
-				}
-			}
-		}
+		ctx = r.Variables.Ctx()
 		if r.Delimiters != nil {
 			if len(r.Delimiters) != 2 {
 				return fmt.Errorf("Delimiters should be an array of two string")

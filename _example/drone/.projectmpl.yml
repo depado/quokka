@@ -1,0 +1,37 @@
+name: "Drone Template"
+version: "0.1.0"
+description: "Add a .drone.yml file to your project"
+delimiters: ["[[", "]]"]
+variables:
+  goversion:
+    default: "latest"
+    prompt: "Which go version should be used?"
+  repo:
+    required: true
+    prompt: "What's the full path of your project?"
+    help: "Full path of your repo or go package, for example 'github.com/Depado/projectmpl'"
+  gomodules:
+    confirm: false
+    prompt: "Use gomodules instead of dep?"
+  linter:
+    confirm: true
+    prompt: "Use golangci-lint as the main linter?"
+  slack:
+    confirm: true
+    prompt: "Add Slack integration?"
+    variables:
+      channel:
+        required: true
+        help: "Channel in which the build result should be posted. Should start with a # to work properly"
+        prompt: "Slack channel:"
+      webhook:
+        required: true
+        help: "See https://api.slack.com/incoming-webhooks for more information"
+        prompt: "Provide the Slack webhook URL:"
+      username:
+        default: "Build Notification"
+        prompt: "Username the integration will use to post in the channel:"
+  tags:
+    confirm: true 
+    prompt: "Clone with tags?"
+  
