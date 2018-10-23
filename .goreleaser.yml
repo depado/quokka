@@ -1,6 +1,7 @@
 builds:
 - goarch: [amd64, arm, arm64, 386]
   goarm: [6, 7]
+  goos: [linux,darwin,windows]
   env:
   - CGO_ENABLED=0
   ldflags:

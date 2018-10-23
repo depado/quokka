@@ -3,13 +3,18 @@ version: "0.1.0"
 description: "Add a .drone.yml file to your project"
 delimiters: ["[[", "]]"]
 variables:
+  name:
+    prompt: "What's the name of your repo?"
+    required: true
+  organization:
+    prompt: "What's your username or organization's name?"
+    required: true
+  gitserver:
+    default: "github.com"
+    help: "Git server"
   goversion:
     default: "latest"
     prompt: "Which go version should be used?"
-  repo:
-    required: true
-    prompt: "What's the full path of your project?"
-    help: "Full path of your repo or go package, for example 'github.com/Depado/projectmpl'"
   gomodules:
     confirm: false
     prompt: "Use gomodules instead of dep?"
@@ -29,7 +34,6 @@ variables:
         help: "See https://api.slack.com/incoming-webhooks for more information"
         prompt: "Provide the Slack webhook URL:"
       username:
-        default: "Build Notification"
         prompt: "Username the integration will use to post in the channel:"
   tags:
     confirm: true 

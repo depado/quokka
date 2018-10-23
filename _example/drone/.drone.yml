@@ -1,6 +1,6 @@
 workspace:
   base: /go
-  path: src/[[ .repo ]]
+  path: src/[[ .gitserver ]]/[[ .organization ]]/[[ .name ]]
 
 [[ if .tags -]]
 clone:
@@ -44,14 +44,16 @@ pipeline:
     image: plugins/slack
     channel: [[ .slack_channel ]]
     webhook: [[ .slack_webhook ]]
-    username: Notification
+    [[ if not eq .slack_username "" -]]
+    username: [[ .slack_username ]]
+    [[- end ]]
     template: >
       {{#success build.status}}
       <{{build.link}}|Build {{build.number}}> by {{build.author}} succeeded in {{since build.started}}
 
-      Version {{#if build.tag}}`{{build.tag}}`{{else}}`latest`{{/if}} deployed.
+      Version {{#if build.tag}}`{{build.tag}}`{{else}}`latest`{{/if}} built.
 
-      `chatbot-backend:{{build.commit}}` 
+      `[[ .name ]]:{{build.commit}}` 
       {{else}}
       <{{build.link}}|Build {{build.number}}> by {{build.author}} failed in {{since build.started}}
       {{/success}}
@@ -65,7 +67,7 @@ pipeline:
     image: plugins/slack
     channel: [[ .slack_channel ]]
     webhook: [[ .slack_webhook ]]
-    username: Notification
+    username: [[ .slack_username ]]
     template: >
       {{#success build.status}}
       <{{build.link}}|Build {{build.number}}> on branch `{{build.branch}}` by {{build.author}} succeeded in {{since build.started}}

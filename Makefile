@@ -15,7 +15,11 @@ build: ## Build
 
 .PHONY: release
 release: ## Create a new release on Github
-	VERSION=$(VERSION) BUILD=$(BUILD) goreleaser --snapshot
+	VERSION=$(VERSION) BUILD=$(BUILD) goreleaser
+
+.PHONY: snapshot
+snapshot: ## Create a new snapshot release
+	VERSION=$(VERSION) BUILD=$(BUILD) goreleaser --snapshot --rm-dist
 
 .PHONY: test
 test: ## Run the test suite
