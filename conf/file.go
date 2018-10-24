@@ -81,7 +81,7 @@ func (f *File) ParseFrontMatter() error {
 		return err
 	}
 	f.Metadata = &r
-	if f.Metadata.Variables != nil && len(f.Metadata.Variables) > 0 {
+	if f.Metadata.Variables != nil && len(f.Metadata.Variables.s) > 0 {
 		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
 		f.Metadata.Variables.Prompt()
 	}
@@ -190,7 +190,9 @@ func (f *File) Render() error {
 			}
 			delims = r.Delimiters
 		}
-		r.Variables.AddToCtx("", ctx)
+		if r.Variables != nil {
+			r.Variables.AddToCtx("", ctx)
+		}
 	}
 	if f.Metadata != nil {
 		if f.Metadata.If != "" {

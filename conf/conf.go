@@ -11,11 +11,11 @@ import (
 // Config is a configuration that can be applied to a single file (inline conf)
 // or to an entire directory
 type Config struct {
-	Delimiters []string  `yaml:"delimiters"`
-	Copy       *bool     `yaml:"copy"`
-	Ignore     *bool     `yaml:"ignore"`
-	Variables  Variables `yaml:"variables"`
-	If         string    `yaml:"if"`
+	Delimiters []string   `yaml:"delimiters"`
+	Copy       *bool      `yaml:"copy"`
+	Ignore     *bool      `yaml:"ignore"`
+	Variables  *Variables `yaml:"variables"`
+	If         string     `yaml:"if"`
 }
 
 // ConfigFile is the combination of File and Config

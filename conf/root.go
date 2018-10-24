@@ -43,10 +43,8 @@ func (r Root) ExecuteCommands(dir string) {
 	for _, cmd := range r.After {
 		if cmd.Cmd != "" {
 			if cmd.If != "" && r.Variables != nil {
-				if v, ok := r.Variables[cmd.If]; ok {
-					if v.Confirm != nil && *v.Confirm || v.Result != "" {
-						cmd.Run()
-					}
+				if v, ok := r.Variables.m[cmd.If]; ok && v.True() {
+					cmd.Run()
 				}
 			} else {
 				cmd.Run()
