@@ -9,10 +9,18 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// Variables represents a map of variable
-type Variables struct {
-	m map[string]*Variable
-	s []*Variable
+// Variables is a slice of pointer to a single variable
+type Variables []*Variable
+
+// FindNamed will find a variable by name in the global variables. Returns nil
+// if not found
+func (vv Variables) FindNamed(s string) *Variable {
+	for _, v := range vv {
+		if v.Name == s {
+			return v
+		}
+	}
+	return nil
 }
 
 // FromMapSlice fills in the Variables struct with the data stored in a
@@ -21,20 +29,14 @@ func (vv *Variables) FromMapSlice(in yaml.MapSlice) {
 	for _, i := range in {
 		inv := &Variable{}
 		inv.FromMapItem(i)
-
-		k := i.Key.(string)
-		inv.Name = k
-		vv.m[k] = inv
-		vv.s = append(vv.s, inv)
+		*vv = append(*vv, inv)
 	}
 }
 
 // UnmarshalYAML defines a custom way to unmarshal to the Variables type.
 // Specifically this allows to conserve the key order
 func (vv *Variables) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	variables := Variables{
-		m: make(map[string]*Variable),
-	}
+	var variables Variables
 	n := yaml.MapSlice{}
 	err := unmarshal(&n)
 	if err != nil {
@@ -47,7 +49,7 @@ func (vv *Variables) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 // Prompt will prompt
 func (vv Variables) Prompt() {
-	for _, v := range vv.s {
+	for _, v := range vv {
 		v.Prompt()
 	}
 }
@@ -55,7 +57,7 @@ func (vv Variables) Prompt() {
 // Ctx generates the context from the variables
 func (vv Variables) Ctx() map[string]interface{} {
 	ctx := make(map[string]interface{})
-	for _, v := range vv.s {
+	for _, v := range vv {
 		if v != nil {
 			if v.Confirm != nil {
 				ctx[v.Name] = *v.Confirm
@@ -101,8 +103,8 @@ type Variable struct {
 
 	// Confirm is used both for default variable and to store the result.
 	// If this field isn't nil, then a confirmation survey is used.
-	Confirm   *bool      `yaml:"confirm,omitempty"`
-	Variables *Variables `yaml:"variables,omitempty"`
+	Confirm   *bool     `yaml:"confirm,omitempty"`
+	Variables Variables `yaml:"variables,omitempty"`
 
 	Result string
 	Name   string
@@ -111,6 +113,7 @@ type Variable struct {
 // FromMapItem will fill the variable with the data stored in the input
 // yaml.MapItem. Used to recursively parse nested variables.
 func (v *Variable) FromMapItem(i yaml.MapItem) {
+	v.Name = i.Key.(string)
 	for _, data := range i.Value.(yaml.MapSlice) {
 		switch data.Key.(string) {
 		case "default":
@@ -129,9 +132,7 @@ func (v *Variable) FromMapItem(i yaml.MapItem) {
 			b := data.Value.(bool)
 			v.Confirm = &b
 		case "variables":
-			vv := &Variables{
-				m: make(map[string]*Variable),
-			}
+			var vv Variables
 			vv.FromMapSlice(data.Value.(yaml.MapSlice))
 			v.Variables = vv
 		}
