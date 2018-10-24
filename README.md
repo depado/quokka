@@ -149,7 +149,7 @@ system so make sure you are ok with that.
 When downloading or cloning a template, `projectmpl` will create a temporary
 directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
-the `--template.keep` option. This option pairs well with `--template.output`
+the `--keep` option. This option pairs well with `--template.output`
 which defines where the template should be downloaded/cloned.
 
 ## Examples
