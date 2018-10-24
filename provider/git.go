@@ -3,10 +3,9 @@ package provider
 import (
 	"path/filepath"
 
+	"github.com/Depado/projectmpl/utils"
 	"github.com/spf13/viper"
 	git "gopkg.in/src-d/go-git.v4"
-
-	"github.com/Depado/projectmpl/utils"
 )
 
 type gitp struct {
@@ -41,7 +40,7 @@ func (g gitp) Fetch() (string, error) {
 	}
 	s.DoneStop("Done cloning in", utils.Green.Sprint(outdir))
 
-	return filepath.Join(outdir, viper.GetString("template.path")), nil
+	return filepath.Join(outdir, viper.GetString("path")), nil
 }
 
 func (gitp) UsesTmp() bool {

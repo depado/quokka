@@ -115,6 +115,8 @@ Projectmpl supports various provider to download the templates. It supports
 or using a local directory. 
 
 ```
+projectmpl is a boilerplate engine
+
 Usage:
   projectmpl [renderer] <options> [flags]
   projectmpl [command]
@@ -126,17 +128,13 @@ Available Commands:
 Flags:
   -c, --commands                 execute the after commands (make sure you know what it does)
       --git.depth int            depth of git clone in case of git provider (default 1)
-      --git.key string           private key to use to clone the template if needed
   -h, --help                     help for projectmpl
-      --log.format string        one of text or json (default "text")
-      --log.level string         one of debug, info, warn, error or fatal (default "info")
-      --log.line                 enable filename and line in logs
-  -o, --output string            output directory of rendered template (default "output")
-      --password string          password for auth if needed
-      --template.keep            do not delete the template when operation is complete
+  -k, --keep                     do not delete the template when operation is complete
+  -o, --output string            output directory (default "output")
+  -p, --path string              specify if the template is actually stored in a sub-directory of the downloaded file
       --template.output string   specify output directory for the template
-      --template.path string     specify if the template is actually stored in a sub-directory of the downloaded file
-      --user string              user for auth if needed
+
+Use "projectmpl [command] --help" for more information about a command.
 ```
 
 ## Commands
@@ -158,9 +156,9 @@ which defines where the template should be downloaded/cloned.
 
 ```sh
 $ # Clone the repository and execute the template that is located in _example/license
-$ projectmpl git@github.com:Depado/projectmpl.git --template.path _example/license
-$ # Clone the template and render it in a specific directory
-$ projectmpl git@github.com:Depado/projectmpl.git --template.path _example/cleanarch --template.keep --template.output "template" -o myamazingproject
+$ projectmpl git@github.com:Depado/projectmpl.git --path _example/license
+$ # Clone the template in a specific directory, render it in a specific directory and keep the template
+$ projectmpl git@github.com:Depado/projectmpl.git --path _example/cleanarch --keep --template.output "template" -o myamazingproject
 $ # Reuse the downloaded template and allow final commands
 $ projectmpl template/ -c -o myotherproject
 ```

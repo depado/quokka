@@ -57,7 +57,7 @@ func (h httpp) Fetch() (string, error) {
 	}
 	s.DoneStop("Donwloaded and extracted template in", utils.Green.Sprint(outdir))
 
-	return filepath.Join(outdir, viper.GetString("template.path")), nil
+	return filepath.Join(outdir, viper.GetString("path")), nil
 }
 
 func (httpp) Name() string {

@@ -18,7 +18,7 @@ func NewLocalProvider(in string) Provider {
 }
 
 func (l local) Fetch() (string, error) {
-	return filepath.Join(l.Path, viper.GetString("template.path")), nil
+	return filepath.Join(l.Path, viper.GetString("path")), nil
 }
 
 func (local) UsesTmp() bool {
