@@ -15,9 +15,18 @@ type Variables []*Variable
 // FindNamed will find a variable by name in the global variables. Returns nil
 // if not found
 func (vv Variables) FindNamed(s string) *Variable {
+	// First pass, top level
 	for _, v := range vv {
 		if v.Name == s {
 			return v
+		}
+	}
+	// Second pass, get inside variables
+	for _, v := range vv {
+		if v.Variables != nil {
+			if out := v.Variables.FindNamed(s); out != nil {
+				return out
+			}
 		}
 	}
 	return nil
