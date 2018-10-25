@@ -15,16 +15,21 @@ type Variables []*Variable
 // FindNamed will find a variable by name in the global variables. Returns nil
 // if not found
 func (vv Variables) FindNamed(s string) *Variable {
-	// First pass, top level
+	return vv.FindWithParent(nil, s)
+}
+
+// FindWithParent tries to find the variable with a prefix
+func (vv Variables) FindWithParent(p *Variable, s string) *Variable {
 	for _, v := range vv {
-		if v.Name == s {
+		if p != nil {
+			if p.Name+"_"+v.Name == s {
+				return v
+			}
+		} else if v.Name == s {
 			return v
 		}
-	}
-	// Second pass, get inside variables
-	for _, v := range vv {
 		if v.Variables != nil {
-			if out := v.Variables.FindNamed(s); out != nil {
+			if out := v.Variables.FindWithParent(v, s); out != nil {
 				return out
 			}
 		}

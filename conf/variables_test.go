@@ -90,7 +90,8 @@ func TestVariables_FindNamed(t *testing.T) {
 		{"should find bool", vv, args{hasbool.Name}, hasbool},
 		{"should find value", vv, args{hasvalue.Name}, hasvalue},
 		{"shouldn't find", vv, args{"random.jpg"}, nil},
-		{"should find nested", Variables{parentvar}, args{"sub"}, subvar},
+		{"should find nested", Variables{parentvar}, args{"parent_sub"}, subvar},
+		{"shouldn't find nested raw", Variables{parentvar}, args{"sub"}, nil},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
