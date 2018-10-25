@@ -17,6 +17,7 @@ func AddRendererFlags(c *cobra.Command) {
 	c.PersistentFlags().BoolP("keep", "k", false, "do not delete the template when operation is complete")
 	c.PersistentFlags().Int("git.depth", 1, "depth of git clone in case of git provider")
 	c.PersistentFlags().String("template.output", "", "specify output directory for the template")
+	// TODO: Handle auth for HTTP Provider
 	// c.PersistentFlags().String("user", "", "user for auth if needed")
 	// c.PersistentFlags().String("password", "", "password for auth if needed")
 	if err := viper.BindPFlags(c.PersistentFlags()); err != nil {
@@ -27,6 +28,7 @@ func AddRendererFlags(c *cobra.Command) {
 // Initialize will be run when cobra finishes its initialization
 func Initialize() {
 	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
+	viper.SetEnvPrefix("projectmpl")
 	// Environment variables
 	viper.AutomaticEnv()
 }
