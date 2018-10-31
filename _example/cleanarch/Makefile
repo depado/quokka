@@ -12,14 +12,13 @@ help:
 .PHONY: build
 build: ## Build
 	go build -o $(BINARY) $(LDFLAGS)
-
-
+{{ if .docker }}
 .PHONY: docker
 docker: ## Build the docker image
 	docker build -t $(BINARY):latest -t $(BINARY):$(VERSION) \
 		--build-arg build=$(BUILD) --build-arg version=$(VERSION) \
 		-f Dockerfile --no-cache .
-
+{{ end }}
 .PHONY: test
 test: ## Run the test suite
 	go test ./...
