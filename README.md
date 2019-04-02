@@ -22,7 +22,6 @@
     - [Download](#download)
     - [Build from source](#build-from-source)
 - [Usage](#usage)
-    - [Commands](#commands)
     - [Keeping the template](#keeping-the-template)
     - [Examples](#examples)
 - [Template Creation](#template-creation)
@@ -37,7 +36,7 @@
     - [Standard `.quokka.yml` files](#standard-quokkayml-files)
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
-    - [After render commands](#after-render-commands)
+    <!-- - [After render commands](#after-render-commands) -->
 
 # Introduction
 
