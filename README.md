@@ -1,23 +1,25 @@
-<h1 align=center>
-projectmpl
-<br>
-<br>
+<h1 align="center">Quokka</h1>
+<div>
+  <span align="left">
+    <img src="/assets/mascot.png" alt="mascot">
+  </span>
+  <span align=right>
 
-[![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
+  [![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
-![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Depado/projectmpl)](https://goreportcard.com/report/github.com/Depado/projectmpl)
-[![Build Status](https://drone.depado.eu/api/badges/Depado/projectmpl/status.svg)](https://drone.depado.eu/Depado/projectmpl)
-[![codecov](https://codecov.io/gh/Depado/projectmpl/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/projectmpl)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/projectmpl/blob/master/LICENSE)
-[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
-</h1>
+  ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
+  [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/projectmpl)](https://goreportcard.com/report/github.com/Depado/projectmpl)
+  [![Build Status](https://drone.depado.eu/api/badges/Depado/projectmpl/status.svg)](https://drone.depado.eu/Depado/projectmpl)
+  [![codecov](https://codecov.io/gh/Depado/projectmpl/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/projectmpl)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/projectmpl/blob/master/LICENSE)
+  [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
+  
+  </span>
+</div>
 
-<h2 align="center">Project boilerplate engine<h2>
+<h2 align="center">Friendly Boilerplate Engine</h2>
+
 <img align="center" src="/assets/projectmpl.gif">
-</h1>
-
-<!-- TOC -->
 
 - [Introduction](#introduction)
     - [Features](#features)
@@ -41,8 +43,6 @@ projectmpl
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
     - [After render commands](#after-render-commands)
-
-<!-- /TOC -->
 
 # Introduction
 
@@ -76,13 +76,14 @@ new project.
   Each variable can have its own subset of variables which will only be
   prompted to the user if the parent variable is filled or set to true.
 - **Customizable templates**  
-  Projectmpl allows fine-grained control over what needs to be done when
+  Projectmpl enables fine-grained control over what needs to be done when
   rendering the template. Just copy the file, ignore it, add conditionals based
   on what the user answered, change the template delimiters…
-- **After render commands**  
-  Projectmpl allows you to define commands to be run once the boilerplate has
+- **[On Hold] After render commands**  
+  Projectmpl enables you to define commands to be run once the boilerplate has
   been rendered. _For security reasons, an explicit flag must be provided by the
   user for the commands to be executed_
+  This feature is currently disabled for security reasons.
 
 # Installation
 
@@ -115,59 +116,63 @@ Projectmpl supports various provider to download the templates. It supports
 or using a local directory. 
 
 ```
-projectmpl is a boilerplate engine
+Quokka (qk) is a template engine that enables to render local or distant 
+templates/boilerplates in a user friendly way. When given a URL/Git repository
+or a path to a local Quokka template, quokka will ask for the required values
+in an interactive way except if an inpute file is given to the CLI.
 
 Usage:
-  projectmpl [renderer] <options> [flags]
-  projectmpl [command]
+  qk [template] [output] <options> [flags]
+  qk [command]
 
 Available Commands:
   help        Help about any command
+  new         Create a new quokka template
   version     Show build and version
 
 Flags:
-  -c, --commands                 execute the after commands (make sure you know what it does)
-      --git.depth int            depth of git clone in case of git provider (default 1)
-  -h, --help                     help for projectmpl
-  -k, --keep                     do not delete the template when operation is complete
-  -o, --output string            output directory (default "output")
-  -p, --path string              specify if the template is actually stored in a sub-directory of the downloaded file
-      --template.output string   specify output directory for the template
+  -d, --debug           debug mode
+      --git.depth int   depth of git clone in case of git provider (default 1)
+  -h, --help            help for qk
+  -i, --input string    specify an input values file to automate template rendering
+  -k, --keep            do not delete the template when operation is complete
+  -o, --output string   specify the directory where the template should be downloaded or cloned
+  -p, --path string     specify if the template is actually stored in a sub-directory of the downloaded file
 
-Use "projectmpl [command] --help" for more information about a command.
+Use "qk [command] --help" for more information about a command.
 ```
 
-## Commands
+<!-- ## Commands
 
 Some templates may define additional commands that will run once the template
 has been rendered. If you wish to activate this behavior, you can pass the
 `-c` or `--commands` flag. These commands can be anything, and may harm your
-system so make sure you are ok with that. 
+system so make sure you are ok with that.  -->
 
 ## Keeping the template
 
 When downloading or cloning a template, `projectmpl` will create a temporary
 directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
-the `--keep` option. This option pairs well with `--template.output`
-which defines where the template should be downloaded/cloned.
+the `--keep` option. This option pairs well with the `--output` option which 
+defines where the template should be downloaded/cloned.
 
 ## Examples
 
 ```sh
 $ # Clone the repository and execute the template that is located in _example/license
-$ projectmpl git@github.com:Depado/projectmpl.git --path _example/license
+$ qk git@github.com:Depado/projectmpl.git output --path _example/license
 $ # Clone the template in a specific directory, render it in a specific directory and keep the template
-$ projectmpl git@github.com:Depado/projectmpl.git --path _example/cleanarch --keep --template.output "template" -o myamazingproject
-$ # Reuse the downloaded template and allow final commands
-$ projectmpl template/ -c -o myotherproject
+$ qk git@github.com:Depado/projectmpl.git myamazingproject --path _example/cleanarch --keep --output "template"
+$ # Reuse the downloaded template
+$ projectmpl template/ myotherproject
 ```
 
 # Template Creation
 
-## The root `.projectmpl.yml` file
+## The root `.quokka.yml` file
 
-To configure your template, place a `.projectmpl.yml` at the root of your template.
+To configure your template, place a `.quokka.yml` at the root of your template.
 This is called the root configuration, and should contain some information about
 your template such as its name, its version and a description.
 
@@ -175,16 +180,16 @@ It can also contain overrides for delimiters in the templates (defaults being
 the go-style `{{ .var }}`) and variables.
 
 ```yaml
-name: "Example Projectmpl"
+name: "Example Quokka Template"
 version: "0.1.0"
-description: "An example template to show how projectmpl works"
+description: "An example template to show how quokka works"
 ```
 
 ## Variable declaration
 
 You can add a `variables` section to your root configuration (or to any 
-`.projectmpl.yml` file, or directly inline in your template files, see below) to
-define the variables you want your user to define. There are three types of
+`.quokka.yml` file, or directly inline in your template files, see below) to
+define the variables you want your user to fill in. There are three types of
 input you can use:
 
 ### Simple Input
@@ -279,14 +284,14 @@ in our template rendering.
 The sub variables can be accessed in your templates with the form `.parent_sub`.
 In this case, `.slack_channel` and `.slack_webhook`.
 
-## Standard `.projectmpl.yml` files
+## Standard `.quokka.yml` files
 
-If you place a `.projectmpl.yml` file in a sub-directory of your template, this
+If you place a `.quokka.yml` file in a sub-directory of your template, this
 file will apply recursively to all the elements inside that directory and its 
 own sub-directories, meaning that you can override some variables, add new ones, 
 modify the delimiters, or completely ignore an entire directory.
 
-For example you can completely ignore a director:
+For example you can completely ignore a directory:
 
 ```
 └──── change
@@ -300,7 +305,7 @@ copy: true
 
 In this case, the file `override.go` won't be rendered (but will simply be 
 copied to the output directory). This would apply for every sub-directory, 
-except if a directory contains a `.projectmpl.yml` telling otherwise, or a
+except if a directory contains a `.quokka.yml` telling otherwise, or a
 file with an inline configuration. The `ignore` option can also be used to
 completely ignore a file or a directory. 
 
@@ -329,7 +334,7 @@ like an inline `.projectmpl.yml` that applies to a single file.
 ## Conditional Rendering/Copy
 
 You may want some files to not be copied or rendered according to what the user
-answers to your prompt. You can use the `if` key (in a `.projectmpl.yml`
+answers to your prompt. You can use the `if` key (in a `.quokka.yml`
 or inline in a file), with the name of one of your variables. For example if
 you have a variable defined like this in your root config:
 
@@ -355,7 +360,7 @@ This file will be rendered if, and only if, the user answered yes to that
 question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
 
-## After render commands
+<!-- ## After render commands
 
 You can define some actions to be run once your template has been rendered.
 You can only define those in the root configuration (not in sub-directory
@@ -384,4 +389,4 @@ message (instead of the command output).
 
 **Note**: Due to the potential misbehavior of template creators, the user needs
 to pass the `-c` or `--commands` to execute those commands. Otherwise the 
-commands will be completely ignored.
+commands will be completely ignored. -->

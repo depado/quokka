@@ -15,12 +15,12 @@ type Provider interface {
 // NewProviderFromPath will return a new Provider according to the given string
 // as it will try to detect git repositories, http scheme and fallback to local
 // directory otherwise
-func NewProviderFromPath(in string) Provider {
+func NewProviderFromPath(in, path, output string, depth int) Provider {
 	if strings.HasSuffix(in, ".git") {
-		return NewGitProvider(in)
+		return NewGitProvider(in, path, output, depth)
 	}
 	if strings.HasPrefix(in, "http://") || strings.HasPrefix(in, "https://") {
-		return NewHTTPProvider(in)
+		return NewHTTPProvider(in, path, output)
 	}
-	return NewLocalProvider(in)
+	return NewLocalProvider(in, output)
 }

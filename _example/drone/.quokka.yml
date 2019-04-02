@@ -1,6 +1,6 @@
 name: "Drone Template"
 version: "0.1.0"
-description: "Add a .drone.yml file to your project"
+description: "Helps you generate a .drone.yml file that fits your project needs"
 delimiters: ["[[", "]]"]
 variables:
   name:

@@ -4,6 +4,8 @@ builds:
   goos: [linux,darwin,windows]
   env:
   - CGO_ENABLED=0
+  main: ./cmd/qk/main.go
+  binary: qk
   ldflags:
    - -s -w -X "main.Version={{.Env.VERSION}}" -X "main.Build={{ .Env.BUILD }}"
 archive:

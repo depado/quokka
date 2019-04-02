@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-BINARY=projectmpl
+BINARY=qk
 VERSION=$(shell git describe --abbrev=0 --tags 2> /dev/null || echo "0.1.0")
 BUILD=$(shell git rev-parse HEAD 2> /dev/null || echo "undefined")
 LDFLAGS=-ldflags "-X main.Version=$(VERSION) -X main.Build=$(BUILD)"
@@ -11,11 +11,11 @@ help:
 
 .PHONY: build
 build: ## Build
-	CGO_ENABLED=0 go build -o $(BINARY) $(LDFLAGS)
+	CGO_ENABLED=0 go build -o $(BINARY) $(LDFLAGS) ./cmd/qk
 
 .PHONY: install
 install: ## Build and install
-	CGO_ENABLED=0 go install $(LDFLAGS)
+	CGO_ENABLED=0 go install $(LDFLAGS) ./cmd/qk
 
 .PHONY: release
 release: ## Create a new release on Github

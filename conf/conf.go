@@ -16,6 +16,7 @@ type Config struct {
 	Ignore     *bool      `yaml:"ignore"`
 	Variables  *Variables `yaml:"variables"`
 	If         string     `yaml:"if"`
+	Ctx        InputCtx   `yaml:"-"`
 }
 
 // ConfigFile is the combination of File and Config
@@ -36,12 +37,20 @@ func (c *ConfigFile) Parse() error {
 	return yaml.Unmarshal(out, c)
 }
 
+// Prompt will prompt the necessary prompts wihtout displaying the ones for
+// variables that were already defined in the input file
+func (c *ConfigFile) Prompt() {
+	if c.Variables != nil {
+		c.Variables.FillPrompt("", c.Ctx)
+	}
+}
+
 // NewConfigFile returns a new configfile
-func NewConfigFile(path string, file os.FileInfo) *ConfigFile {
-	return &ConfigFile{File: &File{Path: path, Info: file, Dir: filepath.Dir(path)}}
+func NewConfigFile(path string, file os.FileInfo, ctx InputCtx) *ConfigFile {
+	return &ConfigFile{File: &File{Path: path, Info: file, Dir: filepath.Dir(path)}, Config: Config{Ctx: ctx}}
 }
 
 // NewFile returns a new file
-func NewFile(path string, file os.FileInfo) *File {
-	return &File{Path: path, Info: file, Dir: filepath.Dir(path)}
+func NewFile(path string, file os.FileInfo, ctx InputCtx) *File {
+	return &File{Path: path, Info: file, Dir: filepath.Dir(path), Ctx: ctx}
 }

@@ -1,5 +1,5 @@
 ---
-render_if: drone
+if: drone
 ---
 workspace:
   base: /go

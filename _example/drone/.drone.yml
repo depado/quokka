@@ -44,7 +44,7 @@ pipeline:
     image: plugins/slack
     channel: [[ .slack_channel ]]
     webhook: [[ .slack_webhook ]]
-    [[ if not eq .slack_username "" -]]
+    [[ if not (eq .slack_username "") -]]
     username: [[ .slack_username ]]
     [[- end ]]
     template: >

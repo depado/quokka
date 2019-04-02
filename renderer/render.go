@@ -10,13 +10,14 @@ import (
 )
 
 // Render is the main render function
-func Render(template string) {
+func Render(template, output, toutput, path, input string, keep bool, depth int) {
 	var err error
-	var path string
+	var tpath string
 
-	if _, err = os.Stat(viper.GetString("output")); !os.IsNotExist(err) {
+	if _, err = os.Stat(output); !os.IsNotExist(err) {
 		var confirmed bool
 		prompt := &survey.Confirm{
+			Help:    "qk will only affect already existing files that match the template you're trying to render",
 			Message: "The output destination already exists. Continue ?",
 		}
 		survey.AskOne(prompt, &confirmed, nil) // nolint: errcheck
@@ -27,9 +28,9 @@ func Render(template string) {
 	}
 
 	// Determines the provider to use and fetch the template
-	p := provider.NewProviderFromPath(template)
+	p := provider.NewProviderFromPath(template, path, toutput, depth)
 	utils.OkPrintln("Detected", utils.Green.Sprint(p.Name()), "template provider")
-	if path, err = p.Fetch(); err != nil {
+	if tpath, err = p.Fetch(); err != nil {
 		os.Exit(1)
 	}
 
@@ -40,5 +41,5 @@ func Render(template string) {
 			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
 		}(path)
 	}
-	Analyze(path)
+	Analyze(tpath, output, input)
 }

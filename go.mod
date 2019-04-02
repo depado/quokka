@@ -1,50 +1,41 @@
 module github.com/Depado/projectmpl
 
 require (
-	github.com/briandowns/spinner v0.0.0-20181018151057-dd69c579ff20
-	github.com/davecgh/go-spew v1.1.1
-	github.com/dsnet/compress v0.0.0-20171208185109-cc9eb1d7ad76
-	github.com/emirpasic/gods v1.12.0
+	github.com/Netflix/go-expect v0.0.0-20180928190340-9d1f4485533b // indirect
+	github.com/briandowns/spinner v0.0.0-20190319032542-ac46072a5a91
+	github.com/coreos/etcd v3.3.12+incompatible // indirect
+	github.com/dsnet/compress v0.0.1 // indirect
+	github.com/emirpasic/gods v1.12.0 // indirect
 	github.com/fatih/color v1.7.0
-	github.com/fsnotify/fsnotify v1.4.7
-	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db
-	github.com/hashicorp/hcl v1.0.0
-	github.com/inconshreveable/mousetrap v1.0.0
-	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
-	github.com/kevinburke/ssh_config v0.0.0-20180830205328-81db2a75821e
-	github.com/konsorten/go-windows-terminal-sequences v1.0.1
-	github.com/magiconair/properties v1.8.0
-	github.com/mattn/go-colorable v0.0.9
-	github.com/mattn/go-isatty v0.0.4
-	github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b
+	github.com/gliderlabs/ssh v0.1.3 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
+	github.com/hinshun/vt10x v0.0.0-20180809195222-d55458df857c // indirect
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
+	github.com/kr/pty v1.1.4 // indirect
+	github.com/mattn/go-colorable v0.1.1 // indirect
+	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/mholt/archiver v2.1.0+incompatible
-	github.com/mitchellh/go-homedir v1.0.0
-	github.com/mitchellh/mapstructure v1.1.2
-	github.com/nwaples/rardecode v0.0.0-20171029023500-e06696f847ae
-	github.com/pelletier/go-buffruneio v0.2.0
-	github.com/pelletier/go-toml v1.2.0
-	github.com/pierrec/lz4 v0.0.0-20181005164709-635575b42742
-	github.com/pmezard/go-difflib v1.0.0
-	github.com/sergi/go-diff v1.0.0
-	github.com/sirupsen/logrus v1.1.1
-	github.com/spf13/afero v1.1.2
-	github.com/spf13/cast v1.2.0
+	github.com/mitchellh/go-homedir v1.1.0 // indirect
+	github.com/nwaples/rardecode v1.0.0 // indirect
+	github.com/pierrec/lz4 v0.0.0-20181005164709-635575b42742 // indirect
+	github.com/pkg/errors v0.8.1 // indirect
+	github.com/pkg/profile v1.3.0 // indirect
+	github.com/sirupsen/logrus v1.4.0
+	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cobra v0.0.3
-	github.com/spf13/jwalterweatherman v1.0.0
-	github.com/spf13/pflag v1.0.3
-	github.com/spf13/viper v1.2.1
-	github.com/src-d/gcfg v1.3.0
-	github.com/stretchr/testify v1.2.2
-	github.com/ulikunitz/xz v0.5.4
-	github.com/xanzy/ssh-agent v0.2.0
-	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
-	golang.org/x/net v0.0.0-20181017193950-04a2e542c03f
-	golang.org/x/sys v0.0.0-20181019160139-8e24a49d80f8
-	golang.org/x/text v0.3.0
-	gopkg.in/AlecAivazis/survey.v1 v1.6.2
-	gopkg.in/src-d/go-billy.v4 v4.3.0
-	gopkg.in/src-d/go-git.v4 v4.7.1
-	gopkg.in/warnings.v0 v0.1.2
-	gopkg.in/yaml.v2 v2.2.1
+	github.com/spf13/jwalterweatherman v1.1.0 // indirect
+	github.com/spf13/viper v1.3.2
+	github.com/stretchr/testify v1.3.0
+	github.com/ugorji/go/codec v0.0.0-20190320090025-2dc34c0b8780 // indirect
+	github.com/xanzy/ssh-agent v0.2.1 // indirect
+	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
+	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c // indirect
+	golang.org/x/net v0.0.0-20190328230028-74de082e2cca // indirect
+	golang.org/x/sys v0.0.0-20190329044733-9eb1bfa1ce65 // indirect
+	gopkg.in/AlecAivazis/survey.v1 v1.8.2
+	gopkg.in/src-d/go-billy.v4 v4.3.0 // indirect
+	gopkg.in/src-d/go-git-fixtures.v3 v3.4.0 // indirect
+	gopkg.in/src-d/go-git.v4 v4.10.0
+	gopkg.in/yaml.v2 v2.2.2
 )

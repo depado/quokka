@@ -1,24 +1,22 @@
 package provider
 
-import (
-	"path/filepath"
-
-	"github.com/spf13/viper"
-)
+import "path/filepath"
 
 type local struct {
-	Path string
+	Path      string
+	InnerPath string
 }
 
 // NewLocalProvider will return a new provider to a local filesystem path
-func NewLocalProvider(in string) Provider {
+func NewLocalProvider(in, path string) Provider {
 	return local{
-		Path: in,
+		Path:      in,
+		InnerPath: path,
 	}
 }
 
 func (l local) Fetch() (string, error) {
-	return filepath.Join(l.Path, viper.GetString("path")), nil
+	return filepath.Join(l.Path, l.InnerPath), nil
 }
 
 func (local) UsesTmp() bool {

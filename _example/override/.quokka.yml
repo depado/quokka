@@ -1,0 +1,8 @@
+name: "Override Test Template"
+version: "0.1.0"
+description: "Simple template to show how to override values from the root config"
+delimiters: ["{{", "}}"]
+variables:
+  name:
+    prompt: "Name of the project:"
+    required: true

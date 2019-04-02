@@ -1,0 +1,4 @@
+variables:
+  name:
+    prompt: "Name of the package:"
+    required: true

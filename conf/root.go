@@ -59,6 +59,15 @@ func (r Root) NewPath(f *File, new string) {
 }
 
 // NewRootConfig will return the root configuration
-func NewRootConfig(path string, file os.FileInfo) *Root {
-	return &Root{ConfigFile: ConfigFile{File: &File{Path: path, Info: file, Dir: filepath.Dir(path)}}}
+func NewRootConfig(path string, file os.FileInfo, ctx InputCtx) *Root {
+	return &Root{
+		ConfigFile: ConfigFile{
+			File: &File{
+				Path: path,
+				Info: file,
+				Dir:  filepath.Dir(path),
+			},
+			Config: Config{Ctx: ctx},
+		},
+	}
 }

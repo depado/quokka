@@ -86,6 +86,29 @@ func (vv Variables) Ctx() map[string]interface{} {
 	return ctx
 }
 
+// FillPrompt will fill the variables from the input context if needed
+func (vv *Variables) FillPrompt(prefix string, ctx InputCtx) {
+	for _, v := range *vv {
+		var ok bool
+		p := v.Name
+		if prefix != "" {
+			p = prefix + "_" + v.Name
+		}
+		for _, in := range ctx {
+			if in.Key == p {
+				ok = true
+				v.FillFromMapItem(in)
+				if v.True() && v.Variables != nil {
+					v.Variables.FillPrompt(p, ctx)
+				}
+			}
+		}
+		if !ok {
+			v.Prompt()
+		}
+	}
+}
+
 // AddToCtx will add the variable results to a sub-key
 func (vv Variables) AddToCtx(prefix string, ctx map[string]interface{}) {
 	for k, v := range vv.Ctx() {
@@ -122,6 +145,25 @@ type Variable struct {
 
 	Result string
 	Name   string
+}
+
+// FillFromMapItem fills the value not from prompt but from a mapitem
+func (v *Variable) FillFromMapItem(i yaml.MapItem) {
+	if v.Confirm != nil {
+		b, ok := i.Value.(bool)
+		if !ok {
+			utils.ErrPrintln("wrong type for", v.Name, "expecting bool")
+			return
+		}
+		v.Confirm = &b
+	} else {
+		s, ok := i.Value.(string)
+		if !ok {
+			utils.ErrPrintln("wrong type for", v.Name, "expecting string")
+			return
+		}
+		v.Result = s
+	}
 }
 
 // FromMapItem will fill the variable with the data stored in the input

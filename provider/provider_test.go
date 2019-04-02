@@ -7,22 +7,26 @@ import (
 
 func TestNewProviderFromPath(t *testing.T) {
 	type args struct {
-		in string
+		in     string
+		path   string
+		output string
+		depth  int
 	}
 	tests := []struct {
 		name string
 		args args
 		want Provider
 	}{
-		{"should detect git", args{"git@github.com:Depado/bfchroma.git"}, NewGitProvider("git@github.com:Depado/bfchroma.git")},
-		{"should detect git with http", args{"https://github.com/Depado/bfchroma.git"}, NewGitProvider("https://github.com/Depado/bfchroma.git")},
-		{"should detect http", args{"http://example.com/template/"}, NewHTTPProvider("http://example.com/template/")},
-		{"should detect http", args{"https://example.com/template/"}, NewHTTPProvider("https://example.com/template/")},
-		{"should detect local", args{"/tmp/template/"}, NewLocalProvider("/tmp/template/")},
+		{"should detect git", args{in: "git@github.com:Depado/bfchroma.git", depth: 1}, NewGitProvider("git@github.com:Depado/bfchroma.git", "", "", 1)},
+		{"should detect git and tweak depth", args{in: "git@github.com:Depado/bfchroma.git", depth: 10}, NewGitProvider("git@github.com:Depado/bfchroma.git", "", "", 10)},
+		{"should detect git with http", args{in: "https://github.com/Depado/bfchroma.git", depth: 1}, NewGitProvider("https://github.com/Depado/bfchroma.git", "", "", 1)},
+		{"should detect http", args{in: "http://example.com/template/"}, NewHTTPProvider("http://example.com/template/", "", "")},
+		{"should detect http", args{in: "https://example.com/template/"}, NewHTTPProvider("https://example.com/template/", "", "")},
+		{"should detect local", args{in: "/tmp/template/"}, NewLocalProvider("/tmp/template/", "")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewProviderFromPath(tt.args.in); !reflect.DeepEqual(got, tt.want) {
+			if got := NewProviderFromPath(tt.args.in, tt.args.path, tt.args.output, tt.args.depth); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewProviderFromPath() = %v, want %v", got, tt.want)
 			}
 		})

@@ -9,17 +9,20 @@ import (
 
 	"github.com/Depado/projectmpl/utils"
 	"github.com/mholt/archiver"
-	"github.com/spf13/viper"
 )
 
 type httpp struct {
-	URL string
+	URL    string
+	Path   string
+	Output string
 }
 
 // NewHTTPProvider will return a new HTTP provider
-func NewHTTPProvider(in string) Provider {
+func NewHTTPProvider(in, path, output string) Provider {
 	return httpp{
-		URL: in,
+		URL:    in,
+		Path:   path,
+		Output: output,
 	}
 }
 
@@ -38,7 +41,7 @@ func (h httpp) Fetch() (string, error) {
 	// Setup utils and spinner
 	s := utils.NewSpinner("Downloading template")
 	// Create directory if needed
-	if outdir, err = utils.GetTemplateDir(); err != nil {
+	if outdir, err = utils.GetTemplateDir(h.Output); err != nil {
 		s.ErrStop("Couldn't create template directory:", err)
 		return "", err
 	}
@@ -57,7 +60,7 @@ func (h httpp) Fetch() (string, error) {
 	}
 	s.DoneStop("Donwloaded and extracted template in", utils.Green.Sprint(outdir))
 
-	return filepath.Join(outdir, viper.GetString("path")), nil
+	return filepath.Join(outdir, h.Path), nil
 }
 
 func (httpp) Name() string {
