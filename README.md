@@ -1,7 +1,7 @@
 <h1 align="center">Quokka</h1>
 <div>
   <span align="left">
-    <img src="/assets/mascot.png" alt="mascot">
+    <img src="/assets/mascot.png" alt="mascot" height="200px">
   </span>
   <span align=right>
 
