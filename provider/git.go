@@ -3,7 +3,7 @@ package provider
 import (
 	"path/filepath"
 
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/utils"
 	git "gopkg.in/src-d/go-git.v4"
 )
 

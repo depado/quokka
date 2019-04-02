@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/utils"
 	yaml "gopkg.in/yaml.v2"
 )
 

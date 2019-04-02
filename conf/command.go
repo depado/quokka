@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/utils"
 )
 
 // Command is a simple command to be executed

@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/Depado/projectmpl/cmd"
-	"github.com/Depado/projectmpl/renderer"
+	"github.com/Depado/quokka/cmd"
+	"github.com/Depado/quokka/renderer"
 	"github.com/spf13/cobra"
 )
 

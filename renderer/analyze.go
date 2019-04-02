@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Depado/projectmpl/conf"
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/conf"
+	"github.com/Depado/quokka/utils"
 	"github.com/fatih/color"
 )
 

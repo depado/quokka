@@ -1,33 +1,19 @@
-workspace:
-  base: /go
-  path: src/github.com/Depado/projectmpl
+---
+kind: pipeline
+name: default
 
-pipeline:
-  prerequisites:
-    image: "golang:latest"
-    pull: true
-    commands: 
-      - go version
-      - go get -u github.com/golang/dep/cmd/dep
-      - dep ensure -vendor-only
-    environment:
-      - GO111MODULE=off
+- name: build
+  image: golang:latest
+  pull: always
+  commands:
+  - go build
+  environment:
+    GO111MODULE: "on"
 
-  linter:
-    image: "golang:latest"
-    commands:
-      - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
-      - golangci-lint run
-    environment:
-      - GO111MODULE=off
-
-  test:
-    image: "golang:latest"
-    commands:
-      - go test -race -coverprofile=coverage.txt ./...
-    environment:
-      - GO111MODULE=off
-
-  codecov:
-    image: robertstettner/drone-codecov
-    secrets: [ codecov_token ]
+- name: linter
+  image: golang:latest
+  commands:
+    - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+    - golangci-lint run
+  environment:
+    GO111MODULE: "off"

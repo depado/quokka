@@ -7,7 +7,7 @@ import (
 	"path"
 	"path/filepath"
 
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/utils"
 	"github.com/mholt/archiver"
 )
 

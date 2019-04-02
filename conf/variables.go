@@ -3,7 +3,7 @@ package conf
 import (
 	"fmt"
 
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/utils"
 	"github.com/fatih/color"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 	yaml "gopkg.in/yaml.v2"

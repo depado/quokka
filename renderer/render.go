@@ -3,8 +3,8 @@ package renderer
 import (
 	"os"
 
-	"github.com/Depado/projectmpl/provider"
-	"github.com/Depado/projectmpl/utils"
+	"github.com/Depado/quokka/provider"
+	"github.com/Depado/quokka/utils"
 	"github.com/spf13/viper"
 	"gopkg.in/AlecAivazis/survey.v1"
 )

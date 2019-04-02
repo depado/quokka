@@ -1,4 +1,4 @@
-module github.com/Depado/projectmpl
+module github.com/Depado/quokka
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect

@@ -1,6 +1,6 @@
-name: "Example Projectmpl"
+name: "Example quokka"
 version: "0.1.0"
-description: "An example template to show how projectmpl works"
+description: "An example template to show how quokka works"
 delimiters: ["{{", "}}"]
 after:
   - cmd: "git init"

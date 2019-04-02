@@ -8,10 +8,10 @@
   [![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
   ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
-  [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/projectmpl)](https://goreportcard.com/report/github.com/Depado/projectmpl)
-  [![Build Status](https://drone.depado.eu/api/badges/Depado/projectmpl/status.svg)](https://drone.depado.eu/Depado/projectmpl)
-  [![codecov](https://codecov.io/gh/Depado/projectmpl/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/projectmpl)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/projectmpl/blob/master/LICENSE)
+  [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/quokka)](https://goreportcard.com/report/github.com/Depado/quokka)
+  [![Build Status](https://drone.depado.eu/api/badges/Depado/quokka/status.svg)](https://drone.depado.eu/Depado/quokka)
+  [![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/quokka/blob/master/LICENSE)
   [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
   
   </span>
@@ -19,7 +19,7 @@
 
 <h2 align="center">Friendly Boilerplate Engine</h2>
 
-<img align="center" src="/assets/projectmpl.gif">
+<img align="center" src="/assets/quokka.gif">
 
 - [Introduction](#introduction)
     - [Features](#features)
@@ -31,7 +31,7 @@
     - [Keeping the template](#keeping-the-template)
     - [Examples](#examples)
 - [Template Creation](#template-creation)
-    - [The root `.projectmpl.yml` file](#the-root-projectmplyml-file)
+    - [The root `.quokka.yml` file](#the-root-quokkayml-file)
     - [Variable declaration](#variable-declaration)
         - [Simple Input](#simple-input)
         - [Selection](#selection)
@@ -39,48 +39,48 @@
         - [Other options and help](#other-options-and-help)
         - [Validation](#validation)
         - [Sub Variables](#sub-variables)
-    - [Standard `.projectmpl.yml` files](#standard-projectmplyml-files)
+    - [Standard `.quokka.yml` files](#standard-quokkayml-files)
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
     - [After render commands](#after-render-commands)
 
 # Introduction
 
-Projectmpl is a boilerplate engine. It allows you to quickly use boilerplate 
+quokka is a boilerplate engine. It allows you to quickly use boilerplate 
 templates and avoid copy-pasting chunks of code and snippets when you start a 
 new project.
 
 ## Features
 
 - **No external dependencies**  
-  Projectmpl is written in Go and thus is compiled to a static binary. Download
+  quokka is written in Go and thus is compiled to a static binary. Download
   or build it and you're good to go.
 - **Local or distant templates**  
   Either your template is a git repository, an archive stored on a distant
-  server or a local directory, projectmpl knows how to handle these.
+  server or a local directory, quokka knows how to handle these.
 - **Sweet output and prompts**  
   Thanks to the wonderful [survey](https://github.com/AlecAivazis/survey) 
   library, the prompts are unified, can display an help text and support
   validation.
 - **Clean configuration files**  
-  Projectmpl uses YAML for its configuration file formats, making them clean
+  quokka uses YAML for its configuration file formats, making them clean
   and easy to read.
 - **Powerful templating system**  
-  Projectmpl uses [Go's template system](https://golang.org/pkg/text/template/)
+  quokka uses [Go's template system](https://golang.org/pkg/text/template/)
   to render the boilerplate.
 - **Configuration override**  
   Need a different behavior or additional variables in a specific directory? 
-  Just add another `.projectmpl.yml` file in there. You can even overwrite
+  Just add another `.quokka.yml` file in there. You can even overwrite
   variables. 
 - **Conditional prompts (sub-variables)**  
   Each variable can have its own subset of variables which will only be
   prompted to the user if the parent variable is filled or set to true.
 - **Customizable templates**  
-  Projectmpl enables fine-grained control over what needs to be done when
+  quokka enables fine-grained control over what needs to be done when
   rendering the template. Just copy the file, ignore it, add conditionals based
   on what the user answered, change the template delimiters…
 - **[On Hold] After render commands**  
-  Projectmpl enables you to define commands to be run once the boilerplate has
+  quokka enables you to define commands to be run once the boilerplate has
   been rendered. _For security reasons, an explicit flag must be provided by the
   user for the commands to be executed_
   This feature is currently disabled for security reasons.
@@ -89,12 +89,12 @@ new project.
 
 ## Download
 
-You can grab the latest release from [the release page](https://github.com/Depado/projectmpl/releases).
+You can grab the latest release from [the release page](https://github.com/Depado/quokka/releases).
 
 ## Build from source
 
 ```
-$ go get -u github.com/Depado/projectmpl
+$ go get -u github.com/Depado/quokka
 $ cd $GOPATH/src/github.com/Depado/projectpml
 $ dep ensure
 $ make
@@ -103,7 +103,7 @@ $ make
 Or directly install:
 
 ```
-$ go get -u github.com/Depado/projectmpl
+$ go get -u github.com/Depado/quokka
 $ cd $GOPATH/src/github.com/Depado/projectpml
 $ dep ensure
 $ make install
@@ -111,7 +111,7 @@ $ make install
 
 # Usage
 
-Projectmpl supports various provider to download the templates. It supports 
+quokka supports various provider to download the templates. It supports 
 `git`, downloading an archive (`.zip`/`.tar.gz`/`.tar.xz`/...) from internet,
 or using a local directory. 
 
@@ -151,7 +151,7 @@ system so make sure you are ok with that.  -->
 
 ## Keeping the template
 
-When downloading or cloning a template, `projectmpl` will create a temporary
+When downloading or cloning a template, `quokka` will create a temporary
 directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
 the `--keep` option. This option pairs well with the `--output` option which 
@@ -161,11 +161,11 @@ defines where the template should be downloaded/cloned.
 
 ```sh
 $ # Clone the repository and execute the template that is located in _example/license
-$ qk git@github.com:Depado/projectmpl.git output --path _example/license
+$ qk git@github.com:Depado/quokka.git output --path _example/license
 $ # Clone the template in a specific directory, render it in a specific directory and keep the template
-$ qk git@github.com:Depado/projectmpl.git myamazingproject --path _example/cleanarch --keep --output "template"
+$ qk git@github.com:Depado/quokka.git myamazingproject --path _example/cleanarch --keep --output "template"
 $ # Reuse the downloaded template
-$ projectmpl template/ myotherproject
+$ quokka template/ myotherproject
 ```
 
 # Template Creation
@@ -296,7 +296,7 @@ For example you can completely ignore a directory:
 ```
 └──── change
     ├── override.go
-    └── .projectmpl.yml
+    └── .quokka.yml
 ```
 
 ```yaml
@@ -329,7 +329,7 @@ copy: true
 ```
 
 You can even add per-file variables, or modify the delimiters. In fact, it's
-like an inline `.projectmpl.yml` that applies to a single file.
+like an inline `.quokka.yml` that applies to a single file.
 
 ## Conditional Rendering/Copy
 
