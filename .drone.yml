@@ -7,7 +7,7 @@ steps:
   image: golang:latest
   pull: always
   commands:
-  - go build
+  - make
   environment:
     GO111MODULE: "on"
 
