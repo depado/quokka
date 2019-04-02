@@ -1,9 +1,6 @@
 <h1 align="center">Quokka</h1>
-<div>
-  <span align="left">
-    <img src="/assets/mascot.png" alt="mascot" height="200px">
-  </span>
-  <span align=right>
+<h2 align="center">
+  <img src="/assets/mascot.png" alt="mascot" height="200px">
 
   [![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
@@ -13,9 +10,7 @@
   [![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/quokka/blob/master/LICENSE)
   [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
-  
-  </span>
-</div>
+</h2>
 
 <h2 align="center">Friendly Boilerplate Engine</h2>
 
