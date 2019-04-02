@@ -9,7 +9,6 @@ import (
 	"text/template"
 
 	"github.com/Depado/projectmpl/utils"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/fatih/color"
 	"gopkg.in/yaml.v2"
 )
@@ -86,8 +85,6 @@ func (f *File) ParseFrontMatter() error {
 	if f.Metadata.Variables != nil && len(*f.Metadata.Variables) > 0 {
 		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
 		f.Metadata.Variables.FillPrompt("", f.Ctx)
-		spew.Dump(f.Metadata.Variables)
-
 	}
 	return nil
 }
