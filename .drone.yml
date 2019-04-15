@@ -26,8 +26,21 @@ steps:
     path: /go
   commands:
     - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.16.0
-    - ./bin/golangci-lint --version
     - ./bin/golangci-lint run
+
+- name: telegram
+  image: appleboy/drone-telegram
+  settings:
+    to: 790376882
+    format: markdown
+    token:
+      from_secret: telegram_token
+    message: >
+      *{{repo.owner}}/{{repo.name}}*  
+
+      [Build {{build.number}}]({{build.link}}) by {{commit.author}} {{#success build.status}}succeeded{{else}}failed{{/success}} in {{buildtime build.started}}  
+
+      `{{truncate commit.sha 8}}`: "{{commit.message}}"
 
 volumes:
 - name: deps

@@ -40,27 +40,32 @@
 
 # Introduction
 
-quokka is a boilerplate engine. It allows you to quickly use boilerplate 
+Quokka is a boilerplate engine. It allows you to quickly use boilerplate 
 templates and avoid copy-pasting chunks of code and snippets when you start a 
-new project.
+new project. You can create templates for literally anything you want!
+
+## Example Usages
+
+- Generating your CI/CD configuration file
+- 
 
 ## Features
 
 - **No external dependencies**  
-  quokka is written in Go and thus is compiled to a static binary. Download
+  Quokka is written in Go and thus is compiled to a static binary. Download
   or build it and you're good to go.
 - **Local or distant templates**  
   Either your template is a git repository, an archive stored on a distant
-  server or a local directory, quokka knows how to handle these.
+  server or a local directory, Quokka knows how to handle these.
 - **Sweet output and prompts**  
   Thanks to the wonderful [survey](https://github.com/AlecAivazis/survey) 
   library, the prompts are unified, can display an help text and support
   validation.
 - **Clean configuration files**  
-  quokka uses YAML for its configuration file formats, making them clean
+  Quokka uses YAML for its configuration file formats, making them clean
   and easy to read.
 - **Powerful templating system**  
-  quokka uses [Go's template system](https://golang.org/pkg/text/template/)
+  Quokka uses [Go's template system](https://golang.org/pkg/text/template/)
   to render the boilerplate.
 - **Configuration override**  
   Need a different behavior or additional variables in a specific directory? 
@@ -70,11 +75,11 @@ new project.
   Each variable can have its own subset of variables which will only be
   prompted to the user if the parent variable is filled or set to true.
 - **Customizable templates**  
-  quokka enables fine-grained control over what needs to be done when
+  Quokka enables fine-grained control over what needs to be done when
   rendering the template. Just copy the file, ignore it, add conditionals based
   on what the user answered, change the template delimiters…
 - **[On Hold] After render commands**  
-  quokka enables you to define commands to be run once the boilerplate has
+  Quokka enables you to define commands to be run once the boilerplate has
   been rendered. _For security reasons, an explicit flag must be provided by the
   user for the commands to be executed_
   This feature is currently disabled for security reasons.
@@ -89,8 +94,7 @@ You can grab the latest release from [the release page](https://github.com/Depad
 
 ```
 $ go get -u github.com/Depado/quokka
-$ cd $GOPATH/src/github.com/Depado/projectpml
-$ dep ensure
+$ cd $GOPATH/src/github.com/Depado/quokka
 $ make
 ```
 
@@ -98,16 +102,15 @@ Or directly install:
 
 ```
 $ go get -u github.com/Depado/quokka
-$ cd $GOPATH/src/github.com/Depado/projectpml
-$ dep ensure
+$ cd $GOPATH/src/github.com/Depado/quokka
 $ make install
 ```
 
 # Usage
 
-quokka supports various provider to download the templates. It supports 
-`git`, downloading an archive (`.zip`/`.tar.gz`/`.tar.xz`/...) from internet,
-or using a local directory. 
+Quokka supports various providers to download the templates. It supports 
+`git`, downloading an archive (`.zip`/`.tar.gz`/`.tar.xz`/...),
+or using a local directory.
 
 ```
 Quokka (qk) is a template engine that enables to render local or distant 

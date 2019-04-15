@@ -17,6 +17,7 @@ func AddRendererFlags(c *cobra.Command) {
 	c.PersistentFlags().BoolP("keep", "k", false, "do not delete the template when operation is complete")
 	c.PersistentFlags().StringP("path", "p", "", "specify if the template is actually stored in a sub-directory of the downloaded file")
 	c.PersistentFlags().StringP("output", "o", "", "specify the directory where the template should be downloaded or cloned")
+	c.PersistentFlags().BoolP("yes", "y", false, "Automatically accept")
 	// Git options
 	c.PersistentFlags().Int("git.depth", 1, "depth of git clone in case of git provider")
 

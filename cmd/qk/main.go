@@ -39,6 +39,7 @@ var rootc = &cobra.Command{
 			viper.GetString("input"),
 			viper.GetBool("keep"),
 			viper.GetInt("git.depth"),
+			viper.GetBool("yes"),
 		)
 	},
 }
@@ -47,7 +48,7 @@ var rootc = &cobra.Command{
 var versionc = &cobra.Command{
 	Use:   "version",
 	Short: "Show build and version",
-	Run:   func(cmd *cobra.Command, args []string) { fmt.Printf("Build: %s\nVersion: %s\n", Build, Version) },
+	Run:   func(c *cobra.Command, args []string) { fmt.Printf("Build: %s\nVersion: %s\n", Build, Version) },
 }
 
 // New command that will create a new empty quokka template
@@ -55,7 +56,7 @@ var newc = &cobra.Command{
 	Use:   "new [output] <options>",
 	Short: "Create a new quokka template",
 	Args:  cobra.MinimumNArgs(1),
-	Run:   func(cmd *cobra.Command, args []string) { fmt.Println("Coming soon") },
+	Run:   func(c *cobra.Command, args []string) { cmd.NewQuokkaTemplate(args[0]) },
 }
 
 func main() {

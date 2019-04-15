@@ -5,25 +5,28 @@ import (
 
 	"github.com/Depado/quokka/provider"
 	"github.com/Depado/quokka/utils"
-	"github.com/spf13/viper"
 	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 // Render is the main render function
-func Render(template, output, toutput, path, input string, keep bool, depth int) {
+func Render(template, output, toutput, path, input string, keep bool, depth int, yes bool) {
 	var err error
 	var tpath string
 
 	if _, err = os.Stat(output); !os.IsNotExist(err) {
-		var confirmed bool
-		prompt := &survey.Confirm{
-			Help:    "qk will only affect already existing files that match the template you're trying to render",
-			Message: "The output destination already exists. Continue ?",
-		}
-		survey.AskOne(prompt, &confirmed, nil) // nolint: errcheck
-		if !confirmed {
-			utils.ErrPrintln("Canceled operation")
-			os.Exit(0)
+		if yes {
+			utils.OkPrintln("Output destination already exists but 'yes' option was used")
+		} else {
+			var confirmed bool
+			prompt := &survey.Confirm{
+				Help:    "qk will only affect already existing files that match the template you're trying to render",
+				Message: "The output destination already exists. Continue ?",
+			}
+			survey.AskOne(prompt, &confirmed, nil) // nolint: errcheck
+			if !confirmed {
+				utils.ErrPrintln("Canceled operation")
+				os.Exit(0)
+			}
 		}
 	}
 
@@ -35,7 +38,7 @@ func Render(template, output, toutput, path, input string, keep bool, depth int)
 	}
 
 	// Delete the template if needed
-	if !viper.GetBool("keep") && p.UsesTmp() {
+	if !keep && p.UsesTmp() {
 		defer func(p string) {
 			os.RemoveAll(path)
 			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
