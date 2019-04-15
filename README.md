@@ -23,6 +23,8 @@
     - [Build from source](#build-from-source)
 - [Usage](#usage)
     - [Keeping the template](#keeping-the-template)
+    - [Input File](#input-file)
+    - [Set](#set)
     - [Examples](#examples)
 - [Template Creation](#template-creation)
     - [The root `.quokka.yml` file](#the-root-quokkayml-file)
