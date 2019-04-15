@@ -56,14 +56,27 @@ var newc = &cobra.Command{
 	Use:   "new [output] <options>",
 	Short: "Create a new quokka template",
 	Args:  cobra.MinimumNArgs(1),
-	Run:   func(c *cobra.Command, args []string) { cmd.NewQuokkaTemplate(args[0]) },
+	Run: func(c *cobra.Command, args []string) {
+		cmd.NewQuokkaTemplate(
+			args[0],
+			viper.GetString("name"),
+			viper.GetString("description"),
+			viper.GetString("version"),
+			viper.GetBool("yes"),
+			viper.GetBool("debug"),
+		)
+	},
 }
 
 func main() {
 	// Initialize Cobra and Viper
 	cobra.OnInitialize(cmd.Initialize)
 	cmd.AddRendererFlags(rootc)
+	cmd.AddGlobalFlags(rootc)
+
+	// Add extra flags
 	rootc.AddCommand(versionc)
+	cmd.AddNewFlags(newc)
 	rootc.AddCommand(newc)
 
 	// Run the command
