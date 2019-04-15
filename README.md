@@ -113,7 +113,7 @@ Quokka supports various providers to download the templates. It supports
 or using a local directory.
 
 ```
-Quokka (qk) is a template engine that enables to render local or distant 
+Quokka (qk) is a template engine that enables to render local or distant
 templates/boilerplates in a user friendly way. When given a URL/Git repository
 or a path to a local Quokka template, quokka will ask for the required values
 in an interactive way except if an inpute file is given to the CLI.
@@ -128,31 +128,82 @@ Available Commands:
   version     Show build and version
 
 Flags:
-  -d, --debug           debug mode
+      --debug           Enable or disable debug mode
       --git.depth int   depth of git clone in case of git provider (default 1)
   -h, --help            help for qk
   -i, --input string    specify an input values file to automate template rendering
   -k, --keep            do not delete the template when operation is complete
   -o, --output string   specify the directory where the template should be downloaded or cloned
   -p, --path string     specify if the template is actually stored in a sub-directory of the downloaded file
+  -e, --set strings     specify values on the command line
+  -y, --yes             Automatically accept
 
 Use "qk [command] --help" for more information about a command.
 ```
 
-<!-- ## Commands
-
-Some templates may define additional commands that will run once the template
-has been rendered. If you wish to activate this behavior, you can pass the
-`-c` or `--commands` flag. These commands can be anything, and may harm your
-system so make sure you are ok with that.  -->
-
 ## Keeping the template
 
-When downloading or cloning a template, `quokka` will create a temporary
+When downloading or cloning a template, Quokka will create a temporary
 directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
-the `--keep` option. This option pairs well with the `--output` option which 
-defines where the template should be downloaded/cloned.
+the `-k/--keep` option. This option pairs well with the `-o/--output` option 
+which defines where the template should be downloaded/cloned.
+
+## Input file
+
+The rendering of a Quokka template can be automated if the template was designed
+with this in mind and if an input file is provided on the command line.
+
+Since there is no clear way for specifying overriding values (for example a
+variable that applies to a single file and overrides an already existing 
+variable in the root config), the input values will also fill the overriding
+variables.
+
+The format of the input file is also yaml. The following example demonstrates
+how an input file could be used:
+
+`.quokka.yml`
+```yaml
+name: "Quokka Template"
+description: "New Quokka Template"
+version: "0.1.0"
+variables:
+  slack:
+    confirm: true
+    prompt: "Add Slack integration?"
+    variables:
+      channel:
+        required: true
+      webhook:
+        required: true
+```
+
+`input.yml`
+```yaml
+slack: true
+slack_channel: "#mychan"
+slack_webhook: "complexurl
+```
+
+If this input file is given to Quokka, it won't prompt for these three
+variables, thus requiring no input from the user to render the template. 
+
+## Set
+
+Additionally, you can provide Quokka with the `-e/--set` flag (multiple time if 
+you wish). This works the same way as the input file but has a higher priority, 
+meaning that if you pass both an input file and a `-e` flag that defines a 
+variable, the one passed on the command line will have a higher priority.
+
+The `--set` flags work by providing it with a `key=value` style kind of string.
+If we take the example above using the input file, we can effectively replace
+the `slack_channel` variable by doing so:
+
+```sh
+$ qk template/ output -i input.yml --set "slack_channel=#anotherchan"
+$ # Or
+$ qk template/ output -i input.yml -e "slack_channel=#anotherchan"
+```
 
 ## Examples
 
@@ -162,10 +213,45 @@ $ qk git@github.com:Depado/quokka.git output --path _example/license
 $ # Clone the template in a specific directory, render it in a specific directory and keep the template
 $ qk git@github.com:Depado/quokka.git myamazingproject --path _example/cleanarch --keep --output "template"
 $ # Reuse the downloaded template
-$ quokka template/ myotherproject
+$ qk template/ myotherproject
+$ # Pass an input file to Quokka
+$ qk template/ output -i in.yml
 ```
 
 # Template Creation
+
+## New command
+
+If `quokka` is installed, simply run `quokka new <path>`. This will ask for 
+basic information such as the template name, description and version with some
+sane defaults (version number for example is set to `0.1.0` by default). 
+You can also pass these values as flags on the command line. 
+
+This command will check if the output directory and a `.quokka.yml` file already 
+exist. This command is in charge of creating a new directory and creating the
+initial `.quokka.yml` file with those basic information, helping you getting
+started with Quokka template development. 
+
+<details><summary>Command Line Help</summary>
+
+```
+$ qk new --help
+Create a new quokka template
+
+Usage:
+  qk new [output] <options> [flags]
+
+Flags:
+  -d, --description string   description of the new template
+  -h, --help                 help for new
+  -n, --name string          name of the new template
+  -v, --version string       version of the new template
+
+Global Flags:
+      --debug   Enable or disable debug mode
+  -y, --yes     Automatically accept
+```
+</details>
 
 ## The root `.quokka.yml` file
 

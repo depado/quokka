@@ -11,6 +11,9 @@ import (
 // Green is a simple green foreground color
 var Green = color.New(color.FgGreen)
 
+// Yellow is a simple yellow foreground color
+var Yellow = color.New(color.FgYellow)
+
 // OkPrefix is the prefix that should prefix output when everything is ok
 var OkPrefix = Green.Sprint("»")
 
@@ -38,7 +41,15 @@ func ErrSprintln(opts ...interface{}) string {
 }
 
 // FatalPrintln prints out information with a red prefix and exits the program
+// with an error status code
 func FatalPrintln(opts ...interface{}) {
 	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
 	os.Exit(1)
+}
+
+// ExitPrintln prints out information with a red prefix and exits the program
+// with an acceptable status code
+func ExitPrintln(opts ...interface{}) {
+	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
+	os.Exit(0)
 }

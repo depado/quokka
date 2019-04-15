@@ -9,7 +9,7 @@ import (
 )
 
 // Render is the main render function
-func Render(template, output, toutput, path, input string, keep bool, depth int, yes bool) {
+func Render(template, output, toutput, path, input string, set []string, keep bool, depth int, yes bool) {
 	var err error
 	var tpath string
 
@@ -44,5 +44,5 @@ func Render(template, output, toutput, path, input string, keep bool, depth int,
 			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
 		}(path)
 	}
-	Analyze(tpath, output, input)
+	Analyze(tpath, output, input, set)
 }

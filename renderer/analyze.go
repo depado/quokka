@@ -6,6 +6,7 @@ import (
 
 	"github.com/Depado/quokka/conf"
 	"github.com/Depado/quokka/utils"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/fatih/color"
 )
 
@@ -46,15 +47,28 @@ func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 // Analyze is a work in progress function to analyze the template directory
 // and gather information about where the configuration files are stored and to
 // which templates they should apply.
-func Analyze(dir, output, input string) {
+func Analyze(dir, output, input string, set []string) {
 	var err error
 	var ctx conf.InputCtx
+
 	if input != "" {
 		if ctx, err = conf.GetInputContext(input); err != nil {
 			utils.FatalPrintln("Could not parse input file:", err)
 		}
 		utils.OkPrintln("Input file", utils.Green.Sprint(input), "found")
 	}
+	if set != nil {
+		setCtx, err := conf.GetSetContext(set)
+		if err != nil {
+			utils.FatalPrintln("Could not parse set flags:", err)
+		}
+		ctx = conf.MergeCtx(ctx, setCtx)
+		spew.Dump(ctx)
+		utils.OkPrintln("Command line set merged in context")
+	}
+
+	spew.Dump(ctx)
+
 	root := HandleRootConfig(dir, ctx)
 	var candidates []*conf.File
 

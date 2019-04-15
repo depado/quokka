@@ -37,6 +37,7 @@ var rootc = &cobra.Command{
 			viper.GetString("output"),
 			viper.GetString("path"),
 			viper.GetString("input"),
+			viper.GetStringSlice("set"),
 			viper.GetBool("keep"),
 			viper.GetInt("git.depth"),
 			viper.GetBool("yes"),
