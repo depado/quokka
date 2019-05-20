@@ -160,11 +160,13 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 	if fd, err = os.Create(f.NewPath + ".rendered"); err != nil {
 		return err
 	}
-	defer fd.Close()
 
 	if err = t.Execute(fd, ctx); err != nil {
+		fd.Close()
 		return err
 	}
+
+	fd.Close()
 	return os.Rename(rdr, f.NewPath)
 }
 
