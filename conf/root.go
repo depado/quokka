@@ -55,7 +55,7 @@ func (r Root) ExecuteCommands(dir string) {
 
 // NewPath adds the path where the file should be rendered according to the root
 func (r Root) NewPath(f *File, new string) {
-	f.NewPath = strings.Replace(f.Path, r.File.Dir, new, 1)
+	f.NewPath = filepath.ToSlash(strings.Replace(f.Path, r.File.Dir, new, 1))
 }
 
 // NewRootConfig will return the root configuration
