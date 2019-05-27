@@ -51,7 +51,17 @@ func GetSetContext(set []string) (InputCtx, error) {
 		if len(tmp) != 2 {
 			return out, fmt.Errorf("invalid set option: %s", s)
 		}
-		out = append(out, yaml.MapItem{Key: tmp[0], Value: tmp[1]})
+		v := yaml.MapItem{Key: tmp[0]}
+		// Convert to bool if needed
+		switch strings.ToLower(tmp[1]) {
+		case "1", "true":
+			v.Value = true
+		case "0", "false":
+			v.Value = false
+		default:
+			v.Value = tmp[1]
+		}
+		out = append(out, v)
 	}
 	return out, nil
 }

@@ -56,7 +56,7 @@ func Analyze(dir, output, input string, set []string) {
 		}
 		utils.OkPrintln("Input file", utils.Green.Sprint(input), "found")
 	}
-	if set != nil {
+	if len(set) > 0 {
 		setCtx, err := conf.GetSetContext(set)
 		if err != nil {
 			utils.FatalPrintln("Could not parse set flags:", err)
