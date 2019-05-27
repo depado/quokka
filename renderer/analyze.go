@@ -6,7 +6,6 @@ import (
 
 	"github.com/Depado/quokka/conf"
 	"github.com/Depado/quokka/utils"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/fatih/color"
 )
 
@@ -63,11 +62,8 @@ func Analyze(dir, output, input string, set []string) {
 			utils.FatalPrintln("Could not parse set flags:", err)
 		}
 		ctx = conf.MergeCtx(ctx, setCtx)
-		spew.Dump(ctx)
 		utils.OkPrintln("Command line set merged in context")
 	}
-
-	spew.Dump(ctx)
 
 	root := HandleRootConfig(dir, ctx)
 	var candidates []*conf.File
