@@ -19,5 +19,5 @@ require (
 	golang.org/x/crypto v0.0.0-20181015023909-0c41d7ab0a0e
 	golang.org/x/sys v0.0.0-20181019160139-8e24a49d80f8
 	golang.org/x/text v0.3.0
-	gopkg.in/yaml.v2 v2.2.1
+	gopkg.in/yaml.v2 v2.2.8
 )
