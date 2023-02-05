@@ -1,9 +1,0 @@
-name: quokka
-organization: Depado
-gitserver: github.com
-goversion: "1.12"
-linter: true
-slack: false
-slack_channel: "#test"
-slack_webhook: http://test.com
-tags: true
