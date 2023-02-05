@@ -20,8 +20,6 @@ func TestNewProviderFromPath(t *testing.T) {
 		{"should detect git", args{in: "git@github.com:Depado/bfchroma.git", depth: 1}, NewGitProvider("git@github.com:Depado/bfchroma.git", "", "", 1)},
 		{"should detect git and tweak depth", args{in: "git@github.com:Depado/bfchroma.git", depth: 10}, NewGitProvider("git@github.com:Depado/bfchroma.git", "", "", 10)},
 		{"should detect git with http", args{in: "https://github.com/Depado/bfchroma.git", depth: 1}, NewGitProvider("https://github.com/Depado/bfchroma.git", "", "", 1)},
-		{"should detect http", args{in: "http://example.com/template/"}, NewHTTPProvider("http://example.com/template/", "", "")},
-		{"should detect http", args{in: "https://example.com/template/"}, NewHTTPProvider("https://example.com/template/", "", "")},
 		{"should detect local", args{in: "/tmp/template/"}, NewLocalProvider("/tmp/template/", "")},
 	}
 	for _, tt := range tests {

@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"io/ioutil"
+	"os"
 )
 
 // GetTemplateDir creates the necessary directory or uses the one provided in
@@ -10,5 +10,5 @@ func GetTemplateDir(output string) (string, error) {
 	if output != "" {
 		return output, nil
 	}
-	return ioutil.TempDir("", "qk")
+	return os.MkdirTemp("", "qk")
 }

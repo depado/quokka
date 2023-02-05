@@ -1,7 +1,6 @@
 package conf
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -30,7 +29,7 @@ func (c *ConfigFile) Parse() error {
 	var err error
 	var out []byte
 
-	if out, err = ioutil.ReadFile(c.File.Path); err != nil {
+	if out, err = os.ReadFile(c.File.Path); err != nil {
 		return err
 	}
 

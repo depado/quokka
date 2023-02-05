@@ -4,7 +4,7 @@ name: default
 
 steps:
 - name: build
-  image: golang:latest
+  image: golang:1.20.0
   volumes:
   - name: deps
     path: /go
@@ -12,7 +12,7 @@ steps:
   - make
 
 - name: test
-  image: golang:latest
+  image: golang:1.20.0
   volumes:
   - name: deps
     path: /go
@@ -20,27 +20,21 @@ steps:
   - make test
 
 - name: linter
-  image: golang:latest
+  image: golang:1.20.0
   volumes:
-  - name: deps
-    path: /go
+    - name: deps
+      path: /go
   commands:
-    - curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh -s v1.16.0
-    - ./bin/golangci-lint run
+    - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s
+    - ./bin/golangci-lint run --timeout 5m
+    - rm -r ./bin/
 
 - name: telegram
   image: appleboy/drone-telegram
   settings:
     to: 790376882
-    format: markdown
     token:
       from_secret: telegram_token
-    message: >
-      *{{repo.name}}*  
-
-      [Build {{build.number}}]({{build.link}}) by {{commit.author}} {{#success build.status}}succeeded{{else}}failed{{/success}} in {{buildtime build.started}}  
-
-      `{{truncate commit.sha 8}}`: "{{commit.message}}"
 
 volumes:
 - name: deps

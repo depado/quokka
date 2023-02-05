@@ -2,7 +2,7 @@ package conf
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"gopkg.in/yaml.v2"
@@ -35,7 +35,7 @@ func MergeCtx(a, b InputCtx) InputCtx {
 // has already been filled
 func GetInputContext(path string) (InputCtx, error) {
 	var out InputCtx
-	input, err := ioutil.ReadFile(path)
+	input, err := os.ReadFile(path)
 	if err != nil {
 		return out, err
 	}

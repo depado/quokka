@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/Depado/quokka/cmd"
 	"github.com/Depado/quokka/renderer"
-	"github.com/spf13/cobra"
 )
 
 // Build number and versions injected at compile time
@@ -17,10 +17,11 @@ var (
 	Build   = "unknown"
 )
 
-var qkdesc = `Quokka (qk) is a template engine that enables to render local or distant 
-templates/boilerplates in a user friendly way. When given a URL/Git repository
-or a path to a local Quokka template, quokka will ask for the required values
-in an interactive way except if an inpute file is given to the CLI.
+var qkdesc = `Quokka (qk) is a template engine that enables to render local or
+distant templates/boilerplates in a user friendly way. When given a Git
+repository or a path to a local Quokka template, quokka will ask for the
+required values in an interactive way except if an inpute file is given to the
+CLI.
 `
 
 // Main command that will be run when no other command is provided on the

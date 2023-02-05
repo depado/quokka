@@ -19,8 +19,5 @@ func NewProviderFromPath(in, path, output string, depth int) Provider {
 	if strings.HasSuffix(in, ".git") {
 		return NewGitProvider(in, path, output, depth)
 	}
-	if strings.HasPrefix(in, "http://") || strings.HasPrefix(in, "https://") {
-		return NewHTTPProvider(in, path, output)
-	}
 	return NewLocalProvider(in, output)
 }
