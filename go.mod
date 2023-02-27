@@ -3,7 +3,7 @@ module github.com/Depado/quokka
 go 1.20
 
 require (
-	github.com/briandowns/spinner v1.21.0
+	github.com/briandowns/spinner v1.22.0
 	github.com/fatih/color v1.14.1
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
