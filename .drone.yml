@@ -4,7 +4,7 @@ name: default
 
 steps:
 - name: build
-  image: golang:1.20.3
+  image: golang:1.20.4
   volumes:
   - name: deps
     path: /go
@@ -12,7 +12,7 @@ steps:
   - make
 
 - name: test
-  image: golang:1.20.3
+  image: golang:1.20.4
   volumes:
   - name: deps
     path: /go
@@ -20,7 +20,7 @@ steps:
   - make test
 
 - name: linter
-  image: golang:1.20.3
+  image: golang:1.20.4
   volumes:
     - name: deps
       path: /go
