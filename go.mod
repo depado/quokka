@@ -7,7 +7,7 @@ require (
 	github.com/fatih/color v1.15.0
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8
 	gopkg.in/src-d/go-git.v4 v4.13.1
 	gopkg.in/yaml.v2 v2.4.0
