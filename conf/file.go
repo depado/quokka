@@ -7,9 +7,12 @@ import (
 	"path"
 	"path/filepath"
 	"text/template"
+	"unicode"
 
 	"github.com/Depado/quokka/utils"
 	"github.com/fatih/color"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"gopkg.in/yaml.v2"
 )
 
@@ -24,6 +27,14 @@ type File struct {
 	Renderers []*ConfigFile
 	Metadata  *Config
 	Ctx       InputCtx
+}
+
+// templateFuncMaps adds just simple strings filter to pretty print string
+var templateFuncMaps template.FuncMap = template.FuncMap{
+	"title": func(str string) string {
+		return cases.Title(language.Und).String(str)
+	},
+	"uc": unicode.ToUpper,
 }
 
 // AddRenderer adds a renderer to a file
@@ -155,7 +166,7 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 		return err
 	}
 
-	t := template.Must(template.New(path.Base(f.NewPath)).Delims(delims[0], delims[1]).ParseFiles(f.NewPath))
+	t := template.Must(template.New(path.Base(f.NewPath)).Delims(delims[0], delims[1]).Funcs(templateFuncMaps).ParseFiles(f.NewPath))
 
 	if fd, err = os.Create(f.NewPath + ".rendered"); err != nil {
 		return err
