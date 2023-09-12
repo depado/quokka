@@ -42,49 +42,43 @@
 
 # Introduction
 
-Quokka is a boilerplate engine. It allows you to quickly use boilerplate 
-templates and avoid copy-pasting chunks of code and snippets when you start a 
+Quokka is a boilerplate engine. It allows you to quickly use boilerplate
+templates and avoid copy-pasting chunks of code and snippets when you start a
 new project. You can create templates for literally anything you want!
 
 ## Example Usages
 
 - Generating your CI/CD configuration file
-- 
+-
 
 ## Features
 
-- **No external dependencies**  
+- **No external dependencies**
   Quokka is written in Go and thus is compiled to a static binary. Download
   or build it and you're good to go.
-- **Local or distant templates**  
-  Either your template is a git repository, an archive stored on a distant
-  server or a local directory, Quokka knows how to handle these.
-- **Sweet output and prompts**  
-  Thanks to the wonderful [survey](https://github.com/AlecAivazis/survey) 
+- **Local or distant templates**
+  Quokka supports both git repositories and local files.
+- **Sweet output and prompts**
+  Thanks to the wonderful [survey](https://github.com/AlecAivazis/survey)
   library, the prompts are unified, can display an help text and support
   validation.
-- **Clean configuration files**  
+- **Clean configuration files**
   Quokka uses YAML for its configuration file formats, making them clean
   and easy to read.
-- **Powerful templating system**  
+- **Powerful templating system**
   Quokka uses [Go's template system](https://golang.org/pkg/text/template/)
   to render the boilerplate.
-- **Configuration override**  
-  Need a different behavior or additional variables in a specific directory? 
+- **Configuration override**
+  Need a different behavior or additional variables in a specific directory?
   Just add another `.quokka.yml` file in there. You can even overwrite
-  variables. 
-- **Conditional prompts (sub-variables)**  
+  variables.
+- **Conditional prompts (sub-variables)**
   Each variable can have its own subset of variables which will only be
   prompted to the user if the parent variable is filled or set to true.
-- **Customizable templates**  
+- **Customizable templates**
   Quokka enables fine-grained control over what needs to be done when
   rendering the template. Just copy the file, ignore it, add conditionals based
   on what the user answered, change the template delimiters…
-- **[On Hold] After render commands**  
-  Quokka enables you to define commands to be run once the boilerplate has
-  been rendered. _For security reasons, an explicit flag must be provided by the
-  user for the commands to be executed_
-  This feature is currently disabled for security reasons.
 
 # Installation
 
@@ -110,9 +104,8 @@ $ make install
 
 # Usage
 
-Quokka supports various providers to download the templates. It supports 
-`git`, downloading an archive (`.zip`/`.tar.gz`/`.tar.xz`/...),
-or using a local directory.
+Quokka has two ways of retrieving the templates. It supports
+`git` or using a local directory.
 
 ```
 Quokka (qk) is a template engine that enables to render local or distant
@@ -145,10 +138,10 @@ Use "qk [command] --help" for more information about a command.
 
 ## Keeping the template
 
-When downloading or cloning a template, Quokka will create a temporary
+When cloning a template, Quokka will create a temporary
 directory and delete it once the operation completes. If you want to keep
 the template (to play with it, or simply to keep a copy), make sure you pass
-the `-k/--keep` option. This option pairs well with the `-o/--output` option 
+the `-k/--keep` option. This option pairs well with the `-o/--output` option
 which defines where the template should be downloaded/cloned.
 
 ## Input file
@@ -157,7 +150,7 @@ The rendering of a Quokka template can be automated if the template was designed
 with this in mind and if an input file is provided on the command line.
 
 Since there is no clear way for specifying overriding values (for example a
-variable that applies to a single file and overrides an already existing 
+variable that applies to a single file and overrides an already existing
 variable in the root config), the input values will also fill the overriding
 variables.
 
@@ -188,13 +181,13 @@ slack_webhook: "complexurl
 ```
 
 If this input file is given to Quokka, it won't prompt for these three
-variables, thus requiring no input from the user to render the template. 
+variables, thus requiring no input from the user to render the template.
 
 ## Set
 
-Additionally, you can provide Quokka with the `-e/--set` flag (multiple time if 
-you wish). This works the same way as the input file but has a higher priority, 
-meaning that if you pass both an input file and a `-e` flag that defines a 
+Additionally, you can provide Quokka with the `-e/--set` flag (multiple time if
+you wish). This works the same way as the input file but has a higher priority,
+meaning that if you pass both an input file and a `-e` flag that defines a
 variable, the one passed on the command line will have a higher priority.
 
 The `--set` flags work by providing it with a `key=value` style kind of string.
@@ -224,15 +217,15 @@ $ qk template/ output -i in.yml
 
 ## New command
 
-If `quokka` is installed, simply run `quokka new <path>`. This will ask for 
+If `quokka` is installed, simply run `quokka new <path>`. This will ask for
 basic information such as the template name, description and version with some
-sane defaults (version number for example is set to `0.1.0` by default). 
-You can also pass these values as flags on the command line. 
+sane defaults (version number for example is set to `0.1.0` by default).
+You can also pass these values as flags on the command line.
 
-This command will check if the output directory and a `.quokka.yml` file already 
+This command will check if the output directory and a `.quokka.yml` file already
 exist. This command is in charge of creating a new directory and creating the
 initial `.quokka.yml` file with those basic information, helping you getting
-started with Quokka template development. 
+started with Quokka template development.
 
 <details><summary>Command Line Help</summary>
 
@@ -272,7 +265,7 @@ description: "An example template to show how quokka works"
 
 ## Variable declaration
 
-You can add a `variables` section to your root configuration (or to any 
+You can add a `variables` section to your root configuration (or to any
 `.quokka.yml` file, or directly inline in your template files, see below) to
 define the variables you want your user to fill in. There are three types of
 input you can use:
@@ -293,7 +286,7 @@ variables:
   license:
     values: ["MIT", "Apache License 2.0", "BSD 3", "FreeBSD", "GPL", "LGPL", "WTFPL", "None"]
 ```
-This will result in a selection input where the user can choose one of the 
+This will result in a selection input where the user can choose one of the
 provided choices.
 
 ### Boolean/Confirmation
@@ -304,11 +297,11 @@ variables:
     confirm: true
 ```
 If you're using the `confirm` keyword, it will generate a simple yes/no input.
-The value you give that `confirm` key becomes the default value. 
+The value you give that `confirm` key becomes the default value.
 
 ### Other options and help
 
-You can also help your users by changing the prompt, adding a help text or 
+You can also help your users by changing the prompt, adding a help text or
 providing a default value:
 
 ```yaml
@@ -372,8 +365,8 @@ In this case, `.slack_channel` and `.slack_webhook`.
 ## Standard `.quokka.yml` files
 
 If you place a `.quokka.yml` file in a sub-directory of your template, this
-file will apply recursively to all the elements inside that directory and its 
-own sub-directories, meaning that you can override some variables, add new ones, 
+file will apply recursively to all the elements inside that directory and its
+own sub-directories, meaning that you can override some variables, add new ones,
 modify the delimiters, or completely ignore an entire directory.
 
 For example you can completely ignore a directory:
@@ -388,11 +381,11 @@ For example you can completely ignore a directory:
 copy: true
 ```
 
-In this case, the file `override.go` won't be rendered (but will simply be 
-copied to the output directory). This would apply for every sub-directory, 
+In this case, the file `override.go` won't be rendered (but will simply be
+copied to the output directory). This would apply for every sub-directory,
 except if a directory contains a `.quokka.yml` telling otherwise, or a
 file with an inline configuration. The `ignore` option can also be used to
-completely ignore a file or a directory. 
+completely ignore a file or a directory.
 
 ```yaml
 ignore: true
@@ -401,7 +394,7 @@ ignore: true
 ## Per-file configuration
 
 You can also configure individual files by adding a front matter at the top
-of the file (that will obviously be removed when rendered). 
+of the file (that will obviously be removed when rendered).
 
 Let's say I have a file that I don't want to render but simply copy to the
 output directory:
@@ -444,34 +437,3 @@ workspace:
 This file will be rendered if, and only if, the user answered yes to that
 question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
-
-<!-- ## After render commands
-
-You can define some actions to be run once your template has been rendered.
-You can only define those in the root configuration (not in sub-directory
-configuration files). These actions can be configured to be run only when a
-variable has been entered, just like the conditional rendering. Here is an
-example of initializing the git repository when the template has been rendered:
-
-```yml
-after:
-  - cmd: "git init"
-    echo: "Intialized git repo"
-    if: git
-  - cmd: "git config core.hooksPath .githooks"
-    echo: "Configured git hooks"
-    if: git
-variables:
-  git:
-    confirm: true
-    prompt: "Initialize git repo and git hooks ?"
-```
-
-If the user answers yes to the question about git, then the repo will be 
-initialized. You can also specify that you want the output of the command to be
-displayed to the user using the `output: true`. `echo` is used to display a nice
-message (instead of the command output).
-
-**Note**: Due to the potential misbehavior of template creators, the user needs
-to pass the `-c` or `--commands` to execute those commands. Otherwise the 
-commands will be completely ignored. -->
