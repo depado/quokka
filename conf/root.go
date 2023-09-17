@@ -5,8 +5,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/Depado/quokka/utils"
 	yaml "gopkg.in/yaml.v2"
+
+	"github.com/Depado/quokka/utils"
 )
 
 // Root is a ConfigFile with extra information. It should be located at the root

@@ -9,11 +9,12 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/Depado/quokka/utils"
 	"github.com/fatih/color"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"gopkg.in/yaml.v2"
+
+	"github.com/Depado/quokka/utils"
 )
 
 const frontMatterPrefix = "---"

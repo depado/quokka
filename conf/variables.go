@@ -3,10 +3,11 @@ package conf
 import (
 	"fmt"
 
-	"github.com/Depado/quokka/utils"
 	"github.com/fatih/color"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 	yaml "gopkg.in/yaml.v2"
+
+	"github.com/Depado/quokka/utils"
 )
 
 // Variables is a slice of pointer to a single variable

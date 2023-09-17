@@ -3,8 +3,9 @@ package provider
 import (
 	"path/filepath"
 
-	"github.com/Depado/quokka/utils"
 	git "gopkg.in/src-d/go-git.v4"
+
+	"github.com/Depado/quokka/utils"
 )
 
 type gitp struct {

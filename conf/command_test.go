@@ -8,8 +8,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Depado/quokka/utils"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/Depado/quokka/utils"
 )
 
 func captureOutput(f func()) string {

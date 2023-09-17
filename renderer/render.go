@@ -3,9 +3,10 @@ package renderer
 import (
 	"os"
 
+	"gopkg.in/AlecAivazis/survey.v1"
+
 	"github.com/Depado/quokka/provider"
 	"github.com/Depado/quokka/utils"
-	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 // Render is the main render function

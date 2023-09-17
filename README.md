@@ -2,8 +2,6 @@
 <h2 align="center">
   <img src="/assets/mascot.png" alt="mascot" height="200px">
 
-  [![forthebadge](https://forthebadge.com/images/badges/made-with-go.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
-
   ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
   [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/quokka)](https://goreportcard.com/report/github.com/Depado/quokka)
   [![Build Status](https://drone.depado.eu/api/badges/Depado/quokka/status.svg)](https://drone.depado.eu/Depado/quokka)
@@ -38,7 +36,6 @@
     - [Standard `.quokka.yml` files](#standard-quokkayml-files)
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
-    <!-- - [After render commands](#after-render-commands) -->
 
 # Introduction
 
@@ -49,7 +46,8 @@ new project. You can create templates for literally anything you want!
 ## Example Usages
 
 - Generating your CI/CD configuration file
--
+- Generating skeleton applications with your own best practices
+- More
 
 ## Features
 
@@ -437,3 +435,9 @@ workspace:
 This file will be rendered if, and only if, the user answered yes to that
 question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
+
+## Todo
+
+- Per-file config:
+  - [ ] Allow more complex conditional rendering
+  - [ ] Ability to rename files once rendered

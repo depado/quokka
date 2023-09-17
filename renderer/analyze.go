@@ -4,9 +4,10 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/fatih/color"
+
 	"github.com/Depado/quokka/conf"
 	"github.com/Depado/quokka/utils"
-	"github.com/fatih/color"
 )
 
 // ConfigName is the generic name of the file that acts at the configuration
