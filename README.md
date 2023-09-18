@@ -441,3 +441,4 @@ to copy the file and not render it.
 - Per-file config:
   - [ ] Allow more complex conditional rendering
   - [ ] Ability to rename files once rendered
+  - [ ] Unable to access sub variables in condition
