@@ -6,18 +6,15 @@ import (
 	"strings"
 
 	yaml "gopkg.in/yaml.v2"
-
-	"github.com/Depado/quokka/utils"
 )
 
 // Root is a ConfigFile with extra information. It should be located at the root
 // of the template
 type Root struct {
 	ConfigFile  `yaml:",inline"`
-	Name        string    `yaml:"name"`
-	Version     string    `yaml:"version"`
-	Description string    `yaml:"description"`
-	After       []Command `yaml:"after"`
+	Name        string `yaml:"name"`
+	Version     string `yaml:"version"`
+	Description string `yaml:"description"`
 }
 
 // Parse will parse the yaml file and store its result in the root config
@@ -30,27 +27,6 @@ func (r *Root) Parse() error {
 	}
 
 	return yaml.Unmarshal(out, r)
-}
-
-// ExecuteCommands will execute the commands in the newly rendered directory
-func (r Root) ExecuteCommands(dir string) {
-	var err error
-
-	if err = os.Chdir(dir); err != nil {
-		utils.FatalPrintln("Couldn't change directory:", err)
-	}
-
-	for _, cmd := range r.After {
-		if cmd.Cmd != "" {
-			if cmd.If != "" && r.Variables != nil {
-				if v := r.Variables.FindNamed(cmd.If); v != nil && v.True() {
-					cmd.Run()
-				}
-			} else {
-				cmd.Run()
-			}
-		}
-	}
 }
 
 // NewPath adds the path where the file should be rendered according to the root

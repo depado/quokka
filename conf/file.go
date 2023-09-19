@@ -26,8 +26,13 @@ type File struct {
 	NewPath   string
 	Info      os.FileInfo
 	Renderers []*ConfigFile
-	Metadata  *Config
+	Metadata  *FileMetadata
 	Ctx       InputCtx
+}
+
+type FileMetadata struct {
+	Config `yaml:",inline"`
+	Rename string `yaml:"rename"`
 }
 
 // templateFuncMaps adds just simple strings filter to pretty print string
@@ -89,11 +94,12 @@ func (f *File) ParseFrontMatter() error {
 	}
 
 	// Parse stuff to configuration
-	var r Config
-	if err = yaml.Unmarshal([]byte(in), &r); err != nil {
+	var fm FileMetadata
+	if err = yaml.Unmarshal([]byte(in), &fm); err != nil {
 		return err
 	}
-	f.Metadata = &r
+	f.Metadata = &fm
+
 	if f.Metadata.Variables != nil && len(*f.Metadata.Variables) > 0 {
 		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
 		f.Metadata.Variables.FillPrompt("", f.Ctx)
@@ -224,6 +230,9 @@ func (f *File) Render() error {
 		}
 		if f.Metadata.Variables != nil {
 			f.Metadata.Variables.AddToCtx("", ctx)
+		}
+		if f.Metadata.Rename != "" {
+			f.NewPath = filepath.Join(filepath.Dir(f.NewPath), f.Metadata.Rename)
 		}
 	}
 	if ignore {
