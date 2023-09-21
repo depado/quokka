@@ -21,7 +21,7 @@ install: ## Build and install
 
 .PHONY: release
 release: ## Create a new release on Github
-	VERSION="$(VERSION)" BUILD="$(BUILD)" BUILDDATE="$(BUILDDATE)" goreleaser releasee
+	VERSION="$(VERSION)" BUILD="$(BUILD)" BUILDDATE="$(BUILDDATE)" goreleaser release
 
 .PHONY: snapshot
 snapshot: ## Create a new snapshot release
