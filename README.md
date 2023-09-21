@@ -447,3 +447,10 @@ workspace:
 This file will be rendered if, and only if, the user answered yes to that
 question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
+
+# ToDo
+
+- [ ] Ignore file list in `.quokka.yml`
+  - Use case: Add a `README.md` to document the template along with
+    `README.md.tmpl` with a `rename` directive. This would avoids the front-matter
+    in the template documentation.
