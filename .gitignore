@@ -1,4 +1,4 @@
 .vscode/
 coverage.txt
 qk
-quokka
+dist/

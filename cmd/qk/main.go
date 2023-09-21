@@ -4,17 +4,20 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"github.com/Depado/quokka/cmd"
 	"github.com/Depado/quokka/renderer"
+	"github.com/Depado/quokka/utils"
 )
 
 // Build number and versions injected at compile time
 var (
-	Version = "unknown"
-	Build   = "unknown"
+	Version   = "unknown"
+	Build     = "unknown"
+	BuildDate = "unknown"
 )
 
 var qkdesc = `Quokka (qk) is a template engine that enables to render local or
@@ -32,6 +35,7 @@ var rootc = &cobra.Command{
 	Long:  qkdesc,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
+		utils.OkPrintln("quokka", color.GreenString(Version))
 		renderer.Render(
 			args[0],
 			args[1],
@@ -50,7 +54,9 @@ var rootc = &cobra.Command{
 var versionc = &cobra.Command{
 	Use:   "version",
 	Short: "Show build and version",
-	Run:   func(c *cobra.Command, args []string) { fmt.Printf("Build: %s\nVersion: %s\n", Build, Version) },
+	Run: func(c *cobra.Command, args []string) {
+		fmt.Printf("Build: %s\nVersion: %s\nBuild Date: %s\n", Build, Version, BuildDate)
+	},
 }
 
 // New command that will create a new empty quokka template

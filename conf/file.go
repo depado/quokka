@@ -6,9 +6,11 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 	"text/template"
 	"unicode"
 
+	"github.com/antonmedv/expr"
 	"github.com/fatih/color"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -240,18 +242,40 @@ func (f *File) Render() error {
 		return nil
 	}
 	if condition != "" {
-		if v, ok := ctx[condition]; ok {
-			switch o := v.(type) {
-			case bool:
-				if !o {
-					utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
-					return nil
+		if len(strings.Fields(condition)) == 1 {
+			if v, ok := ctx[condition]; ok {
+				switch o := v.(type) {
+				case bool:
+					if !o {
+						utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+						return nil
+					}
+				case string:
+					if o == "" {
+						utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+						return nil
+					}
 				}
-			case string:
-				if o == "" {
-					utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
-					return nil
-				}
+			}
+		} else {
+			p, err := expr.Compile(condition, expr.AsBool())
+			if err != nil {
+				utils.ErrPrintln("Invalid conditional in", color.YellowString(f.Path), "-", color.RedString(err.Error()))
+				return nil
+			}
+			out, err := expr.Run(p, ctx)
+			if err != nil {
+				utils.ErrPrintln("Failed to run condition in", color.YellowString(f.Path), "-", color.RedString(err.Error()))
+				return nil
+			}
+			res, ok := out.(bool)
+			if !ok {
+				utils.ErrPrintln("Condition didn't return a boolean value in", color.YellowString(f.Path))
+				return nil
+			}
+			if !res {
+				utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+				return nil
 			}
 		}
 	}

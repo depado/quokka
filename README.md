@@ -4,7 +4,7 @@
 
   ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
   [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/quokka)](https://goreportcard.com/report/github.com/Depado/quokka)
-  [![Build Status](https://drone.depado.eu/api/badges/Depado/quokka/status.svg)](https://drone.depado.eu/Depado/quokka)
+  [![Build Status](https://drone.depa.do/api/badges/Depado/quokka/status.svg)](https://drone.depa.do/Depado/quokka)
   [![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/quokka/blob/master/LICENSE)
   [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
@@ -407,6 +407,18 @@ copy: true
 You can even add per-file variables, or modify the delimiters. In fact, it's
 like an inline `.quokka.yml` that applies to a single file.
 
+Supported instructions are as follows:
+
+- `if: condition`: Conditional rendering using an [expr](https://expr.medv.io/docs/Language-Definition)
+  expression that must return a boolean value
+- `copy: true`: Do not attempt to render the file and simply copy it to its
+  destination
+- `delimiters: ["[[", "]]"]`: Change the delimiters used for template rendering.
+  This can be useful for files that already are templates or use extensively the
+  `{}` chars
+- `rename: newname`: Rename the file to this new name once rendered
+- `ignore: true`: Completely ignore the file (no render, no copy)
+
 ## Conditional Rendering/Copy
 
 You may want some files to not be copied or rendered according to what the user
@@ -435,9 +447,3 @@ workspace:
 This file will be rendered if, and only if, the user answered yes to that
 question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
-
-## Todo
-
-- Per-file config:
-  - [ ] Allow more complex conditional rendering
-  - [ ] Unable to access sub variables in condition

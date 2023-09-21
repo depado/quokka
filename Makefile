@@ -2,8 +2,10 @@
 
 BINARY=qk
 VERSION=$(shell git describe --abbrev=0 --tags 2> /dev/null || echo "0.1.0")
+SUFFIX=$(shell git describe --exact-match > /dev/null 2>&1 || echo "-dev")
 BUILD=$(shell git rev-parse HEAD 2> /dev/null || echo "undefined")
-LDFLAGS=-ldflags "-X main.Version=$(VERSION) -X main.Build=$(BUILD)"
+BUILDDATE=$(shell LANG=en_us_88591 date)
+LDFLAGS=-ldflags "-X 'main.Version=$(VERSION)$(SUFFIX)' -X 'main.Build=$(BUILD)' -X 'main.BuildDate=$(BUILDDATE)' -s -w"
 
 .PHONY: help
 help:
@@ -19,11 +21,11 @@ install: ## Build and install
 
 .PHONY: release
 release: ## Create a new release on Github
-	VERSION=$(VERSION) BUILD=$(BUILD) goreleaser
+	VERSION="$(VERSION)" BUILD="$(BUILD)" BUILDDATE="$(BUILDDATE)" goreleaser releasee
 
 .PHONY: snapshot
 snapshot: ## Create a new snapshot release
-	VERSION=$(VERSION) BUILD=$(BUILD) goreleaser --snapshot --rm-dist
+	VERSION="$(VERSION)" BUILD="$(BUILD)" BUILDDATE="$(BUILDDATE)" goreleaser release --snapshot --clean
 
 .PHONY: test
 test: ## Run the test suite
