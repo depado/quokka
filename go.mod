@@ -3,7 +3,7 @@ module github.com/Depado/quokka
 go 1.21
 
 require (
-	github.com/antonmedv/expr v1.15.4
+	github.com/antonmedv/expr v1.15.5
 	github.com/briandowns/spinner v1.23.0
 	github.com/fatih/color v1.16.0
 	github.com/spf13/cobra v1.8.0
