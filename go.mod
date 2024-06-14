@@ -6,7 +6,7 @@ require (
 	github.com/briandowns/spinner v1.23.1
 	github.com/expr-lang/expr v1.16.9
 	github.com/fatih/color v1.17.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/text v0.16.0
