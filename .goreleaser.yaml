@@ -1,6 +1,9 @@
+version: 2
+
 before:
   hooks:
     - go mod tidy
+
 builds:
   - goarch: [amd64, arm, arm64, 386]
     goarm: [6, 7]
@@ -30,8 +33,10 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+
 checksum:
   name_template: "checksums.txt"
+
 changelog:
   sort: asc
   filters:
