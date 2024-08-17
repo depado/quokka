@@ -15,6 +15,10 @@ help:
 build: ## Build
 	CGO_ENABLED=0 go build -o $(BINARY) $(LDFLAGS) ./cmd/qk
 
+.PHONY: tmp
+tmp: ## Build quokka and place the binary in /tmp
+	CGO_ENABLED=0 go build -o /tmp/$(BINARY) $(LDFLAGS) ./cmd/qk
+
 .PHONY: install
 install: ## Build and install
 	CGO_ENABLED=0 go install $(LDFLAGS) ./cmd/qk
