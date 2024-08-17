@@ -1,0 +1,1 @@
+{"go-coverage-action-fmt":1,"coverage_pct":7.083333333333333,"pkg_stats":{"github.com/Depado/quokka/cmd":[0],"github.com/Depado/quokka/cmd/qk":[0],"github.com/Depado/quokka/renderer":[0],"github.com/Depado/quokka/utils":[0],"github.com/Depado/quokka/conf":[10.104529616724738],"github.com/Depado/quokka/provider":[23.809523809523807]},"skipped_count":0}
