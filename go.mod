@@ -3,7 +3,6 @@ module github.com/depado/quokka
 go 1.23
 
 require (
-	github.com/depado/quokka v1.4.0
 	github.com/briandowns/spinner v1.23.1
 	github.com/expr-lang/expr v1.16.9
 	github.com/fatih/color v1.17.0
