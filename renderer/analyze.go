@@ -6,8 +6,8 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/Depado/quokka/conf"
-	"github.com/Depado/quokka/utils"
+	"github.com/depado/quokka/conf"
+	"github.com/depado/quokka/utils"
 )
 
 // ConfigName is the generic name of the file that acts at the configuration

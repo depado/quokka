@@ -8,9 +8,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/Depado/quokka/cmd"
-	"github.com/Depado/quokka/renderer"
-	"github.com/Depado/quokka/utils"
+	"github.com/depado/quokka/cmd"
+	"github.com/depado/quokka/renderer"
+	"github.com/depado/quokka/utils"
 )
 
 // Build number and versions injected at compile time

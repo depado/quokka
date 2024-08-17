@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Depado/quokka/utils"
+	"github.com/depado/quokka/utils"
 )
 
 // NewQuokkaTemplate will create a new Quokka template with default params

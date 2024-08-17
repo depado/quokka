@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-git/go-git/v5"
 
-	"github.com/Depado/quokka/utils"
+	"github.com/depado/quokka/utils"
 )
 
 type gitp struct {

@@ -3,10 +3,10 @@
   <img src="/assets/mascot.png" alt="mascot" height="200px">
 
   ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
-  [![Go Report Card](https://goreportcard.com/badge/github.com/Depado/quokka)](https://goreportcard.com/report/github.com/Depado/quokka)
+  [![Go Report Card](https://goreportcard.com/badge/github.com/depado/quokka)](https://goreportcard.com/report/github.com/depado/quokka)
   [![Build Status](https://drone.depa.do/api/badges/Depado/quokka/status.svg)](https://drone.depa.do/Depado/quokka)
   [![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Depado/quokka/blob/master/LICENSE)
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/depado/quokka/blob/master/LICENSE)
   [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
 </h2>
 
@@ -82,21 +82,21 @@ new project. You can create templates for literally anything you want!
 
 ## Download
 
-You can grab the latest release from [the release page](https://github.com/Depado/quokka/releases).
+You can grab the latest release from [the release page](https://github.com/depado/quokka/releases).
 
 ## Build from source
 
 ```
-$ go get -u github.com/Depado/quokka
-$ cd $GOPATH/src/github.com/Depado/quokka
+$ go get -u github.com/depado/quokka
+$ cd $GOPATH/src/github.com/depado/quokka
 $ make
 ```
 
 Or directly install:
 
 ```
-$ go get -u github.com/Depado/quokka
-$ cd $GOPATH/src/github.com/Depado/quokka
+$ go get -u github.com/depado/quokka
+$ cd $GOPATH/src/github.com/depado/quokka
 $ make install
 ```
 

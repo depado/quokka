@@ -5,8 +5,8 @@ import (
 
 	"gopkg.in/AlecAivazis/survey.v1"
 
-	"github.com/Depado/quokka/provider"
-	"github.com/Depado/quokka/utils"
+	"github.com/depado/quokka/provider"
+	"github.com/depado/quokka/utils"
 )
 
 // Render is the main render function

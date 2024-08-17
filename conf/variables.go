@@ -7,7 +7,7 @@ import (
 	survey "gopkg.in/AlecAivazis/survey.v1"
 	yaml "gopkg.in/yaml.v2"
 
-	"github.com/Depado/quokka/utils"
+	"github.com/depado/quokka/utils"
 )
 
 // Variables is a slice of pointer to a single variable
