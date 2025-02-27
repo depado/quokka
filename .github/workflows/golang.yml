@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with: { fetch-depth: 10 }
-      - uses: gwatts/go-coverage-action@2845595538a59d63d1bf55f109c14e104c6f7cb3 # v2
+      - uses: lazyguru/go-coverage-action@9b496d245c69f85ab8cef4ce57d857cc727506ee
         id: coverage
         with:
           cover-pkg: ./...
