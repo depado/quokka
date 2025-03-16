@@ -6,7 +6,7 @@ toolchain go1.24.1
 
 require (
 	github.com/briandowns/spinner v1.23.2
-	github.com/expr-lang/expr v1.16.9
+	github.com/expr-lang/expr v1.17.0
 	github.com/fatih/color v1.18.0
 	github.com/go-git/go-git/v5 v5.14.0
 	github.com/spf13/cobra v1.9.1
