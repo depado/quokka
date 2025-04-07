@@ -22,7 +22,7 @@ func (r *Root) Parse() error {
 	var err error
 	var out []byte
 
-	if out, err = os.ReadFile(r.ConfigFile.File.Path); err != nil {
+	if out, err = os.ReadFile(r.File.Path); err != nil {
 		return err
 	}
 

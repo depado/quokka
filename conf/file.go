@@ -60,7 +60,7 @@ func (f *File) ParseFrontMatter() error {
 	if fd, err = os.Open(f.Path); err != nil {
 		utils.FatalPrintln("Couldn't open candidate:", err)
 	}
-	defer fd.Close()
+	defer fd.Close() //nolint:errcheck
 
 	// Scan it and check if there are known delimiters or an end of file
 	scanner := bufio.NewScanner(fd)
@@ -124,11 +124,11 @@ func (f *File) WriteCopy() error {
 	if sfd, err = os.Open(f.Path); err != nil {
 		return err
 	}
-	defer sfd.Close()
+	defer sfd.Close() //nolint:errcheck
 	if ofd, err = os.Create(f.NewPath); err != nil {
 		return err
 	}
-	defer ofd.Close()
+	defer ofd.Close() //nolint:errcheck
 
 	// Scan it and check if there are known delimiters or an end of file
 	scanner := bufio.NewScanner(sfd)
@@ -182,11 +182,11 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 	}
 
 	if err = t.Execute(fd, ctx); err != nil {
-		fd.Close()
+		fd.Close() //nolint:errcheck
 		return err
 	}
 
-	fd.Close()
+	fd.Close() //nolint:errcheck
 	return os.Rename(rdr, f.NewPath)
 }
 
@@ -209,7 +209,7 @@ func (f *File) Render() error {
 		}
 		if r.Delimiters != nil {
 			if len(r.Delimiters) != 2 {
-				return fmt.Errorf("Delimiters should be an array of two string")
+				return fmt.Errorf("delimiters should be an array of two string")
 			}
 			delims = r.Delimiters
 		}

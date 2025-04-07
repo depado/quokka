@@ -40,7 +40,7 @@ func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 	if root.Description != "" {
 		utils.OkPrintln(color.CyanString(root.Description))
 	}
-	root.ConfigFile.Prompt()
+	root.Prompt()
 	return root
 }
 

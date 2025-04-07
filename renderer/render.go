@@ -41,7 +41,7 @@ func Render(template, output, toutput, path, input string, set []string, keep bo
 	// Delete the template if needed
 	if !keep && p.UsesTmp() {
 		defer func(p string) {
-			os.RemoveAll(path)
+			os.RemoveAll(path) //nolint:errcheck
 			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
 		}(path)
 	}

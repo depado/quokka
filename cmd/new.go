@@ -28,8 +28,8 @@ func NewQuokkaTemplate(path, name, description, version string, yes, debug bool)
 	if fd, err = os.Create(qf); err != nil {
 		utils.FatalPrintln("Unable to create file")
 	}
-	defer fd.Close()
-	if _, err = fd.WriteString(fmt.Sprintf("name: \"%s\"\ndescription: \"%s\"\nversion: \"%s\"\n", name, description, version)); err != nil {
+	defer fd.Close() //nolint:errcheck
+	if _, err = fmt.Fprintf(fd, "name: \"%s\"\ndescription: \"%s\"\nversion: \"%s\"\n", name, description, version); err != nil {
 		utils.FatalPrintln("Unable to write in file")
 	}
 }
