@@ -4,7 +4,6 @@
 
   ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
   [![Go Report Card](https://goreportcard.com/badge/github.com/depado/quokka)](https://goreportcard.com/report/github.com/depado/quokka)
-  [![Build Status](https://drone.depa.do/api/badges/Depado/quokka/status.svg)](https://drone.depa.do/Depado/quokka)
   [![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/depado/quokka/blob/master/LICENSE)
   [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
