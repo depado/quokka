@@ -45,5 +45,7 @@ func Render(template, output, toutput, path, input string, set []string, keep bo
 			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
 		}(path)
 	}
-	Analyze(tpath, output, input, set)
+	if err := Analyze(tpath, output, input, set); err != nil {
+		utils.FatalPrintln(err)
+	}
 }
