@@ -1,6 +1,7 @@
 package renderer
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -47,20 +48,20 @@ func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 // Analyze is a work in progress function to analyze the template directory
 // and gather information about where the configuration files are stored and to
 // which templates they should apply.
-func Analyze(dir, output, input string, set []string) {
+func Analyze(dir, output, input string, set []string) error {
 	var err error
 	var ctx conf.InputCtx
 
 	if input != "" {
 		if ctx, err = conf.GetInputContext(input); err != nil {
-			utils.FatalPrintln("Could not parse input file:", err)
+			return fmt.Errorf("could not parse input file: %w", err)
 		}
 		utils.OkPrintln("Input file", utils.Green.Sprint(input), "found")
 	}
 	if len(set) > 0 {
 		setCtx, err := conf.GetSetContext(set)
 		if err != nil {
-			utils.FatalPrintln("Could not parse set flags:", err)
+			return fmt.Errorf("could not parse set flags: %w", err)
 		}
 		ctx = conf.MergeCtx(ctx, setCtx)
 		utils.OkPrintln("Command line set merged in context")
@@ -82,14 +83,14 @@ func Analyze(dir, output, input string, set []string) {
 			m[cf.File.Dir] = cf
 			utils.OkPrintln("Override configuration:", color.YellowString(path))
 			if err := cf.Parse(); err != nil {
-				utils.FatalPrintln("Couldn't parse configuration:", err)
+				return fmt.Errorf("could not parse configuration: %w", err)
 			}
 			cf.Prompt()
 		}
 		return nil
 	})
 	if err != nil {
-		utils.FatalPrintln("Couldn't read filesystem:", err)
+		return fmt.Errorf("could not read filesystem: %w", err)
 	}
 
 	// Cycle through the files
@@ -115,15 +116,17 @@ func Analyze(dir, output, input string, set []string) {
 		return nil
 	})
 	if err != nil {
-		utils.FatalPrintln("Couldn't read filesystem:", err)
+		return fmt.Errorf("could not read filesystem: %w", err)
 	}
 
 	for _, f := range candidates {
 		if err = f.ParseFrontMatter(); err != nil {
-			utils.FatalPrintln("Couldn't parse front matter for file", color.YellowString(f.Path), ":", err)
+			return fmt.Errorf("could not parse front matter for file %s: %w", color.YellowString(f.Path), err)
 		}
 		if err = f.Render(); err != nil {
-			utils.FatalPrintln("Couldn't render template:", err)
+			return fmt.Errorf("could not render template: %w", err)
 		}
 	}
+
+	return nil
 }
