@@ -1,6 +1,6 @@
 module github.com/depado/quokka
 
-go 1.24.0
+go 1.25.0
 
 toolchain go1.26.1
 
@@ -12,7 +12,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/text v0.34.0
+	golang.org/x/text v0.35.0
 	gopkg.in/AlecAivazis/survey.v1 v1.8.8
 	gopkg.in/yaml.v2 v2.4.0
 )
