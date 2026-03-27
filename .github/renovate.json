@@ -11,6 +11,11 @@
       "matchPackageNames": ["gopkg.in/AlecAivazis/survey.v1"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["depado/github-actions"],
+      "pinDigests": false
     }
   ]
 }
