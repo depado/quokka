@@ -2,7 +2,7 @@ module github.com/depado/quokka
 
 go 1.25.0
 
-toolchain go1.26.1
+toolchain go1.26.2
 
 require (
 	github.com/briandowns/spinner v1.23.2
