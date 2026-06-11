@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
+	"github.com/goccy/go-yaml"
 	survey "gopkg.in/AlecAivazis/survey.v1"
-	yaml "gopkg.in/yaml.v2"
 
 	"github.com/depado/quokka/utils"
 )

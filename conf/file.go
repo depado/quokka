@@ -15,7 +15,7 @@ import (
 	"github.com/fatih/color"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"gopkg.in/yaml.v2"
+	"github.com/goccy/go-yaml"
 
 	"github.com/depado/quokka/utils"
 )

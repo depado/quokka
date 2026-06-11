@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	yaml "gopkg.in/yaml.v2"
+	"github.com/goccy/go-yaml"
 )
 
 // Include defines an external template to pull in during rendering
@@ -37,7 +37,7 @@ func (r *Root) Parse() error {
 		return err
 	}
 
-	return yaml.Unmarshal(out, r)
+	return yaml.UnmarshalWithOptions(out, r, yaml.UseOrderedMap())
 }
 
 // NewPath adds the path where the file should be rendered according to the root

@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	yaml "gopkg.in/yaml.v2"
+	"github.com/goccy/go-yaml"
 )
 
 // Config is a configuration that can be applied to a single file (inline conf)
@@ -33,7 +33,7 @@ func (c *ConfigFile) Parse() error {
 		return err
 	}
 
-	return yaml.Unmarshal(out, c)
+	return yaml.UnmarshalWithOptions(out, c, yaml.UseOrderedMap())
 }
 
 // Prompt will prompt the necessary prompts wihtout displaying the ones for

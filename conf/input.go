@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"gopkg.in/yaml.v2"
+	"github.com/goccy/go-yaml"
 )
 
 // InputCtx is the input context
@@ -58,7 +58,7 @@ func GetInputContext(path string) (InputCtx, error) {
 	if err != nil {
 		return out, err
 	}
-	return out, yaml.Unmarshal(input, &out)
+	return out, yaml.UnmarshalWithOptions(input, &out, yaml.UseOrderedMap())
 }
 
 // GetSetContext will return the map of string to interface{} that contains the
