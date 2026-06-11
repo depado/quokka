@@ -5,6 +5,7 @@ import (
 
 	"gopkg.in/AlecAivazis/survey.v1"
 
+	"github.com/depado/quokka/conf"
 	"github.com/depado/quokka/provider"
 	"github.com/depado/quokka/utils"
 )
@@ -40,12 +41,12 @@ func Render(template, output, toutput, path, input string, set []string, keep bo
 
 	// Delete the template if needed
 	if !keep && p.UsesTmp() {
-		defer func(p string) {
-			os.RemoveAll(path) //nolint:errcheck
-			utils.OkPrintln("Removed template", utils.Green.Sprint(path))
-		}(path)
+		defer func(tp string) {
+			os.RemoveAll(tp) //nolint:errcheck
+			utils.OkPrintln("Removed template", utils.Green.Sprint(tp))
+		}(tpath)
 	}
-	if err := Analyze(tpath, output, input, set); err != nil {
+	if err := Analyze(tpath, output, input, set, depth, conf.InputCtx{}); err != nil {
 		utils.FatalPrintln(err)
 	}
 }

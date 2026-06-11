@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/fatih/color"
+	survey "gopkg.in/AlecAivazis/survey.v1"
 
 	"github.com/depado/quokka/conf"
+	"github.com/depado/quokka/provider"
 	"github.com/depado/quokka/utils"
 )
 
@@ -45,27 +48,13 @@ func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 	return root
 }
 
-// Analyze is a work in progress function to analyze the template directory
-// and gather information about where the configuration files are stored and to
-// which templates they should apply.
-func Analyze(dir, output, input string, set []string) error {
+// collect recursively prompts all variables for the template at dir and all
+// its includes, and accumulates a flat list of files to render.
+// ctx is the pre-fill context from a parent template (empty at top level).
+// Returns the file list and the unified render context (all prompted values
+// from this template and all its includes merged together).
+func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, map[string]interface{}, error) {
 	var err error
-	var ctx conf.InputCtx
-
-	if input != "" {
-		if ctx, err = conf.GetInputContext(input); err != nil {
-			return fmt.Errorf("could not parse input file: %w", err)
-		}
-		utils.OkPrintln("Input file", utils.Green.Sprint(input), "found")
-	}
-	if len(set) > 0 {
-		setCtx, err := conf.GetSetContext(set)
-		if err != nil {
-			return fmt.Errorf("could not parse set flags: %w", err)
-		}
-		ctx = conf.MergeCtx(ctx, setCtx)
-		utils.OkPrintln("Command line set merged in context")
-	}
 
 	root := HandleRootConfig(dir, ctx)
 	var candidates []*conf.File
@@ -90,10 +79,10 @@ func Analyze(dir, output, input string, set []string) error {
 		return nil
 	})
 	if err != nil {
-		return fmt.Errorf("could not read filesystem: %w", err)
+		return nil, nil, fmt.Errorf("could not read filesystem: %w", err)
 	}
 
-	// Cycle through the files
+	// Cycle through the files and attach their renderers
 	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -116,9 +105,140 @@ func Analyze(dir, output, input string, set []string) error {
 		return nil
 	})
 	if err != nil {
-		return fmt.Errorf("could not read filesystem: %w", err)
+		return nil, nil, fmt.Errorf("could not read filesystem: %w", err)
 	}
 
+	// Build the accumulated render context: start with the incoming pre-fill
+	// values (from parent), then overlay this template's prompted results.
+	accumCtx := conf.InputCtxToMap(ctx)
+	for _, cf := range m {
+		if cf.Variables != nil {
+			cf.Variables.AddToCtx("", accumCtx)
+		}
+	}
+
+	// Process includes: evaluate gates, fetch, recurse.
+	for _, inc := range root.Includes {
+		if inc.Confirm != nil {
+			msg := inc.Prompt
+			if msg == "" {
+				msg = "Include " + inc.Source + "?"
+			}
+			var confirmed bool
+			if err = survey.AskOne(&survey.Confirm{Message: msg, Default: *inc.Confirm}, &confirmed, nil); err != nil {
+				return nil, nil, fmt.Errorf("could not get confirmation for include %q: %w", inc.Source, err)
+			}
+			if !confirmed {
+				utils.OkPrintln("Skipped include", utils.Green.Sprint(inc.Source))
+				continue
+			}
+		}
+		if inc.If != "" {
+			pass, condErr := conf.EvalCondition(inc.If, accumCtx)
+			if condErr != nil {
+				utils.ErrPrintln("Condition error for include", utils.Green.Sprint(inc.Source), "-", color.RedString(condErr.Error()))
+				continue
+			}
+			if !pass {
+				utils.OkPrintln("Skipped include", utils.Green.Sprint(inc.Source))
+				continue
+			}
+		}
+
+		effectiveOutput := output
+		if inc.Dest != "" && inc.Dest != "." {
+			effectiveOutput = filepath.Join(output, inc.Dest)
+		}
+
+		// Resolve relative local paths against the parent template directory.
+		source := inc.Source
+		if !strings.HasSuffix(source, ".git") && !filepath.IsAbs(source) {
+			source = filepath.Join(dir, source)
+		}
+
+		p := provider.NewProviderFromPath(source, inc.Path, "", depth)
+		if p.UsesTmp() {
+			var incTempDir string
+			if incTempDir, err = os.MkdirTemp("", "qk-include"); err != nil {
+				return nil, nil, fmt.Errorf("could not create temp dir for include %q: %w", source, err)
+			}
+			defer os.RemoveAll(incTempDir) //nolint:errcheck
+			p = provider.NewProviderFromPath(source, inc.Path, incTempDir, depth)
+		}
+
+		utils.OkPrintln("Fetching include via", utils.Green.Sprint(p.Name()), "provider:", utils.Green.Sprint(source))
+		var tpath string
+		if tpath, err = p.Fetch(); err != nil {
+			return nil, nil, fmt.Errorf("could not fetch include %q: %w", source, err)
+		}
+
+		// Recurse: pass the current accumCtx so the include can reuse already-
+		// prompted variables without re-prompting.
+		incFiles, incCtx, err := collect(tpath, effectiveOutput, conf.MapToInputCtx(accumCtx), depth)
+		if err != nil {
+			return nil, nil, fmt.Errorf("could not collect include %q: %w", source, err)
+		}
+		// Merge new variables introduced by the include (parent takes priority
+		// on any name collision — but in practice FillPrompt ensures they agree).
+		for k, v := range incCtx {
+			if _, exists := accumCtx[k]; !exists {
+				accumCtx[k] = v
+			}
+		}
+		candidates = append(candidates, incFiles...)
+	}
+
+	return candidates, accumCtx, nil
+}
+
+// Analyze is the main entry point for rendering a template.
+// It runs in two phases:
+//  1. Collect: prompt all variables across the full template tree (parent +
+//     all includes, recursively) before writing any files.
+//  2. Render: write all collected files using the unified context, so that
+//     every file has access to variables from every template in the tree.
+//
+// parentCtx contains values already collected by a parent template; pass an
+// empty InputCtx at the top level.
+func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.InputCtx) error {
+	var err error
+	ctx := parentCtx
+
+	if input != "" {
+		inputCtx, err := conf.GetInputContext(input)
+		if err != nil {
+			return fmt.Errorf("could not parse input file: %w", err)
+		}
+		ctx = conf.MergeCtx(ctx, inputCtx)
+		utils.OkPrintln("Input file", utils.Green.Sprint(input), "found")
+	}
+	if len(set) > 0 {
+		setCtx, err := conf.GetSetContext(set)
+		if err != nil {
+			return fmt.Errorf("could not parse set flags: %w", err)
+		}
+		ctx = conf.MergeCtx(ctx, setCtx)
+		utils.OkPrintln("Command line set merged in context")
+	}
+
+	// Phase 1: prompt all variables across the full template tree.
+	candidates, globalCtx, err := collect(dir, output, ctx, depth)
+	if err != nil {
+		return err
+	}
+
+	// Inject the unified context into every file so that variables from
+	// included sub-templates are available when rendering parent files
+	// (e.g. .license from a license include available in README.md).
+	globalInputCtx := conf.MapToInputCtx(globalCtx)
+	for _, f := range candidates {
+		f.GlobalCtx = globalCtx
+		// Also update Ctx so per-file frontmatter prompts can be pre-filled
+		// with the full global context.
+		f.Ctx = conf.MergeCtx(f.Ctx, globalInputCtx)
+	}
+
+	// Phase 2: render all files.
 	for _, f := range candidates {
 		if err = f.ParseFrontMatter(); err != nil {
 			return fmt.Errorf("could not parse front matter for file %s: %w", color.YellowString(f.Path), err)

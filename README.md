@@ -35,6 +35,7 @@
     - [Standard `.quokka.yml` files](#standard-quokkayml-files)
     - [Per-file configuration](#per-file-configuration)
     - [Conditional Rendering/Copy](#conditional-renderingcopy)
+    - [Includes](#includes)
 
 # Introduction
 
@@ -69,6 +70,10 @@ new project. You can create templates for literally anything you want!
   Need a different behavior or additional variables in a specific directory?
   Just add another `.quokka.yml` file in there. You can even overwrite
   variables.
+- **Template composition**
+  Compose multiple templates together using the `includes` directive in the
+  root `.quokka.yml`. Included templates inherit the parent's context and can
+  contribute variables back.
 - **Conditional prompts (sub-variables)**
   Each variable can have its own subset of variables which will only be
   prompted to the user if the parent variable is filled or set to true.
@@ -200,10 +205,10 @@ $ qk template/ output -i input.yml -e "slack_channel=#anotherchan"
 ## Examples
 
 ```sh
-$ # Clone the repository and execute the template that is located in _example/license
-$ qk git@github.com:Depado/quokka.git output --path _example/license
+$ # Clone a git repository and render a template from its root
+$ qk git@github.com:user/my-template.git output
 $ # Clone the template in a specific directory, render it in a specific directory and keep the template
-$ qk git@github.com:Depado/quokka.git myamazingproject --path _example/cleanarch --keep --output "template"
+$ qk git@github.com:user/my-template.git myamazingproject --path subdir --keep --output "template"
 $ # Reuse the downloaded template
 $ qk template/ myotherproject
 $ # Pass an input file to Quokka
@@ -446,6 +451,40 @@ workspace:
 This file will be rendered if, and only if, the user answered yes to that
 question. Note that `if` and `copy` can work together if you just want
 to copy the file and not render it.
+
+## Includes
+
+The root `.quokka.yml` can declare an `includes` list to pull in and compose
+external templates. An include supports the following options:
+
+- `source`: URL (ending in `.git`) or local path to the template
+- `path`: Inner sub-path within the fetched template (optional)
+- `dest`: Sub-directory within the output to render into (default: root)
+- `if`: Condition (single variable name or expr-lang expression) to gate the include
+- `confirm`: When `true`, prompts the user with a yes/no question before including
+- `prompt`: Custom message for the confirm prompt (default: "Include \<source\>?")
+
+Included templates inherit the parent's accumulated context (already-prompted
+variables are passed down and won't be re-prompted), and can contribute new
+variables back to the parent template.
+
+To pull a specific sub-directory from a cloned repository (e.g. a monorepo of
+templates), use `path` — it works identically for both git and local sources:
+
+```yaml
+name: "My Project Template"
+version: "0.1.0"
+description: "A template that includes a license"
+includes:
+  - source: "git@github.com:user/license-template.git"
+    dest: "."
+    confirm: true
+    prompt: "Include a LICENSE file?"
+  - source: "git@github.com:user/templates.git"
+    path: "ci-template"
+    dest: ".github"
+    if: ci
+```
 
 # ToDo
 

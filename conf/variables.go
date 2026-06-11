@@ -40,12 +40,15 @@ func (vv Variables) FindWithParent(p *Variable, s string) *Variable {
 
 // FromMapSlice fills in the Variables struct with the data stored in a
 // yaml.MapSlice. Used to recursively parse nested variables.
-func (vv *Variables) FromMapSlice(in yaml.MapSlice) {
+func (vv *Variables) FromMapSlice(in yaml.MapSlice) error {
 	for _, i := range in {
 		inv := &Variable{}
-		inv.FromMapItem(i)
+		if err := inv.FromMapItem(i); err != nil {
+			return err
+		}
 		*vv = append(*vv, inv)
 	}
+	return nil
 }
 
 // UnmarshalYAML defines a custom way to unmarshal to the Variables type.
@@ -53,11 +56,12 @@ func (vv *Variables) FromMapSlice(in yaml.MapSlice) {
 func (vv *Variables) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var variables Variables
 	n := yaml.MapSlice{}
-	err := unmarshal(&n)
-	if err != nil {
+	if err := unmarshal(&n); err != nil {
 		return err
 	}
-	variables.FromMapSlice(n)
+	if err := variables.FromMapSlice(n); err != nil {
+		return err
+	}
 	*vv = variables
 	return nil
 }
@@ -79,9 +83,9 @@ func (vv Variables) Ctx() map[string]interface{} {
 			} else {
 				ctx[v.Name] = v.Result
 			}
-		}
-		if v.Variables != nil {
-			v.Variables.AddToCtx(v.Name, ctx)
+			if v.Variables != nil {
+				v.Variables.AddToCtx(v.Name, ctx)
+			}
 		}
 	}
 	return ctx
@@ -169,31 +173,82 @@ func (v *Variable) FillFromMapItem(i yaml.MapItem) {
 
 // FromMapItem will fill the variable with the data stored in the input
 // yaml.MapItem. Used to recursively parse nested variables.
-func (v *Variable) FromMapItem(i yaml.MapItem) {
-	v.Name = i.Key.(string)
-	for _, data := range i.Value.(yaml.MapSlice) {
-		switch data.Key.(string) {
+func (v *Variable) FromMapItem(i yaml.MapItem) error {
+	key, ok := i.Key.(string)
+	if !ok {
+		return fmt.Errorf("variable key must be a string, got %T", i.Key)
+	}
+	v.Name = key
+
+	if i.Value == nil {
+		return nil
+	}
+	fields, ok := i.Value.(yaml.MapSlice)
+	if !ok {
+		return fmt.Errorf("variable %q: expected a mapping, got %T", v.Name, i.Value)
+	}
+
+	for _, data := range fields {
+		fkey, ok := data.Key.(string)
+		if !ok {
+			return fmt.Errorf("variable %q: field key must be a string, got %T", v.Name, data.Key)
+		}
+		switch fkey {
 		case "default":
-			v.Default = data.Value.(string)
+			s, ok := data.Value.(string)
+			if !ok {
+				return fmt.Errorf("variable %q: 'default' must be a string, got %T", v.Name, data.Value)
+			}
+			v.Default = s
 		case "prompt":
-			v.CustomPrompt = data.Value.(string)
+			s, ok := data.Value.(string)
+			if !ok {
+				return fmt.Errorf("variable %q: 'prompt' must be a string, got %T", v.Name, data.Value)
+			}
+			v.CustomPrompt = s
 		case "values":
-			for _, p := range data.Value.([]interface{}) {
-				v.Values = append(v.Values, p.(string))
+			items, ok := data.Value.([]interface{})
+			if !ok {
+				return fmt.Errorf("variable %q: 'values' must be a list, got %T", v.Name, data.Value)
+			}
+			for _, p := range items {
+				s, ok := p.(string)
+				if !ok {
+					return fmt.Errorf("variable %q: 'values' entries must be strings, got %T", v.Name, p)
+				}
+				v.Values = append(v.Values, s)
 			}
 		case "help":
-			v.Help = data.Value.(string)
+			s, ok := data.Value.(string)
+			if !ok {
+				return fmt.Errorf("variable %q: 'help' must be a string, got %T", v.Name, data.Value)
+			}
+			v.Help = s
 		case "required":
-			v.Required = data.Value.(bool)
+			b, ok := data.Value.(bool)
+			if !ok {
+				return fmt.Errorf("variable %q: 'required' must be a bool, got %T", v.Name, data.Value)
+			}
+			v.Required = b
 		case "confirm":
-			b := data.Value.(bool)
+			b, ok := data.Value.(bool)
+			if !ok {
+				return fmt.Errorf("variable %q: 'confirm' must be a bool, got %T", v.Name, data.Value)
+			}
 			v.Confirm = &b
 		case "variables":
+			ms, ok := data.Value.(yaml.MapSlice)
+			if !ok {
+				return fmt.Errorf("variable %q: 'variables' must be a mapping, got %T", v.Name, data.Value)
+			}
 			var vv Variables
-			vv.FromMapSlice(data.Value.(yaml.MapSlice))
+			if err := vv.FromMapSlice(ms); err != nil {
+				return err
+			}
 			v.Variables = vv
 		}
 	}
+	return nil
 }
 
 // True returns if the variable has been filled

@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/depado/quokka/conf"
 )
 
 func TestAnalyze_WithUnreadableFile(t *testing.T) {
@@ -18,7 +20,7 @@ func TestAnalyze_WithUnreadableFile(t *testing.T) {
 	}
 	defer os.Chmod(subdir, 0755) //nolint:errcheck
 
-	if err := Analyze(dir, "output", "", []string{}); err == nil {
+	if err := Analyze(dir, "output", "", []string{}, 1, conf.InputCtx{}); err == nil {
 		t.Error("Expected Analyze to return an error for unreadable directory, but got nil")
 	}
 }

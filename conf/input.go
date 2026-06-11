@@ -30,9 +30,28 @@ func MergeCtx(a, b InputCtx) InputCtx {
 	return out
 }
 
-// GetInputContext will return a map of string to interface{} that will then
-// be used to determine whether or not a value from the root config file
-// has already been filled
+// InputCtxToMap converts an InputCtx into a map[string]interface{} suitable
+// for use as a template render context.
+func InputCtxToMap(ctx InputCtx) map[string]interface{} {
+	out := make(map[string]interface{})
+	for _, item := range ctx {
+		if k, ok := item.Key.(string); ok {
+			out[k] = item.Value
+		}
+	}
+	return out
+}
+
+// MapToInputCtx converts a map[string]interface{} (as returned by
+// Variables.Ctx) into an InputCtx so it can be used to pre-fill prompts.
+func MapToInputCtx(m map[string]interface{}) InputCtx {
+	out := InputCtx{}
+	for k, v := range m {
+		out = append(out, yaml.MapItem{Key: k, Value: v})
+	}
+	return out
+}
+
 func GetInputContext(path string) (InputCtx, error) {
 	var out InputCtx
 	input, err := os.ReadFile(path)
