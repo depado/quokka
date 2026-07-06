@@ -30,7 +30,7 @@ func GetRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 
 // HandleRootConfig will find and parse the root configuration. It will then ask
 // the user for the variables in the root configuration
-func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
+func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]interface{}) *conf.Root {
 	var err error
 	var root *conf.Root
 
@@ -44,7 +44,7 @@ func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 	if root.Description != "" {
 		utils.OkPrintln(color.CyanString(root.Description))
 	}
-	root.Prompt()
+	root.Prompt(builtins)
 	return root
 }
 
@@ -56,7 +56,10 @@ func HandleRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, map[string]interface{}, error) {
 	var err error
 
-	root := HandleRootConfig(dir, ctx)
+	builtins := conf.DefaultBuiltins(output, nil)
+	root := HandleRootConfig(dir, ctx, builtins)
+	builtins["template_name"] = root.Name
+	builtins["template_version"] = root.Version
 	var candidates []*conf.File
 
 	m := make(map[string]*conf.ConfigFile)
@@ -74,7 +77,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 			if err := cf.Parse(); err != nil {
 				return fmt.Errorf("could not parse configuration: %w", err)
 			}
-			cf.Prompt()
+			cf.Prompt(builtins)
 		}
 		return nil
 	})
@@ -89,6 +92,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		}
 		if !info.IsDir() && info.Name() != ConfigName && info.Name() != ".git" {
 			f := conf.NewFile(path, info, ctx)
+			f.Builtins = builtins
 			c := filepath.Dir(path)
 			for {
 				if v, ok := m[c]; ok {
@@ -109,8 +113,12 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 	}
 
 	// Build the accumulated render context: start with the incoming pre-fill
-	// values (from parent), then overlay this template's prompted results.
+	// values (from parent), then overlay built-ins as lowest priority,
+	// then overlay this template's prompted results.
 	accumCtx := conf.InputCtxToMap(ctx)
+	for k, v := range builtins {
+		accumCtx[k] = v
+	}
 	for _, cf := range m {
 		if cf.Variables != nil {
 			cf.Variables.AddToCtx("", accumCtx)

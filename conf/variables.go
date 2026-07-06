@@ -2,6 +2,8 @@ package conf
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/goccy/go-yaml"
@@ -91,9 +93,32 @@ func (vv Variables) Ctx() map[string]interface{} {
 	return ctx
 }
 
+func resolveDefault(v *Variable, builtins map[string]interface{}) {
+	if !strings.HasPrefix(v.Default, "$") || builtins == nil {
+		return
+	}
+	name := v.Default[1:]
+	if val, ok := builtins[name]; ok {
+		switch vt := val.(type) {
+		case string:
+			v.Default = vt
+		case int:
+			v.Default = strconv.Itoa(vt)
+		case int64:
+			v.Default = strconv.FormatInt(vt, 10)
+		case float64:
+			v.Default = strconv.FormatFloat(vt, 'f', -1, 64)
+		case bool:
+			v.Default = strconv.FormatBool(vt)
+		}
+	}
+}
+
 // FillPrompt will fill the variables from the input context if needed
-func (vv *Variables) FillPrompt(prefix string, ctx InputCtx) {
+func (vv *Variables) FillPrompt(prefix string, ctx InputCtx, builtins map[string]interface{}) {
 	for _, v := range *vv {
+		resolveDefault(v, builtins)
+
 		var ok bool
 		p := v.Name
 		if prefix != "" {
@@ -104,7 +129,7 @@ func (vv *Variables) FillPrompt(prefix string, ctx InputCtx) {
 				ok = true
 				v.FillFromMapItem(in)
 				if v.True() && v.Variables != nil {
-					v.Variables.FillPrompt(p, ctx)
+					v.Variables.FillPrompt(p, ctx, builtins)
 				}
 			}
 		}

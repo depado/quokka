@@ -13,6 +13,7 @@ import (
 
 	"github.com/expr-lang/expr"
 	"github.com/fatih/color"
+	"github.com/google/uuid"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"github.com/goccy/go-yaml"
@@ -64,6 +65,9 @@ type File struct {
 	// (parent + all includes). It is the lowest-priority layer: renderer
 	// variables and frontmatter always override it.
 	GlobalCtx map[string]interface{}
+	// Builtins holds the built-in system variables available for default
+	// resolution and template rendering (username, hostname, year, etc.)
+	Builtins map[string]interface{}
 }
 
 type FileMetadata struct {
@@ -76,7 +80,8 @@ var templateFuncMaps template.FuncMap = template.FuncMap{
 	"title": func(str string) string {
 		return cases.Title(language.Und).String(str)
 	},
-	"uc": unicode.ToUpper,
+	"uc":   unicode.ToUpper,
+	"uuid": func() string { return uuid.New().String() },
 }
 
 // AddRenderer adds a renderer to a file
@@ -109,7 +114,7 @@ func (f *File) ParseFrontMatter() error {
 
 	if f.Metadata.Variables != nil && len(*f.Metadata.Variables) > 0 {
 		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
-		f.Metadata.Variables.FillPrompt("", f.Ctx)
+		f.Metadata.Variables.FillPrompt("", f.Ctx, f.Builtins)
 	}
 	return nil
 }
@@ -215,7 +220,11 @@ func (f *File) Render() error {
 	var shouldIgnore bool
 
 	ctx := make(map[string]interface{})
-	// Lowest priority: global context from all templates in the tree.
+	// Lowest priority: built-in system variables (username, hostname, etc.)
+	for k, v := range f.Builtins {
+		ctx[k] = v
+	}
+	// Next: global context from all templates in the tree.
 	for k, v := range f.GlobalCtx {
 		ctx[k] = v
 	}

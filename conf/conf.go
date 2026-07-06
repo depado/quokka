@@ -36,11 +36,11 @@ func (c *ConfigFile) Parse() error {
 	return yaml.UnmarshalWithOptions(out, c, yaml.UseOrderedMap())
 }
 
-// Prompt will prompt the necessary prompts wihtout displaying the ones for
+// Prompt will prompt the necessary prompts without displaying the ones for
 // variables that were already defined in the input file
-func (c *ConfigFile) Prompt() {
+func (c *ConfigFile) Prompt(builtins map[string]interface{}) {
 	if c.Variables != nil {
-		c.Variables.FillPrompt("", c.Ctx)
+		c.Variables.FillPrompt("", c.Ctx, builtins)
 	}
 }
 

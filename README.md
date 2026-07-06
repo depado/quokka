@@ -2,11 +2,12 @@
 <h2 align="center">
   <img src="/assets/mascot.png" alt="mascot" height="200px">
 
-  ![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
-  [![Go Report Card](https://goreportcard.com/badge/github.com/depado/quokka)](https://goreportcard.com/report/github.com/depado/quokka)
-  [![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
-  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/depado/quokka/blob/master/LICENSE)
-  [![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
+![Go Version](https://img.shields.io/badge/Go%20Version-latest-brightgreen.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/depado/quokka)](https://goreportcard.com/report/github.com/depado/quokka)
+[![codecov](https://codecov.io/gh/Depado/quokka/branch/master/graph/badge.svg)](https://codecov.io/gh/Depado/quokka)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/depado/quokka/blob/master/LICENSE)
+[![Say Thanks!](https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg)](https://saythanks.io/to/Depado)
+
 </h2>
 
 <h2 align="center">Friendly Boilerplate Engine</h2>
@@ -14,28 +15,29 @@
 <img align="center" src="/assets/quokka.gif">
 
 - [Introduction](#introduction)
-    - [Features](#features)
+  - [Features](#features)
 - [Installation](#installation)
-    - [Download](#download)
-    - [Build from source](#build-from-source)
+  - [Download](#download)
+  - [Build from source](#build-from-source)
 - [Usage](#usage)
-    - [Keeping the template](#keeping-the-template)
-    - [Input File](#input-file)
-    - [Set](#set)
-    - [Examples](#examples)
+  - [Keeping the template](#keeping-the-template)
+  - [Input File](#input-file)
+  - [Set](#set)
+  - [Examples](#examples)
 - [Template Creation](#template-creation)
-    - [The root `.quokka.yml` file](#the-root-quokkayml-file)
-    - [Variable declaration](#variable-declaration)
-        - [Simple Input](#simple-input)
-        - [Selection](#selection)
-        - [Boolean/Confirmation](#booleanconfirmation)
-        - [Other options and help](#other-options-and-help)
-        - [Validation](#validation)
-        - [Sub Variables](#sub-variables)
-    - [Standard `.quokka.yml` files](#standard-quokkayml-files)
-    - [Per-file configuration](#per-file-configuration)
-    - [Conditional Rendering/Copy](#conditional-renderingcopy)
-    - [Includes](#includes)
+  - [The root `.quokka.yml` file](#the-root-quokkayml-file)
+  - [Variable declaration](#variable-declaration)
+    - [Simple Input](#simple-input)
+    - [Selection](#selection)
+    - [Boolean/Confirmation](#booleanconfirmation)
+    - [Other options and help](#other-options-and-help)
+    - [Validation](#validation)
+    - [Sub Variables](#sub-variables)
+  - [Built-in Default Variables](#built-in-default-variables)
+  - [Standard `.quokka.yml` files](#standard-quokkayml-files)
+  - [Per-file configuration](#per-file-configuration)
+  - [Conditional Rendering/Copy](#conditional-renderingcopy)
+  - [Includes](#includes)
 
 # Introduction
 
@@ -77,6 +79,9 @@ new project. You can create templates for literally anything you want!
 - **Conditional prompts (sub-variables)**
   Each variable can have its own subset of variables which will only be
   prompted to the user if the parent variable is filled or set to true.
+- **Built-in variables**
+  System-provided values (username, git config, UUID, platform info, etc.)
+  available as `$name` defaults or directly in templates.
 - **Customizable templates**
   Quokka enables fine-grained control over what needs to be done when
   rendering the template. Just copy the file, ignore it, add conditionals based
@@ -160,6 +165,7 @@ The format of the input file is also yaml. The following example demonstrates
 how an input file could be used:
 
 `.quokka.yml`
+
 ```yaml
 name: "Quokka Template"
 description: "New Quokka Template"
@@ -176,6 +182,7 @@ variables:
 ```
 
 `input.yml`
+
 ```yaml
 slack: true
 slack_channel: "#mychan"
@@ -248,6 +255,7 @@ Global Flags:
       --debug   Enable or disable debug mode
   -y, --yes     Automatically accept
 ```
+
 </details>
 
 ## The root `.quokka.yml` file
@@ -286,8 +294,19 @@ variables:
 ```yaml
 variables:
   license:
-    values: ["MIT", "Apache License 2.0", "BSD 3", "FreeBSD", "GPL", "LGPL", "WTFPL", "None"]
+    values:
+      [
+        "MIT",
+        "Apache License 2.0",
+        "BSD 3",
+        "FreeBSD",
+        "GPL",
+        "LGPL",
+        "WTFPL",
+        "None",
+      ]
 ```
+
 This will result in a selection input where the user can choose one of the
 provided choices.
 
@@ -298,6 +317,7 @@ variables:
   test:
     confirm: true
 ```
+
 If you're using the `confirm` keyword, it will generate a simple yes/no input.
 The value you give that `confirm` key becomes the default value.
 
@@ -309,7 +329,17 @@ providing a default value:
 ```yaml
 variables:
   license:
-    values: ["MIT", "Apache License 2.0", "BSD 3", "FreeBSD", "GPL", "LGPL", "WTFPL", "None"]
+    values:
+      [
+        "MIT",
+        "Apache License 2.0",
+        "BSD 3",
+        "FreeBSD",
+        "GPL",
+        "LGPL",
+        "WTFPL",
+        "None",
+      ]
     prompt: Which license do you want for your project?"
     help: "License file that will be added to your project"
     default: "MIT"
@@ -318,6 +348,62 @@ variables:
     prompt: "What's the name of your project?"
     help: "Used to render the README file and various configuration files"
 ```
+
+### Built-in Default Variables
+
+Quokka provides built-in values that are always available to your
+templates. They come in two forms:
+
+**Context variables** - always available in templates. Reference them like
+any other variable (e.g. `{{.username}}`, `{{.year}}`). Built-ins are the
+lowest-priority context layer - user-defined variables always override them.
+
+```yaml
+variables:
+  author:
+    default: "$git_user"
+    prompt: "Who is the author?"
+  project:
+    default: "$output"
+  year:
+    default: "$year"
+```
+
+Use `$name` in a variable's `default` field to pre-fill the prompt from a
+built-in. The user can still edit the value before confirming.
+
+**Template functions** - callable functions that return a fresh value each
+time. Use them in templates without dot prefix (e.g. `{{uuid}}`).
+`uuid` is also available as a context variable for use in `$uuid` defaults.
+
+Full list of built-in context variables:
+
+| Variable           | Source                    | Example                |
+| ------------------ | ------------------------- | ---------------------- |
+| `username`         | OS user                   | `john`                 |
+| `hostname`         | OS hostname               | `dev-machine`          |
+| `home`             | User home dir             | `/home/john`           |
+| `cwd`              | Current working dir       | `/home/john/projects`  |
+| `output`           | Output dir basename       | `myproject`            |
+| `year`             | Current year              | `2026`                 |
+| `date`             | Current date (YYYY-MM-DD) | `2026-07-07`           |
+| `datetime`         | ISO 8601 timestamp        | `2026-07-07T14:30:00Z` |
+| `timestamp`        | Unix timestamp            | `1712345678`           |
+| `os`               | Operating system          | `linux`                |
+| `arch`             | CPU architecture          | `amd64`                |
+| `uuid`             | Random UUID v4            | `550e8400-e29b-...`    |
+| `git_user`         | `git config user.name`    | `John Doe`             |
+| `git_email`        | `git config user.email`   | `john@example.com`     |
+| `template_name`    | Root config `name`        | `go-service`           |
+| `template_version` | Root config `version`     | `0.1.0`                |
+
+Template functions:
+
+| Function | Description                                 | Usage             |
+| -------- | ------------------------------------------- | ----------------- |
+| `uuid`   | Generates a new random UUID v4 on each call | `{{uuid}}`        |
+| `title`  | Converts a string to Title Case             | `{{title .name}}` |
+| `uc`     | Converts a string to UPPERCASE              | `{{uc .name}}`    |
 
 ### Validation
 
@@ -469,7 +555,7 @@ variables are passed down and won't be re-prompted), and can contribute new
 variables back to the parent template.
 
 To pull a specific sub-directory from a cloned repository (e.g. a monorepo of
-templates), use `path` — it works identically for both git and local sources:
+templates), use `path` - it works identically for both git and local sources:
 
 ```yaml
 name: "My Project Template"
