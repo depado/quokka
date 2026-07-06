@@ -67,9 +67,7 @@ checksum:
   name_template: "checksums.txt"
 
 sboms:
-  - artifacts: archive
-  - id: source
-    artifacts: source
+  - artifacts: source
 
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
