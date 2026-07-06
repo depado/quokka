@@ -2,7 +2,6 @@ package conf
 
 import (
 	"os"
-	"os/exec"
 	"os/user"
 	"path/filepath"
 	"runtime"
@@ -37,13 +36,6 @@ func DefaultBuiltins(output string, root *Root) map[string]interface{} {
 		builtins["cwd"] = cwd
 	}
 
-	if name, err := gitConfig("user.name"); err == nil && name != "" {
-		builtins["git_user"] = name
-	}
-	if email, err := gitConfig("user.email"); err == nil && email != "" {
-		builtins["git_email"] = email
-	}
-
 	if root != nil {
 		builtins["template_name"] = root.Name
 		builtins["template_version"] = root.Version
@@ -51,13 +43,3 @@ func DefaultBuiltins(output string, root *Root) map[string]interface{} {
 
 	return builtins
 }
-
-func gitConfig(key string) (string, error) {
-	cmd := exec.Command("git", "config", key)
-	out, err := cmd.Output()
-	if err != nil {
-		return "", err
-	}
-	return string(out[:len(out)-1]), nil
-}
-

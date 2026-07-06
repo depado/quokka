@@ -361,7 +361,7 @@ lowest-priority context layer - user-defined variables always override them.
 ```yaml
 variables:
   author:
-    default: "$git_user"
+    default: "$username"
     prompt: "Who is the author?"
   project:
     default: "$output"
@@ -392,8 +392,6 @@ Full list of built-in context variables:
 | `os`               | Operating system          | `linux`                |
 | `arch`             | CPU architecture          | `amd64`                |
 | `uuid`             | Random UUID v4            | `550e8400-e29b-...`    |
-| `git_user`         | `git config user.name`    | `John Doe`             |
-| `git_email`        | `git config user.email`   | `john@example.com`     |
 | `template_name`    | Root config `name`        | `go-service`           |
 | `template_version` | Root config `version`     | `0.1.0`                |
 
