@@ -1,20 +1,43 @@
 version: 2
 
+project_name: quokka
+
 before:
   hooks:
     - go mod tidy
+    - go mod verify
+    - go vet ./...
+
+gomod:
+  proxy: true
 
 builds:
-  - goarch: [amd64, arm, arm64, 386]
-    goarm: [6, 7]
-    goos: [linux, darwin, windows]
-    ignore:
-      - goos: darwin
-        goarch: 386
+  - id: quokka
+    binary: qk
     env:
       - CGO_ENABLED=0
     main: ./cmd/qk/main.go
-    binary: qk
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - "386"
+    goarm:
+      - "6"
+      - "7"
+    ignore:
+      - goos: darwin
+        goarch: "386"
+      - goos: darwin
+        goarch: arm
+      - goos: windows
+        goarch: arm
+    flags:
+      - -trimpath
     ldflags:
       - -s -w
       - -X "main.Version={{ .Version }}"
@@ -22,7 +45,12 @@ builds:
       - -X "main.BuildDate={{ .Date }}"
 
 archives:
-  - format: tar.gz
+  - id: quokka
+    ids: ["quokka"]
+    formats: ["tar.gz"]
+    format_overrides:
+      - goos: windows
+        formats: ["zip"]
     name_template: >-
       {{ .ProjectName }}_
       {{- .Os }}_
@@ -30,16 +58,63 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    format_overrides:
-      - goos: windows
-        format: zip
+
+source:
+  enabled: true
+  name_template: "{{ .ProjectName }}-{{ .Version }}-source"
 
 checksum:
   name_template: "checksums.txt"
 
+sboms:
+  - artifacts: archive
+  - id: source
+    artifacts: source
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
 changelog:
+  use: github
   sort: asc
+  abbrev: 0
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\([[:word:]]+\))?!?:.+$'
+      order: 0
+    - title: Fixes
+      regexp: '^.*?fix(\([[:word:]]+\))?!?:.+$'
+      order: 1
+    - title: Performance
+      regexp: '^.*?perf(\([[:word:]]+\))?!?:.+$'
+      order: 2
+    - title: Refactors
+      regexp: '^.*?refactor(\([[:word:]]+\))?!?:.+$'
+      order: 3
+    - title: Documentation
+      regexp: '^.*?docs(\([[:word:]]+\))?!?:.+$'
+      order: 4
+    - title: Others
+      order: 999
   filters:
     exclude:
-      - "^docs:"
       - "^test:"
+      - "^chore:"
+      - merge conflict
+      - Merge pull request
+
+release:
+  github:
+    owner: depado
+    name: quokka
+  draft: false
+  prerelease: auto
+  mode: replace
+  name_template: "v{{ .Version }}"
+
+git:
+  ignore_tags:
+    - nightly
+
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"
