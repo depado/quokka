@@ -16,7 +16,7 @@ builds:
     binary: qk
     env:
       - CGO_ENABLED=0
-    main: ./cmd/qk/main.go
+    main: ./cmd/qk
     goos:
       - linux
       - darwin
