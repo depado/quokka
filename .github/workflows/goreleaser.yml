@@ -11,4 +11,4 @@ permissions:
 
 jobs:
   goreleaser:
-    uses: depado/github-actions/.github/workflows/goreleaser.yml@main
+    uses: depado/github-actions/.github/workflows/goreleaser-sbom.yml@main
