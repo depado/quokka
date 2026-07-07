@@ -113,3 +113,25 @@ func TestTemplateFuncUUID(t *testing.T) {
 	assert.NotEmpty(t, u2)
 	assert.NotEqual(t, u1, u2, "each call should generate a new UUID")
 }
+
+func TestTemplateFuncUc(t *testing.T) {
+	fn, ok := templateFuncMaps["uc"].(func(string) string)
+	assert.True(t, ok, "uc should be a template function")
+
+	assert.Equal(t, "", fn(""))
+	assert.Equal(t, "HELLO", fn("hello"))
+	assert.Equal(t, "HELLO", fn("HELLO"))
+	assert.Equal(t, "HELLO WORLD", fn("hello world"))
+	assert.Equal(t, "GÖTTERDÄMMERUNG", fn("götterdämmerung"))
+}
+
+func TestTemplateFuncTitle(t *testing.T) {
+	fn, ok := templateFuncMaps["title"].(func(string) string)
+	assert.True(t, ok, "title should be a template function")
+
+	assert.Equal(t, "", fn(""))
+	assert.Equal(t, "Hello", fn("hello"))
+	assert.Equal(t, "Hello", fn("HELLO"))
+	assert.Equal(t, "Hello World", fn("hello world"))
+	assert.Equal(t, "Hello World", fn("HELLO WORLD"))
+}

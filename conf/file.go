@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
-	"unicode"
-
 	"github.com/expr-lang/expr"
 	"github.com/fatih/color"
 	"github.com/google/uuid"
@@ -80,7 +78,7 @@ var templateFuncMaps template.FuncMap = template.FuncMap{
 	"title": func(str string) string {
 		return cases.Title(language.Und).String(str)
 	},
-	"uc":   unicode.ToUpper,
+	"uc":   strings.ToUpper,
 	"uuid": func() string { return uuid.New().String() },
 }
 

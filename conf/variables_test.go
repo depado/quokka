@@ -30,10 +30,12 @@ func TestVariables_Ctx(t *testing.T) {
 			map[string]interface{}{hasbool.Name: true}},
 		{"should get all vars", Variables{empty, hasvalue, hasbool},
 			map[string]interface{}{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true}},
-		{"should get even sub vars", Variables{parentvar},
-			map[string]interface{}{parentvar.Name: "", parentvar.Name + "_" + subvar.Name: "ok"}},
-		{"should get even all with sub vars", Variables{empty, hasvalue, hasbool, parentvar},
-			map[string]interface{}{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true, parentvar.Name: "", parentvar.Name + "_" + subvar.Name: "ok"}},
+		{"should not get sub vars when parent is false", Variables{parentvar},
+			map[string]interface{}{parentvar.Name: ""}},
+		{"should not get sub vars when parent is false with other vars", Variables{empty, hasvalue, hasbool, parentvar},
+			map[string]interface{}{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true, parentvar.Name: ""}},
+		{"should get sub vars when parent is true", Variables{&Variable{Name: "parent", Confirm: &tbool, Variables: Variables{subvar}}},
+			map[string]interface{}{"parent": true, "parent_sub": "ok"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

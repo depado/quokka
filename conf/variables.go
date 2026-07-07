@@ -85,9 +85,9 @@ func (vv Variables) Ctx() map[string]interface{} {
 			} else {
 				ctx[v.Name] = v.Result
 			}
-			if v.Variables != nil {
-				v.Variables.AddToCtx(v.Name, ctx)
-			}
+		if v.True() && v.Variables != nil {
+			v.Variables.AddToCtx(v.Name, ctx)
+		}
 		}
 	}
 	return ctx
