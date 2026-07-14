@@ -36,6 +36,7 @@ func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]any) *c
 
 	if root = GetRootConfig(dir, ctx); root == nil {
 		utils.FatalPrintln("Couldn't find configuration in template")
+		return nil
 	}
 	if err = root.Parse(); err != nil {
 		utils.FatalPrintln("Couldn't parse root configuration:", err)
