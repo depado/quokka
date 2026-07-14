@@ -42,11 +42,11 @@ Enter
 
 Type "go mod tidy"
 Enter
-Sleep 1s
+Sleep 2s
 
 Type "make"
 Enter
-Sleep 1s
+Sleep 2s
 
 Type "./test version"
 Enter
