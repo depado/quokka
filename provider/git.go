@@ -46,7 +46,7 @@ func (g gitp) Fetch() (string, error) {
 		s.ErrStop("Couldn't clone repo:", err)
 		return "", err
 	}
-	s.DoneStop("Done cloning in", utils.Green.Sprint(outdir))
+	s.DoneStop("Done cloning in [green]" + outdir + "[/]")
 
 	return filepath.Join(outdir, g.InnerPath), nil
 }

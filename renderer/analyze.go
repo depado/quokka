@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/fatih/color"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 
 	"github.com/depado/quokka/conf"
@@ -40,9 +39,10 @@ func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]interfa
 	if err = root.Parse(); err != nil {
 		utils.FatalPrintln("Couldn't parse root configuration:", err)
 	}
-	utils.OkPrintln(color.GreenString(root.Name), "-", color.YellowString(root.Version))
 	if root.Description != "" {
-		utils.OkPrintln(color.CyanString(root.Description))
+		utils.OkPrintf("[green]%s[/] - [yellow]%s[/] - [cyan]%s[/]", root.Name, root.Version, root.Description)
+	} else {
+		utils.OkPrintf("[green]%s[/] - [yellow]%s[/]", root.Name, root.Version)
 	}
 	root.Prompt(builtins)
 	return root
@@ -73,7 +73,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		if !info.IsDir() && info.Name() == ConfigName && path != root.File.Path {
 			cf := conf.NewConfigFile(path, info, ctx)
 			m[cf.File.Dir] = cf
-			utils.OkPrintln("Override configuration:", color.YellowString(path))
+			utils.OkPrintf("Override configuration: [yellow]%s[/]", path)
 			if err := cf.Parse(); err != nil {
 				return fmt.Errorf("could not parse configuration: %w", err)
 			}
@@ -137,18 +137,18 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 				return nil, nil, fmt.Errorf("could not get confirmation for include %q: %w", inc.Source, err)
 			}
 			if !confirmed {
-				utils.OkPrintln("Skipped include", utils.Green.Sprint(inc.Source))
+				utils.OkPrintf("Skipped include [green]%s[/]", inc.Source)
 				continue
 			}
 		}
 		if inc.If != "" {
 			pass, condErr := conf.EvalCondition(inc.If, accumCtx)
 			if condErr != nil {
-				utils.ErrPrintln("Condition error for include", utils.Green.Sprint(inc.Source), "-", color.RedString(condErr.Error()))
+				utils.ErrPrintf("Condition error for include [green]%s[/] - [red]%s[/]", inc.Source, condErr.Error())
 				continue
 			}
 			if !pass {
-				utils.OkPrintln("Skipped include", utils.Green.Sprint(inc.Source))
+				utils.OkPrintf("Skipped include [green]%s[/]", inc.Source)
 				continue
 			}
 		}
@@ -174,7 +174,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 			p = provider.NewProviderFromPath(source, inc.Path, incTempDir, depth)
 		}
 
-		utils.OkPrintln("Fetching include via", utils.Green.Sprint(p.Name()), "provider:", utils.Green.Sprint(source))
+		utils.DebugPrintf("Fetching include via [green]%s[/] provider: [green]%s[/]", p.Name(), source)
 		var tpath string
 		if tpath, err = p.Fetch(); err != nil {
 			return nil, nil, fmt.Errorf("could not fetch include %q: %w", source, err)
@@ -218,7 +218,7 @@ func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.
 			return fmt.Errorf("could not parse input file: %w", err)
 		}
 		ctx = conf.MergeCtx(ctx, inputCtx)
-		utils.OkPrintln("Input file", utils.Green.Sprint(input), "found")
+		utils.OkPrintf("Input file [green]%s[/] found", input)
 	}
 	if len(set) > 0 {
 		setCtx, err := conf.GetSetContext(set)
@@ -249,7 +249,7 @@ func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.
 	// Phase 2: render all files.
 	for _, f := range candidates {
 		if err = f.ParseFrontMatter(); err != nil {
-			return fmt.Errorf("could not parse front matter for file %s: %w", color.YellowString(f.Path), err)
+			return fmt.Errorf("could not parse front matter for file %s: %w", f.Path, err)
 		}
 		if err = f.Render(); err != nil {
 			return fmt.Errorf("could not render template: %w", err)

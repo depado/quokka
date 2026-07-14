@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
@@ -35,7 +34,8 @@ var rootc = &cobra.Command{
 	Long:  qkdesc,
 	Args:  cobra.MinimumNArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		utils.OkPrintln("quokka", color.GreenString(Version))
+		utils.Debug = viper.GetBool("debug")
+		utils.OkPrintf("quokka [green]%s[/]", Version)
 		renderer.Render(
 			args[0],
 			args[1],

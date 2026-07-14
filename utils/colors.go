@@ -2,54 +2,57 @@ package utils
 
 import (
 	"fmt"
-	"log"
 	"os"
 
-	"github.com/fatih/color"
+	"github.com/depado/gorich"
 )
 
-// Green is a simple green foreground color
-var Green = color.New(color.FgGreen)
+var Debug bool
 
-// Yellow is a simple yellow foreground color
-var Yellow = color.New(color.FgYellow)
-
-// OkPrefix is the prefix that should prefix output when everything is ok
-var OkPrefix = Green.Sprint("»")
-
-// ErrPrefix is the prefix that should output when an error occurred
-var ErrPrefix = color.New(color.FgRed).Sprint("»")
-
-// OkPrintln prints with a green prefix
-func OkPrintln(opts ...interface{}) {
-	log.Println(append([]interface{}{OkPrefix}, opts...)...)
+func OkPrintln(args ...interface{}) {
+	gorich.Println("[green]»[/]", fmt.Sprint(args...))
 }
 
-// OkSprintln will return the string with a green prefix
-func OkSprintln(opts ...interface{}) string {
-	return fmt.Sprintln(append([]interface{}{OkPrefix}, opts...)...)
+func OkPrintf(format string, args ...interface{}) {
+	gorich.Printf("[green]»[/] "+format+"\n", args...)
 }
 
-// ErrPrintln prints with a red prefix
-func ErrPrintln(opts ...interface{}) {
-	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
+func ErrPrintln(args ...interface{}) {
+	gorich.Println("[red]»[/]", fmt.Sprint(args...))
 }
 
-// ErrSprintln will return the string with a red prefix
-func ErrSprintln(opts ...interface{}) string {
-	return fmt.Sprintln(append([]interface{}{ErrPrefix}, opts...)...)
+func ErrPrintf(format string, args ...interface{}) {
+	gorich.Printf("[red]»[/] "+format+"\n", args...)
 }
 
-// FatalPrintln prints out information with a red prefix and exits the program
-// with an error status code
-func FatalPrintln(opts ...interface{}) {
-	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
+func FatalPrintln(args ...interface{}) {
+	gorich.Println("[red]»[/]", fmt.Sprint(args...))
 	os.Exit(1)
 }
 
-// ExitPrintln prints out information with a red prefix and exits the program
-// with an acceptable status code
-func ExitPrintln(opts ...interface{}) {
-	log.Println(append([]interface{}{ErrPrefix}, opts...)...)
+func FatalPrintf(format string, args ...interface{}) {
+	gorich.Printf("[red]»[/] "+format+"\n", args...)
+	os.Exit(1)
+}
+
+func ExitPrintln(args ...interface{}) {
+	gorich.Println("[red]»[/]", fmt.Sprint(args...))
 	os.Exit(0)
+}
+
+func ExitPrintf(format string, args ...interface{}) {
+	gorich.Printf("[red]»[/] "+format+"\n", args...)
+	os.Exit(0)
+}
+
+func DebugPrintln(args ...interface{}) {
+	if Debug {
+		gorich.Println("[dim cyan]»[/]", fmt.Sprint(args...))
+	}
+}
+
+func DebugPrintf(format string, args ...interface{}) {
+	if Debug {
+		gorich.Printf("[dim cyan]»[/] "+format+"\n", args...)
+	}
 }

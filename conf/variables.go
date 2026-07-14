@@ -5,7 +5,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fatih/color"
 	"github.com/goccy/go-yaml"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 
@@ -285,7 +284,7 @@ func (v *Variable) True() bool {
 func (v *Variable) Prompt() {
 	var prompt survey.Prompt
 	var validator survey.Validator
-	msg := fmt.Sprintf("Choose a value for %s:", color.YellowString(v.Name))
+	msg := fmt.Sprintf("Choose a value for \x1b[33m%s\x1b[0m:", v.Name)
 	if v.CustomPrompt != "" {
 		msg = v.CustomPrompt
 	}

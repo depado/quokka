@@ -9,12 +9,12 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+
 	"github.com/expr-lang/expr"
-	"github.com/fatih/color"
+	"github.com/goccy/go-yaml"
 	"github.com/google/uuid"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"github.com/goccy/go-yaml"
 
 	"github.com/depado/quokka/utils"
 )
@@ -111,7 +111,7 @@ func (f *File) ParseFrontMatter() error {
 	f.Metadata = &fm
 
 	if f.Metadata.Variables != nil && len(*f.Metadata.Variables) > 0 {
-		utils.OkPrintln("Variables for single file", color.YellowString(f.Path))
+		utils.OkPrintf("Variables for single file [yellow]%s[/]", f.Path)
 		f.Metadata.Variables.FillPrompt("", f.Ctx, f.Builtins)
 	}
 	return nil
@@ -266,17 +266,17 @@ func (f *File) Render() error {
 		}
 	}
 	if shouldIgnore {
-		utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+		utils.OkPrintf("Ignored  [green]%s[/]", f.NewPath)
 		return nil
 	}
 	if condition != "" {
 		pass, err := EvalCondition(condition, ctx)
 		if err != nil {
-			utils.ErrPrintln("Condition error in", color.YellowString(f.Path), "-", color.RedString(err.Error()))
+			utils.ErrPrintf("Condition error in [yellow]%s[/] - [red]%s[/]", f.Path, err.Error())
 			return nil
 		}
 		if !pass {
-			utils.OkPrintln("Ignored ", color.GreenString(f.NewPath))
+			utils.OkPrintf("Ignored  [green]%s[/]", f.NewPath)
 			return nil
 		}
 	}
@@ -284,12 +284,12 @@ func (f *File) Render() error {
 		if err = f.WriteCopy(); err != nil {
 			return err
 		}
-		utils.OkPrintln("Copied  ", color.GreenString(f.NewPath))
+		utils.OkPrintf("Copied   [green]%s[/]", f.NewPath)
 	} else {
 		if err = f.WriteRender(ctx, delims); err != nil {
 			return err
 		}
-		utils.OkPrintln("Rendered", color.GreenString(f.NewPath))
+		utils.OkPrintf("Rendered [green]%s[/]", f.NewPath)
 	}
 	return nil
 }

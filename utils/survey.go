@@ -15,7 +15,7 @@ func AskIfEmptyString(in *string, name, message, def string, debug bool) {
 			ExitPrintln("Canceled operation")
 		}
 	} else if debug {
-		OkPrintln(Green.Sprint(name), "already filled:", *in)
+		OkPrintf("[green]%s[/] already filled: %s", name, *in)
 	}
 }
 
@@ -33,10 +33,9 @@ func ConfirmFileExists(path string, dir, yes, debug bool) bool {
 		}
 		if yes {
 			OkPrintln(fmt.Sprintf(
-				"The destination %s %s already exists but %s option was used.",
+				"The destination %s %s already exists but 'yes' option was used.",
 				t,
-				Green.Sprint(p),
-				Yellow.Sprint("yes"),
+				p,
 			))
 			return true
 		}
@@ -45,7 +44,7 @@ func ConfirmFileExists(path string, dir, yes, debug bool) bool {
 			Message: fmt.Sprintf(
 				"The destination %s %s already exists. Continue ?",
 				t,
-				Green.Sprint(p),
+				p,
 			),
 		}
 		survey.AskOne(prompt, &confirmed, nil) // nolint: errcheck

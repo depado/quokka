@@ -34,7 +34,7 @@ func Render(template, output, toutput, path, input string, set []string, keep bo
 
 	// Determines the provider to use and fetch the template
 	p := provider.NewProviderFromPath(template, path, toutput, depth)
-	utils.OkPrintln("Detected", utils.Green.Sprint(p.Name()), "template provider")
+	utils.DebugPrintf("Detected [green]%s[/] template provider", p.Name())
 	if tpath, err = p.Fetch(); err != nil {
 		os.Exit(1)
 	}
@@ -43,7 +43,7 @@ func Render(template, output, toutput, path, input string, set []string, keep bo
 	if !keep && p.UsesTmp() {
 		defer func(tp string) {
 			os.RemoveAll(tp) //nolint:errcheck
-			utils.OkPrintln("Removed template", utils.Green.Sprint(tp))
+			utils.OkPrintf("Removed template [green]%s[/]", tp)
 		}(tpath)
 	}
 	if err := Analyze(tpath, output, input, set, depth, conf.InputCtx{}); err != nil {

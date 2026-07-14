@@ -2,34 +2,35 @@ package utils
 
 import (
 	"fmt"
-	"time"
+	"strings"
 
-	"github.com/briandowns/spinner"
+	"github.com/depado/gorich"
+	"github.com/depado/gorich/live"
 )
 
-// Spinner extends the spinner.Spinner struct and adds a few useful methods
 type Spinner struct {
-	*spinner.Spinner
+	s *live.ActiveSpinner
 }
 
-// NewSpinner configures and starts a new spinner
 func NewSpinner(message string) *Spinner {
-	s := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
-	s.Suffix = fmt.Sprintf(" %s…", message)
-	s.Color("green") // nolint: errcheck
-	s.Start()
-	return &Spinner{s}
+	return &Spinner{s: live.StartSpinner(message)}
 }
 
-// ErrStop changes the final message of a Spinner (error) and stops it right
-// away
-func (is *Spinner) ErrStop(message string, opts ...interface{}) {
-	is.FinalMSG = fmt.Sprintln(append([]interface{}{ErrPrefix, message}, opts...)...)
-	is.Stop()
+func (s *Spinner) ErrStop(message string, opts ...interface{}) {
+	s.s.Stop()
+	gorich.Println("[red]✗[/] " + join(message, opts...))
 }
 
-// DoneStop changes the final message of a Spinner (ok) and stops it right away
-func (is *Spinner) DoneStop(message string, opts ...interface{}) {
-	is.FinalMSG = fmt.Sprintln(append([]interface{}{OkPrefix, message}, opts...)...)
-	is.Stop()
+func (s *Spinner) DoneStop(message string, opts ...interface{}) {
+	s.s.Stop()
+	gorich.Println("[green]✓[/] " + join(message, opts...))
+}
+
+func join(message string, opts ...interface{}) string {
+	parts := make([]string, 0, len(opts)+1)
+	parts = append(parts, message)
+	for _, o := range opts {
+		parts = append(parts, fmt.Sprint(o))
+	}
+	return strings.Join(parts, " ")
 }
