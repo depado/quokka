@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"maps"
 	"os"
 	"path"
 	"path/filepath"
@@ -62,10 +63,10 @@ type File struct {
 	// GlobalCtx is the unified render context collected from all templates
 	// (parent + all includes). It is the lowest-priority layer: renderer
 	// variables and frontmatter always override it.
-	GlobalCtx map[string]interface{}
+	GlobalCtx map[string]any
 	// Builtins holds the built-in system variables available for default
 	// resolution and template rendering (username, hostname, year, etc.)
-	Builtins map[string]interface{}
+	Builtins map[string]any
 }
 
 type FileMetadata struct {
@@ -150,7 +151,7 @@ func (f *File) WriteCopy() error {
 
 // WriteRender will first render the file as if ignored, but will parse it and
 // render it as soon as it has been copied
-func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
+func (f *File) WriteRender(ctx map[string]any, delims []string) error {
 	rdr := f.NewPath + ".rendered"
 
 	if err := f.WriteCopy(); err != nil {
@@ -181,7 +182,7 @@ func (f *File) WriteRender(ctx map[string]interface{}, delims []string) error {
 // Returns true if the file/include should be processed, false if it should be
 // skipped. An unknown single-word variable is treated as false (skip).
 // Returns an error only when the expression itself is syntactically invalid.
-func EvalCondition(condition string, ctx map[string]interface{}) (bool, error) {
+func EvalCondition(condition string, ctx map[string]any) (bool, error) {
 	if len(strings.Fields(condition)) == 1 {
 		v, ok := ctx[condition]
 		if !ok {
@@ -217,15 +218,11 @@ func (f *File) Render() error {
 	var shouldCopy bool
 	var shouldIgnore bool
 
-	ctx := make(map[string]interface{})
+	ctx := make(map[string]any)
 	// Lowest priority: built-in system variables (username, hostname, etc.)
-	for k, v := range f.Builtins {
-		ctx[k] = v
-	}
+	maps.Copy(ctx, f.Builtins)
 	// Next: global context from all templates in the tree.
-	for k, v := range f.GlobalCtx {
-		ctx[k] = v
-	}
+	maps.Copy(ctx, f.GlobalCtx)
 	delims := []string{"{{", "}}"}
 	for i := len(f.Renderers) - 1; i >= 0; i-- {
 		r := f.Renderers[i]

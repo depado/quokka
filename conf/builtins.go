@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 )
 
-func DefaultBuiltins(output string, root *Root) map[string]interface{} {
-	builtins := map[string]interface{}{
+func DefaultBuiltins(output string, root *Root) map[string]any {
+	builtins := map[string]any{
 		"year":      strconv.Itoa(time.Now().Year()),
 		"date":      time.Now().Format("2006-01-02"),
 		"datetime":  time.Now().Format(time.RFC3339),

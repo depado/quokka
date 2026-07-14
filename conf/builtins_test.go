@@ -48,21 +48,21 @@ func TestDefaultBuiltins_WithRoot(t *testing.T) {
 
 func TestResolveDefault_NoPrefix(t *testing.T) {
 	v := &Variable{Default: "hello"}
-	builtins := map[string]interface{}{"hello": "world"}
+	builtins := map[string]any{"hello": "world"}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "hello", v.Default)
 }
 
 func TestResolveDefault_WithPrefix(t *testing.T) {
 	v := &Variable{Default: "$username"}
-	builtins := map[string]interface{}{"username": "alice"}
+	builtins := map[string]any{"username": "alice"}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "alice", v.Default)
 }
 
 func TestResolveDefault_Unknown(t *testing.T) {
 	v := &Variable{Default: "$unknown"}
-	builtins := map[string]interface{}{"username": "alice"}
+	builtins := map[string]any{"username": "alice"}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "$unknown", v.Default)
 }
@@ -75,28 +75,28 @@ func TestResolveDefault_NilBuiltins(t *testing.T) {
 
 func TestResolveDefault_IntValue(t *testing.T) {
 	v := &Variable{Default: "$count"}
-	builtins := map[string]interface{}{"count": 42}
+	builtins := map[string]any{"count": 42}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "42", v.Default)
 }
 
 func TestResolveDefault_Int64Value(t *testing.T) {
 	v := &Variable{Default: "$ts"}
-	builtins := map[string]interface{}{"ts": int64(1710000000)}
+	builtins := map[string]any{"ts": int64(1710000000)}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "1710000000", v.Default)
 }
 
 func TestResolveDefault_Float64Value(t *testing.T) {
 	v := &Variable{Default: "$pi"}
-	builtins := map[string]interface{}{"pi": 3.14}
+	builtins := map[string]any{"pi": 3.14}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "3.14", v.Default)
 }
 
 func TestResolveDefault_BoolValue(t *testing.T) {
 	v := &Variable{Default: "$flag"}
-	builtins := map[string]interface{}{"flag": true}
+	builtins := map[string]any{"flag": true}
 	resolveDefault(v, builtins)
 	assert.Equal(t, "true", v.Default)
 }

@@ -54,7 +54,7 @@ func (vv *Variables) FromMapSlice(in yaml.MapSlice) error {
 
 // UnmarshalYAML defines a custom way to unmarshal to the Variables type.
 // Specifically this allows to conserve the key order
-func (vv *Variables) UnmarshalYAML(unmarshal func(interface{}) error) error {
+func (vv *Variables) UnmarshalYAML(unmarshal func(any) error) error {
 	var variables Variables
 	n := yaml.MapSlice{}
 	if err := unmarshal(&n); err != nil {
@@ -75,8 +75,8 @@ func (vv Variables) Prompt() {
 }
 
 // Ctx generates the context from the variables
-func (vv Variables) Ctx() map[string]interface{} {
-	ctx := make(map[string]interface{})
+func (vv Variables) Ctx() map[string]any {
+	ctx := make(map[string]any)
 	for _, v := range vv {
 		if v != nil {
 			if v.Confirm != nil {
@@ -84,15 +84,15 @@ func (vv Variables) Ctx() map[string]interface{} {
 			} else {
 				ctx[v.Name] = v.Result
 			}
-		if v.True() && v.Variables != nil {
-			v.Variables.AddToCtx(v.Name, ctx)
-		}
+			if v.True() && v.Variables != nil {
+				v.Variables.AddToCtx(v.Name, ctx)
+			}
 		}
 	}
 	return ctx
 }
 
-func resolveDefault(v *Variable, builtins map[string]interface{}) {
+func resolveDefault(v *Variable, builtins map[string]any) {
 	if !strings.HasPrefix(v.Default, "$") || builtins == nil {
 		return
 	}
@@ -114,7 +114,7 @@ func resolveDefault(v *Variable, builtins map[string]interface{}) {
 }
 
 // FillPrompt will fill the variables from the input context if needed
-func (vv *Variables) FillPrompt(prefix string, ctx InputCtx, builtins map[string]interface{}) {
+func (vv *Variables) FillPrompt(prefix string, ctx InputCtx, builtins map[string]any) {
 	for _, v := range *vv {
 		resolveDefault(v, builtins)
 
@@ -139,7 +139,7 @@ func (vv *Variables) FillPrompt(prefix string, ctx InputCtx, builtins map[string
 }
 
 // AddToCtx will add the variable results to a sub-key
-func (vv Variables) AddToCtx(prefix string, ctx map[string]interface{}) {
+func (vv Variables) AddToCtx(prefix string, ctx map[string]any) {
 	for k, v := range vv.Ctx() {
 		if prefix != "" {
 			ctx[prefix+"_"+k] = v
@@ -231,7 +231,7 @@ func (v *Variable) FromMapItem(i yaml.MapItem) error {
 			}
 			v.CustomPrompt = s
 		case "values":
-			items, ok := data.Value.([]interface{})
+			items, ok := data.Value.([]any)
 			if !ok {
 				return fmt.Errorf("variable %q: 'values' must be a list, got %T", v.Name, data.Value)
 			}
@@ -313,7 +313,7 @@ func (v *Variable) Prompt() {
 	if v.Required {
 		validator = survey.Required
 	}
-	var out interface{}
+	var out any
 	if v.Confirm != nil {
 		out = v.Confirm
 	} else {

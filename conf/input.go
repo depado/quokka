@@ -32,8 +32,8 @@ func MergeCtx(a, b InputCtx) InputCtx {
 
 // InputCtxToMap converts an InputCtx into a map[string]interface{} suitable
 // for use as a template render context.
-func InputCtxToMap(ctx InputCtx) map[string]interface{} {
-	out := make(map[string]interface{})
+func InputCtxToMap(ctx InputCtx) map[string]any {
+	out := make(map[string]any)
 	for _, item := range ctx {
 		if k, ok := item.Key.(string); ok {
 			out[k] = item.Value
@@ -44,7 +44,7 @@ func InputCtxToMap(ctx InputCtx) map[string]interface{} {
 
 // MapToInputCtx converts a map[string]interface{} (as returned by
 // Variables.Ctx) into an InputCtx so it can be used to pre-fill prompts.
-func MapToInputCtx(m map[string]interface{}) InputCtx {
+func MapToInputCtx(m map[string]any) InputCtx {
 	out := InputCtx{}
 	for k, v := range m {
 		out = append(out, yaml.MapItem{Key: k, Value: v})

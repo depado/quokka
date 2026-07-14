@@ -2,6 +2,7 @@ package renderer
 
 import (
 	"fmt"
+	"maps"
 	"os"
 	"path/filepath"
 	"strings"
@@ -29,7 +30,7 @@ func GetRootConfig(dir string, ctx conf.InputCtx) *conf.Root {
 
 // HandleRootConfig will find and parse the root configuration. It will then ask
 // the user for the variables in the root configuration
-func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]interface{}) *conf.Root {
+func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]any) *conf.Root {
 	var err error
 	var root *conf.Root
 
@@ -53,7 +54,7 @@ func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]interfa
 // ctx is the pre-fill context from a parent template (empty at top level).
 // Returns the file list and the unified render context (all prompted values
 // from this template and all its includes merged together).
-func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, map[string]interface{}, error) {
+func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, map[string]any, error) {
 	var err error
 
 	builtins := conf.DefaultBuiltins(output, nil)
@@ -116,9 +117,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 	// values (from parent), then overlay built-ins as lowest priority,
 	// then overlay this template's prompted results.
 	accumCtx := conf.InputCtxToMap(ctx)
-	for k, v := range builtins {
-		accumCtx[k] = v
-	}
+	maps.Copy(accumCtx, builtins)
 	for _, cf := range m {
 		if cf.Variables != nil {
 			cf.Variables.AddToCtx("", accumCtx)

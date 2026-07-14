@@ -1,6 +1,7 @@
 package conf
 
 import (
+	"maps"
 	"reflect"
 	"testing"
 
@@ -20,22 +21,22 @@ func TestVariables_Ctx(t *testing.T) {
 	tests := []struct {
 		name   string
 		fields Variables
-		want   map[string]interface{}
+		want   map[string]any
 	}{
 		{"should get one", Variables{empty},
-			map[string]interface{}{empty.Name: ""}},
+			map[string]any{empty.Name: ""}},
 		{"should get two vars", Variables{empty, hasvalue},
-			map[string]interface{}{empty.Name: "", hasvalue.Name: hasvalue.Result}},
+			map[string]any{empty.Name: "", hasvalue.Name: hasvalue.Result}},
 		{"should get bool", Variables{hasbool},
-			map[string]interface{}{hasbool.Name: true}},
+			map[string]any{hasbool.Name: true}},
 		{"should get all vars", Variables{empty, hasvalue, hasbool},
-			map[string]interface{}{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true}},
+			map[string]any{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true}},
 		{"should not get sub vars when parent is false", Variables{parentvar},
-			map[string]interface{}{parentvar.Name: ""}},
+			map[string]any{parentvar.Name: ""}},
 		{"should not get sub vars when parent is false with other vars", Variables{empty, hasvalue, hasbool, parentvar},
-			map[string]interface{}{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true, parentvar.Name: ""}},
+			map[string]any{empty.Name: "", hasvalue.Name: hasvalue.Result, hasbool.Name: true, parentvar.Name: ""}},
 		{"should get sub vars when parent is true", Variables{&Variable{Name: "parent", Confirm: &tbool, Variables: Variables{subvar}}},
-			map[string]interface{}{"parent": true, "parent_sub": "ok"}},
+			map[string]any{"parent": true, "parent_sub": "ok"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -47,30 +48,28 @@ func TestVariables_Ctx(t *testing.T) {
 }
 
 func TestVariables_AddToCtx(t *testing.T) {
-	basectx := map[string]interface{}{"one": "one", "two": true}
+	basectx := map[string]any{"one": "one", "two": true}
 	type args struct {
 		prefix string
-		ctx    map[string]interface{}
+		ctx    map[string]any
 	}
 	tests := []struct {
 		name    string
 		fields  Variables
 		args    args
-		expects map[string]interface{}
+		expects map[string]any
 	}{
 		{"should add empty to context", Variables{empty}, args{"", basectx},
-			map[string]interface{}{empty.Name: "", "one": "one", "two": true}},
+			map[string]any{empty.Name: "", "one": "one", "two": true}},
 		{"should add boolean to context", Variables{hasbool}, args{"", basectx},
-			map[string]interface{}{hasbool.Name: true, "one": "one", "two": true}},
+			map[string]any{hasbool.Name: true, "one": "one", "two": true}},
 		{"should add boolean with key to context", Variables{hasbool}, args{"sub", basectx},
-			map[string]interface{}{"sub_" + hasbool.Name: true, "one": "one", "two": true}},
+			map[string]any{"sub_" + hasbool.Name: true, "one": "one", "two": true}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cp := make(map[string]interface{})
-			for k, v := range tt.args.ctx {
-				cp[k] = v
-			}
+			cp := make(map[string]any)
+			maps.Copy(cp, tt.args.ctx)
 			tt.fields.AddToCtx(tt.args.prefix, cp)
 			assert.Equal(t, tt.expects, cp)
 		})

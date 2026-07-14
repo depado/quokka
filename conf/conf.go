@@ -38,7 +38,7 @@ func (c *ConfigFile) Parse() error {
 
 // Prompt will prompt the necessary prompts without displaying the ones for
 // variables that were already defined in the input file
-func (c *ConfigFile) Prompt(builtins map[string]interface{}) {
+func (c *ConfigFile) Prompt(builtins map[string]any) {
 	if c.Variables != nil {
 		c.Variables.FillPrompt("", c.Ctx, builtins)
 	}
