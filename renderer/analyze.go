@@ -53,9 +53,10 @@ func HandleRootConfig(dir string, ctx conf.InputCtx, builtins map[string]any) *c
 // collect recursively prompts all variables for the template at dir and all
 // its includes, and accumulates a flat list of files to render.
 // ctx is the pre-fill context from a parent template (empty at top level).
-// Returns the file list and the unified render context (all prompted values
-// from this template and all its includes merged together).
-func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, map[string]any, error) {
+// Returns the file list, the unified render context (all prompted values
+// from this template and all its includes merged together) and the after
+// commands declared by the template at dir (includes' commands are ignored).
+func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, map[string]any, []conf.Command, error) {
 	var err error
 
 	builtins := conf.DefaultBuiltins(output, nil)
@@ -84,7 +85,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		return nil
 	})
 	if err != nil {
-		return nil, nil, fmt.Errorf("could not read filesystem: %w", err)
+		return nil, nil, nil, fmt.Errorf("could not read filesystem: %w", err)
 	}
 
 	// Cycle through the files and attach their renderers
@@ -111,7 +112,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		return nil
 	})
 	if err != nil {
-		return nil, nil, fmt.Errorf("could not read filesystem: %w", err)
+		return nil, nil, nil, fmt.Errorf("could not read filesystem: %w", err)
 	}
 
 	// Build the accumulated render context: start with the incoming pre-fill
@@ -134,7 +135,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 			}
 			var confirmed bool
 			if err = survey.AskOne(&survey.Confirm{Message: msg, Default: *inc.Confirm}, &confirmed, nil); err != nil {
-				return nil, nil, fmt.Errorf("could not get confirmation for include %q: %w", inc.Source, err)
+				return nil, nil, nil, fmt.Errorf("could not get confirmation for include %q: %w", inc.Source, err)
 			}
 			if !confirmed {
 				utils.OkPrintf("Skipped include [green]%s[/]", inc.Source)
@@ -168,7 +169,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		if p.UsesTmp() {
 			var incTempDir string
 			if incTempDir, err = os.MkdirTemp("", "qk-include"); err != nil {
-				return nil, nil, fmt.Errorf("could not create temp dir for include %q: %w", source, err)
+				return nil, nil, nil, fmt.Errorf("could not create temp dir for include %q: %w", source, err)
 			}
 			defer os.RemoveAll(incTempDir) //nolint:errcheck
 			p = provider.NewProviderFromPath(source, inc.Path, incTempDir, depth)
@@ -177,14 +178,14 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		utils.DebugPrintf("Fetching include via [green]%s[/] provider: [green]%s[/]", p.Name(), source)
 		var tpath string
 		if tpath, err = p.Fetch(); err != nil {
-			return nil, nil, fmt.Errorf("could not fetch include %q: %w", source, err)
+			return nil, nil, nil, fmt.Errorf("could not fetch include %q: %w", source, err)
 		}
 
 		// Recurse: pass the current accumCtx so the include can reuse already-
 		// prompted variables without re-prompting.
-		incFiles, incCtx, err := collect(tpath, effectiveOutput, conf.MapToInputCtx(accumCtx), depth)
+		incFiles, incCtx, _, err := collect(tpath, effectiveOutput, conf.MapToInputCtx(accumCtx), depth)
 		if err != nil {
-			return nil, nil, fmt.Errorf("could not collect include %q: %w", source, err)
+			return nil, nil, nil, fmt.Errorf("could not collect include %q: %w", source, err)
 		}
 		// Merge new variables introduced by the include (parent takes priority
 		// on any name collision — but in practice FillPrompt ensures they agree).
@@ -196,7 +197,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 		candidates = append(candidates, incFiles...)
 	}
 
-	return candidates, accumCtx, nil
+	return candidates, accumCtx, root.After, nil
 }
 
 // Analyze is the main entry point for rendering a template.
@@ -208,7 +209,7 @@ func collect(dir, output string, ctx conf.InputCtx, depth int) ([]*conf.File, ma
 //
 // parentCtx contains values already collected by a parent template; pass an
 // empty InputCtx at the top level.
-func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.InputCtx) error {
+func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.InputCtx, trusted, noCommands bool) error {
 	var err error
 	ctx := parentCtx
 
@@ -230,7 +231,7 @@ func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.
 	}
 
 	// Phase 1: prompt all variables across the full template tree.
-	candidates, globalCtx, err := collect(dir, output, ctx, depth)
+	candidates, globalCtx, after, err := collect(dir, output, ctx, depth)
 	if err != nil {
 		return err
 	}
@@ -256,5 +257,61 @@ func Analyze(dir, output, input string, set []string, depth int, parentCtx conf.
 		}
 	}
 
+	// Phase 3: run the after commands declared in the root configuration.
+	return runCommands(after, output, globalCtx, trusted, noCommands)
+}
+
+// runCommands executes the root template's after commands in the output
+// directory. Every command is confirmed with the user unless trusted is true,
+// and all commands are skipped when noCommands is true.
+func runCommands(cmds []conf.Command, output string, ctx map[string]any, trusted, noCommands bool) error {
+	if len(cmds) == 0 {
+		return nil
+	}
+	if noCommands {
+		utils.OkPrintln("Skipped all after commands")
+		return nil
+	}
+	for _, c := range cmds {
+		if c.Cmd == "" {
+			continue
+		}
+		if c.If != "" {
+			pass, err := conf.EvalCondition(c.If, ctx)
+			if err != nil {
+				utils.ErrPrintf("Condition error for command [yellow]%s[/] - [red]%s[/]", c.Cmd, err.Error())
+				continue
+			}
+			if !pass {
+				utils.OkPrintf("Skipped command [yellow]%s[/]", c.Cmd)
+				continue
+			}
+		}
+		if !trusted {
+			var confirmed bool
+			prompt := &survey.Confirm{
+				Message: fmt.Sprintf("Run command %q?", c.Cmd),
+				Help:    "This command was declared by the template, review it before accepting",
+			}
+			if err := survey.AskOne(prompt, &confirmed, nil); err != nil {
+				return fmt.Errorf("could not get confirmation for command %q: %w", c.Cmd, err)
+			}
+			if !confirmed {
+				utils.OkPrintf("Skipped command [yellow]%s[/]", c.Cmd)
+				continue
+			}
+		}
+		utils.OkPrintf("Running  [yellow]%s[/]", c.Cmd)
+		if err := c.Run(output); err != nil {
+			if c.Failure == "stop" {
+				return fmt.Errorf("command %q failed: %w", c.Cmd, err)
+			}
+			utils.ErrPrintf("Command [yellow]%s[/] failed, ignoring: [red]%s[/]", c.Cmd, err.Error())
+			continue
+		}
+		if c.Echo != "" {
+			utils.OkPrintln(c.Echo)
+		}
+	}
 	return nil
 }

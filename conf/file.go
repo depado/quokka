@@ -232,6 +232,15 @@ func (f *File) Render() error {
 		if r.Ignore != nil {
 			shouldIgnore = *r.Ignore
 		}
+		for _, pattern := range r.Ignores {
+			rel, relErr := filepath.Rel(r.File.Dir, f.Path)
+			if relErr != nil {
+				continue
+			}
+			if ok, _ := path.Match(pattern, filepath.ToSlash(rel)); ok {
+				shouldIgnore = true
+			}
+		}
 		if r.Delimiters != nil {
 			if len(r.Delimiters) != 2 {
 				return fmt.Errorf("delimiters should be an array of two string")

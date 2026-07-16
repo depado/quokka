@@ -11,7 +11,7 @@ import (
 )
 
 // Render is the main render function
-func Render(template, output, toutput, path, input string, set []string, keep bool, depth int, yes bool) {
+func Render(template, output, toutput, path, input string, set []string, keep bool, depth int, yes, trusted, noCommands bool) {
 	var err error
 	var tpath string
 
@@ -46,7 +46,7 @@ func Render(template, output, toutput, path, input string, set []string, keep bo
 			utils.OkPrintf("Removed template [green]%s[/]", tp)
 		}(tpath)
 	}
-	if err := Analyze(tpath, output, input, set, depth, conf.InputCtx{}); err != nil {
+	if err := Analyze(tpath, output, input, set, depth, conf.InputCtx{}, trusted, noCommands); err != nil {
 		utils.FatalPrintln(err)
 	}
 }

@@ -13,6 +13,7 @@ type Config struct {
 	Delimiters []string   `yaml:"delimiters"`
 	Copy       *bool      `yaml:"copy"`
 	Ignore     *bool      `yaml:"ignore"`
+	Ignores    []string   `yaml:"ignores"`
 	Variables  *Variables `yaml:"variables"`
 	If         string     `yaml:"if"`
 	Ctx        InputCtx   `yaml:"-"`

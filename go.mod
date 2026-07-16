@@ -5,7 +5,7 @@ go 1.26.1
 toolchain go1.26.5
 
 require (
-	github.com/depado/gorich v1.1.0
+	github.com/depado/gorich v1.1.1
 	github.com/expr-lang/expr v1.17.8
 	github.com/go-git/go-git/v5 v5.19.1
 	github.com/goccy/go-yaml v1.19.2
@@ -38,7 +38,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.4.0 // indirect
 	github.com/kr/pty v1.1.8 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
-	github.com/mattn/go-isatty v0.0.22 // indirect
+	github.com/mattn/go-isatty v0.0.23 // indirect
 	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
 	github.com/pelletier/go-toml/v2 v2.4.3 // indirect

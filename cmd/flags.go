@@ -10,14 +10,14 @@ import (
 // AddRendererFlags adds a set of flags to make the use of the program more
 // flexible
 func AddRendererFlags(c *cobra.Command) {
-	// c.PersistentFlags().BoolP("commands", "c", false, "execute the after commands (make sure you know what it does)")
-
 	// General options
 	c.Flags().StringP("input", "i", "", "specify an input values file to automate template rendering")
 	c.Flags().BoolP("keep", "k", false, "do not delete the template when operation is complete")
 	c.Flags().StringP("path", "p", "", "specify if the template is actually stored in a sub-directory of the downloaded file")
 	c.Flags().StringP("output", "o", "", "specify the directory where the template should be downloaded or cloned")
 	c.Flags().StringSliceP("set", "e", []string{}, "specify values on the command line")
+	c.Flags().Bool("trusted", false, "run the template's after commands without confirmation")
+	c.Flags().Bool("no-commands", false, "never run the template's after commands")
 	// Git options
 	c.Flags().Int("git.depth", 1, "depth of git clone in case of git provider")
 

@@ -46,6 +46,8 @@ var rootc = &cobra.Command{
 			viper.GetBool("keep"),
 			viper.GetInt("git.depth"),
 			viper.GetBool("yes"),
+			viper.GetBool("trusted"),
+			viper.GetBool("no-commands"),
 		)
 	},
 }

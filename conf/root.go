@@ -2,11 +2,32 @@ package conf
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"github.com/goccy/go-yaml"
 )
+
+// Command is a shell command to run in the output directory once the
+// template has been rendered
+type Command struct {
+	Cmd     string `yaml:"cmd"`     // Shell command to run
+	Echo    string `yaml:"echo"`    // Message displayed after a successful run
+	If      string `yaml:"if"`      // Condition: single variable name or expr-lang expression
+	Failure string `yaml:"failure"` // "stop" aborts remaining commands on failure
+}
+
+// Run executes the command in the given directory, streaming output to the
+// user's terminal
+func (c Command) Run(dir string) error {
+	ecmd := exec.Command("sh", "-c", c.Cmd) // ponytail: sh -c only, no windows shell support
+	ecmd.Dir = dir
+	ecmd.Stdin = os.Stdin
+	ecmd.Stdout = os.Stdout
+	ecmd.Stderr = os.Stderr
+	return ecmd.Run()
+}
 
 // Include defines an external template to pull in during rendering
 type Include struct {
@@ -26,6 +47,7 @@ type Root struct {
 	Version     string    `yaml:"version"`
 	Description string    `yaml:"description"`
 	Includes    []Include `yaml:"includes"`
+	After       []Command `yaml:"after"`
 }
 
 // Parse will parse the yaml file and store its result in the root config

@@ -38,6 +38,7 @@
   - [Per-file configuration](#per-file-configuration)
   - [Conditional Rendering/Copy](#conditional-renderingcopy)
   - [Includes](#includes)
+  - [After render commands](#after-render-commands)
 
 # Introduction
 
@@ -135,9 +136,11 @@ Flags:
   -h, --help            help for qk
   -i, --input string    specify an input values file to automate template rendering
   -k, --keep            do not delete the template when operation is complete
+      --no-commands     never run the template's after commands
   -o, --output string   specify the directory where the template should be downloaded or cloned
   -p, --path string     specify if the template is actually stored in a sub-directory of the downloaded file
   -e, --set strings     specify values on the command line
+      --trusted         run the template's after commands without confirmation
   -y, --yes             Automatically accept
 
 Use "qk [command] --help" for more information about a command.
@@ -477,6 +480,19 @@ completely ignore a file or a directory.
 ignore: true
 ```
 
+You can also ignore specific files without touching them, using an `ignores`
+list of glob patterns (relative to the directory containing the `.quokka.yml`):
+
+```yaml
+ignores:
+  - README.md
+  - "docs/*"
+```
+
+This is useful to document the template itself (e.g. a `README.md` at the root
+of your template repo) without adding front-matter to it, while shipping a
+`README.md.tmpl` with a `rename: README.md` directive for the rendered output.
+
 ## Per-file configuration
 
 You can also configure individual files by adding a front matter at the top
@@ -570,9 +586,27 @@ includes:
     if: ci
 ```
 
-# ToDo
+## After render commands
 
-- [ ] Ignore file list in `.quokka.yml`
-  - Use case: Add a `README.md` to document the template along with
-    `README.md.tmpl` with a `rename` directive. This would avoids the front-matter
-    in the template documentation.
+The root `.quokka.yml` can declare an `after` list of commands to run in the
+output directory once the template has been rendered (e.g. `go mod tidy`,
+`git init` or `make bootstrap`). A command supports the following options:
+
+- `cmd`: The shell command to run (executed with `sh -c`)
+- `echo`: Message displayed after a successful run
+- `if`: Condition (single variable name or expr-lang expression) to gate the command
+- `failure`: When set to `stop`, a failing command aborts the remaining commands
+
+```yaml
+after:
+  - cmd: "git init"
+    echo: "Initialized git repo"
+    if: git
+  - cmd: "go mod tidy"
+    failure: stop
+```
+
+**Safety**: since templates can declare arbitrary commands, every command is
+prompted for confirmation before being run. Pass `--trusted` to run them all
+without confirmation, or `--no-commands` to skip them entirely.
+
