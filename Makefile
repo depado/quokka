@@ -2,7 +2,7 @@
 
 BINARY=qk
 VERSION=$(shell git describe --abbrev=0 --tags 2> /dev/null || echo "0.1.0")
-SUFFIX=$(shell git describe --exact-match > /dev/null 2>&1 || echo "-dev")
+SUFFIX=$(shell git describe --exact-match --tags > /dev/null 2>&1 || echo "-dev")
 BUILD=$(shell git rev-parse HEAD 2> /dev/null || echo "undefined")
 BUILDDATE=$(shell LANG=en_us_88591 date)
 LDFLAGS=-ldflags "-X 'main.Version=$(VERSION)$(SUFFIX)' -X 'main.Build=$(BUILD)' -X 'main.BuildDate=$(BUILDDATE)' -s -w"
