@@ -7,7 +7,7 @@ toolchain go1.26.5
 require (
 	github.com/depado/gorich v1.1.2
 	github.com/expr-lang/expr v1.17.8
-	github.com/go-git/go-git/v5 v5.19.1
+	github.com/go-git/go-git/v5 v5.19.2
 	github.com/goccy/go-yaml v1.19.2
 	github.com/google/uuid v1.6.0
 	github.com/spf13/cobra v1.10.2
