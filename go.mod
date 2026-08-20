@@ -2,7 +2,7 @@ module github.com/depado/quokka
 
 go 1.26.1
 
-toolchain go1.26.6
+toolchain go1.27.0
 
 require (
 	github.com/depado/gorich v1.1.2
